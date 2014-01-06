@@ -1,4 +1,4 @@
-find_path(TLIBC_INCLUDE_DIR NAMES tplatform/tlibc_platform.h
+find_path(TLIBC_INCLUDE_DIR NAMES platform/tlibc_platform.h
 	PATHS $ENV{TLIBC_HOME}/include
    )
 
