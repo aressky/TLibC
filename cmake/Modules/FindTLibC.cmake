@@ -1,9 +1,9 @@
-find_path(TLIBC_INCLUDE_DIR NAMES tplatform/tlibc_platform.h
-	PATHS $ENV{TLIBC_HOME}/include
+find_path(TLIBC_INCLUDE_DIR NAMES platform/tlibc_platform.h
+	PATHS $ENV{TLibC_HOME}/include
    )
 
 find_library(TLIBC_LIBRARIES NAMES tlibc
-	PATHS $ENV{TLIBC_HOME}/lib
+	PATHS $ENV{TLibC_HOME}/lib
    )
 
 include(FindPackageHandleStandardArgs)
