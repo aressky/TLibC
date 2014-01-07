@@ -94,4 +94,6 @@ typedef enum _HPType
 	E_TLIBC_OBJECT = 15,
 }HPType;
 
+#define TLIBC_MAX_IDENTIFIER_LENGTH 128
+
 #endif
