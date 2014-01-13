@@ -36,7 +36,6 @@ void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
 
 	self->super.write_tdouble = xml_write_tdouble;
 	self->super.write_string = xml_write_string;
-	self->super.write_tbool = xml_write_tbool;
 	self->super.write_vector_item_begin = xml_write_vector_item_begin;
 	self->super.write_vector_item_end= xml_write_vector_item_end;
 	self->super.write_tchar = xml_write_tchar;
@@ -267,23 +266,6 @@ tint32 xml_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
 tint32 xml_write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
 {
 	return xml_write_string(self, enum_name);
-}
-
-tint32 xml_write_tbool(TLIBC_ABSTRACT_WRITER *super, const tbool val)
-{
-	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	if(val == hptrue)
-	{
-		fprintf(self->f, "true");
-	}
-	else
-	{
-		fprintf(self->f, "false");
-	}
-	self->need_tab = hpfalse;
-
-
-	return E_TLIBC_NOERROR;
 }
 
 tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar val)

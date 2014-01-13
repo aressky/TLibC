@@ -13,7 +13,7 @@ typedef struct _TLIBC_XML_WRITER
 	TLIBC_ABSTRACT_WRITER super;
 	tuint32 count;
 	FILE *f;
-	tbool need_tab;
+	int need_tab;
 }TLIBC_XML_WRITER;
 
 TLIBC_API void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f);
@@ -51,8 +51,6 @@ TLIBC_API tint32 xml_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 v
 TLIBC_API tint32 xml_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str);
 
 TLIBC_API tint32 xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double val);
-
-TLIBC_API tint32 xml_write_tbool(TLIBC_ABSTRACT_WRITER *super, const tbool val);
 
 TLIBC_API tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar val);
 

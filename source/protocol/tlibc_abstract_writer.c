@@ -22,16 +22,13 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 	self->write_tuint64 = NULL;
 	self->write_tchar = NULL;
 	self->write_tdouble = NULL;
-	self->write_tbool = NULL;
 
 	self->write_enum_number = NULL;
 	self->write_enum_name = NULL;	
 	self->write_string = NULL;
-	self->write_bytes = NULL;
 	self->write_null = NULL;
 	self->write_counter = NULL;
 
-	self->write_type = NULL;
 }
 
 tint32 write_struct_begin(TLIBC_ABSTRACT_WRITER *self, const char *struct_name)
@@ -205,24 +202,6 @@ tint32 write_string(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
 	return self->write_string(self, str);
 }
 
-tint32 write_bytes(TLIBC_ABSTRACT_WRITER *self, const tbytes bytes)
-{
-	if(self->write_bytes == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_bytes(self, bytes);
-}
-
-tint32 write_tbool(TLIBC_ABSTRACT_WRITER *self, const tbool val)
-{
-	if(self->write_tbool == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_tbool(self, val);
-}
-
 tint32 write_null(TLIBC_ABSTRACT_WRITER *self)
 {
 	if(self->write_null == NULL)
@@ -230,15 +209,6 @@ tint32 write_null(TLIBC_ABSTRACT_WRITER *self)
 		return E_TLIBC_NOERROR;
 	}
 	return self->write_null(self);
-}
-
-tint32 write_type(TLIBC_ABSTRACT_WRITER *self, const HPType type)
-{
-	if(self->write_type == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_type(self, type);
 }
 
 tint32 write_counter(TLIBC_ABSTRACT_WRITER *self, const tchar *name, const tuint32 val)

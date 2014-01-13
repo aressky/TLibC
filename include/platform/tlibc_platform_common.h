@@ -11,14 +11,6 @@ typedef unsigned int tuint32;
 typedef unsigned long long tuint64;
 typedef char tchar;
 typedef double tdouble;
-typedef struct _tbytes
-{
-	char *ptr;
-	tuint32 len;
-}tbytes;
-
-typedef tchar* tstring;
-typedef tint32 tbool;
 
 #ifndef NULL
 #define NULL				0
@@ -74,24 +66,5 @@ typedef tint32 tbool;
 
 #define hptrue 1
 #define hpfalse 0
-typedef enum _HPType
-{
-	E_TLIBC_INT8 = 0,
-	E_TLIBC_INT16 = 1,
-	E_TLIBC_INT32 = 2,
-	E_TLIBC_INT64 = 3,
-	E_TLIBC_UINT8 = 4,
-	E_TLIBC_UINT16 = 5,
-	E_TLIBC_UINT32 = 6,
-	E_TLIBC_UINT64 = 7,
-	E_TLIBC_CHAR = 8,
-	E_TLIBC_BYTES = 9,
-	E_TLIBC_STRING = 10,
-	E_TLIBC_DOUBLE = 11,
-	E_TLIBC_BOOL = 12,
-	E_TLIBC_NULL = 13,
-	E_TLIBC_VECTOR = 14,
-	E_TLIBC_OBJECT = 15,
-}HPType;
 
 #endif

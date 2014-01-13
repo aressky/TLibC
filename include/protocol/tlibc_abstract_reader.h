@@ -25,16 +25,12 @@ struct _TLIBC_ABSTRACT_READER
 	tint32 (*read_tuint64)(TLIBC_ABSTRACT_READER *self, tuint64 *val);
 	tint32 (*read_tchar)(TLIBC_ABSTRACT_READER *self, tchar *val);
 	tint32 (*read_tdouble)(TLIBC_ABSTRACT_READER *self, tdouble *val);
-	tint32 (*read_tbool)(TLIBC_ABSTRACT_READER *self, tbool *val);
 
 	tint32 (*read_enum_number)(TLIBC_ABSTRACT_READER *self, tint32 *val);
 	tint32 (*read_enum_name)(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length);	
 	tint32 (*read_string)(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
-	tint32 (*read_bytes)(TLIBC_ABSTRACT_READER *self, tbytes *bytes);	
 	tint32 (*read_null)(TLIBC_ABSTRACT_READER *self);
 	tint32 (*read_counter)(TLIBC_ABSTRACT_READER *self, const char *name, tuint32 *val);
-
-	tint32 (*read_type)(TLIBC_ABSTRACT_READER *self, HPType *type);
 };
 
 void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self);
@@ -59,14 +55,11 @@ tint32 read_tuint32(TLIBC_ABSTRACT_READER *self, tuint32 *val);
 tint32 read_tuint64(TLIBC_ABSTRACT_READER *self, tuint64 *val);
 tint32 read_tchar(TLIBC_ABSTRACT_READER *self, tchar *val);
 tint32 read_tdouble(TLIBC_ABSTRACT_READER *self, tdouble *val);
-tint32 read_tbool(TLIBC_ABSTRACT_READER *self, tbool *val);
 
 tint32 read_enum_number(TLIBC_ABSTRACT_READER *self, tint32 *val);
 tint32 read_enum_name(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length);
 tint32 read_string(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
-tint32 read_bytes(TLIBC_ABSTRACT_READER *self, tbytes *bytes);
 tint32 read_null(TLIBC_ABSTRACT_READER *self);
-tint32 read_type(TLIBC_ABSTRACT_READER *self, HPType *type);
 tint32 read_counter(TLIBC_ABSTRACT_READER *self, const char *name, tuint32 *val);
 
 #endif

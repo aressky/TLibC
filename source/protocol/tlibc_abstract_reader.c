@@ -22,16 +22,13 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_tuint64 = NULL;
 	self->read_tchar = NULL;
 	self->read_tdouble = NULL;
-	self->read_tbool = NULL;
 
 	self->read_enum_number = NULL;
 	self->read_enum_name = NULL;
 	self->read_string = NULL;
-	self->read_bytes = NULL;
 	self->read_null = NULL;
 	self->read_counter = NULL;
 
-	self->read_type = NULL;
 }
 
 tint32 read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name)
@@ -205,24 +202,6 @@ tint32 read_string(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length)
 	return self->read_string(self, str, str_length);
 }
 
-tint32 read_bytes(TLIBC_ABSTRACT_READER *self, tbytes *bytes)
-{
-	if(self->read_bytes == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_bytes(self, bytes);
-}
-
-tint32 read_tbool(TLIBC_ABSTRACT_READER *self, tbool *val)
-{
-	if(self->read_tbool == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_tbool(self, val);
-}
-
 tint32 read_null(TLIBC_ABSTRACT_READER *self)
 {
 	if(self->read_null == NULL)
@@ -230,15 +209,6 @@ tint32 read_null(TLIBC_ABSTRACT_READER *self)
 		return E_TLIBC_NOERROR;
 	}
 	return self->read_null(self);
-}
-
-tint32 read_type(TLIBC_ABSTRACT_READER *self, HPType *type)
-{
-	if(self->read_type == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_type(self, type);
 }
 
 tint32 read_counter(TLIBC_ABSTRACT_READER *self, const char *name, tuint32 *val)

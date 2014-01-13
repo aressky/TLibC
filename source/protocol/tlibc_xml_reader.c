@@ -39,7 +39,6 @@ void xml_reader_init(TLIBC_XML_READER *self, FILE *f)
 	self->super.read_tuint64 = xml_read_tuint64;
 
 	self->super.read_tdouble = xml_read_tdouble;
-	self->super.read_tbool = xml_read_tbool;	
 	self->super.read_string = xml_read_string;
 	self->super.read_tchar = xml_read_tchar;
 	self->super.read_counter = xml_read_counter;
@@ -243,22 +242,6 @@ tint32 xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val)
 	return E_TLIBC_NOERROR;
 }
 
-tint32 xml_read_tbool(TLIBC_ABSTRACT_READER *super, tbool *val)
-{
-	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	if(*val == hptrue)
-	{
-		fprintf(self->f, "true");
-	}
-	else
-	{
-		fprintf(self->f, "false");
-	}
-	self->need_tab = hpfalse;
-
-
-	return E_TLIBC_NOERROR;
-}
 
 static void read_char(FILE* fin, tchar *ch)
 {
