@@ -35,7 +35,7 @@ tuint32 tlibc_hash_key(const char *key, tuint32 key_size);
 
 void tlibc_hash_insert(tlibc_hash_t *self, const char *key, tuint32 key_size, tlibc_hash_head_t *val);
 
-tlibc_hash_head_t* tlibc_hash_find(tlibc_hash_t *self, const char *key, tuint32 key_size);
+const tlibc_hash_head_t* tlibc_hash_find(const tlibc_hash_t *self, const char *key, tuint32 key_size);
 
 void tlibc_hash_remove(tlibc_hash_t *self, tlibc_hash_head_t *ele);
 

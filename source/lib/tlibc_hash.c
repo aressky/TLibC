@@ -43,11 +43,11 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 	tlibc_list_add(&val_head->all_data_list, &self->all_data_list);
 }
 
-tlibc_hash_head_t* tlibc_hash_find(tlibc_hash_t *self, const char *key, tuint32 key_size)
+const tlibc_hash_head_t* tlibc_hash_find(const tlibc_hash_t *self, const char *key, tuint32 key_size)
 {
 	tuint32 key_hash = tlibc_hash_key(key, key_size);
 	tuint32 key_index = key_hash % self->size;
-	tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
+	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
 
 	TLIBC_LIST_HEAD *iter;
 	for(iter = bucket->data_list.next; iter != &bucket->data_list; iter = iter->next)
