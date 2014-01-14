@@ -313,7 +313,6 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, void *addr, tuint32 s
 	self->super.write_tuint32 = tlibc_compact_write_tuint32;
 	self->super.write_tuint64 = tlibc_compact_write_tuint64;
 	self->super.write_string = tlibc_compact_write_string;
-	self->super.write_counter = tlibc_compact_write_counter;
 
 	self->addr = addr;
 	self->size = size;
@@ -492,12 +491,6 @@ TLIBC_API tint32 tlibc_compact_write_string(TLIBC_ABSTRACT_WRITER *super, const 
 	ret = E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
 done:
 	return ret;
-}
-
-TLIBC_API tint32 tlibc_compact_write_counter(TLIBC_ABSTRACT_WRITER *super, const tchar *name, const tuint32 val)
-{
-	TLIBC_UNUSED(name);
-	return tlibc_compact_write_tuint32(super, val);
 }
 
 TLIBC_API tint32 tlibc_compact_write_enum_number(TLIBC_ABSTRACT_WRITER *super, const tint32 val)

@@ -62,6 +62,4 @@ TLIBC_API tint32 xml_write_struct_begin(TLIBC_ABSTRACT_WRITER *super, const char
 
 TLIBC_API tint32 xml_write_struct_end(TLIBC_ABSTRACT_WRITER *super, const char *struct_name);
 
-TLIBC_API tint32 xml_write_counter(TLIBC_ABSTRACT_WRITER *super, const tchar *name, const tuint32 val);
-
 #endif

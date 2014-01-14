@@ -41,7 +41,6 @@ void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
 	self->super.write_tchar = xml_write_tchar;
 
 	self->super.write_enum_name = xml_write_enum_name;
-	self->super.write_counter = xml_write_counter;
 
 }
 
@@ -273,13 +272,5 @@ tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar val)
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 
 	write_char(self->f, val);
-	return E_TLIBC_NOERROR;
-}
-
-tint32 xml_write_counter(TLIBC_ABSTRACT_WRITER *super, const tchar *name, const tuint32 val)
-{
-	xml_write_field_begin(super, name);
-	xml_write_tuint32(super, val);
-	xml_write_field_end(super, name);
 	return E_TLIBC_NOERROR;
 }

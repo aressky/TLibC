@@ -29,8 +29,6 @@ struct _TLIBC_ABSTRACT_READER
 	tint32 (*read_enum_number)(TLIBC_ABSTRACT_READER *self, tint32 *val);
 	tint32 (*read_enum_name)(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length);	
 	tint32 (*read_string)(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
-	tint32 (*read_null)(TLIBC_ABSTRACT_READER *self);
-	tint32 (*read_counter)(TLIBC_ABSTRACT_READER *self, const char *name, tuint32 *val);
 };
 
 void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self);
@@ -59,8 +57,6 @@ tint32 read_tdouble(TLIBC_ABSTRACT_READER *self, tdouble *val);
 tint32 read_enum_number(TLIBC_ABSTRACT_READER *self, tint32 *val);
 tint32 read_enum_name(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length);
 tint32 read_string(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
-tint32 read_null(TLIBC_ABSTRACT_READER *self);
-tint32 read_counter(TLIBC_ABSTRACT_READER *self, const char *name, tuint32 *val);
 
 #endif
 

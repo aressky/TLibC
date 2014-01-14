@@ -28,9 +28,7 @@ struct _TLIBC_ABSTRACT_WRITER
 
 	tint32 (*write_enum_number)(TLIBC_ABSTRACT_WRITER *self, const tint32 val);
 	tint32 (*write_enum_name)(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name);
-	tint32 (*write_counter)(TLIBC_ABSTRACT_WRITER *self, const tchar *name, const tuint32 val);
 	tint32 (*write_string)(TLIBC_ABSTRACT_WRITER *self, const tchar* str);
-	tint32 (*write_null)(TLIBC_ABSTRACT_WRITER *self);	
 };
 
 void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self);
@@ -56,8 +54,6 @@ tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble val);
 tint32 write_enum_number(TLIBC_ABSTRACT_WRITER *self, const tint32 val);
 tint32 write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name);
 tint32 write_string(TLIBC_ABSTRACT_WRITER *self, const tchar* str);
-tint32 write_null(TLIBC_ABSTRACT_WRITER *self);
-tint32 write_counter(TLIBC_ABSTRACT_WRITER *self, const tchar *name, const tuint32 val);
 tint32 write_vector_item_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 tint32 write_vector_item_end(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 

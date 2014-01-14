@@ -26,8 +26,6 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 	self->write_enum_number = NULL;
 	self->write_enum_name = NULL;	
 	self->write_string = NULL;
-	self->write_null = NULL;
-	self->write_counter = NULL;
 
 }
 
@@ -200,24 +198,6 @@ tint32 write_string(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
 		return E_TLIBC_NOERROR;
 	}
 	return self->write_string(self, str);
-}
-
-tint32 write_null(TLIBC_ABSTRACT_WRITER *self)
-{
-	if(self->write_null == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_null(self);
-}
-
-tint32 write_counter(TLIBC_ABSTRACT_WRITER *self, const tchar *name, const tuint32 val)
-{
-	if(self->write_counter== NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_counter(self, name, val);
 }
 
 tint32 write_vector_item_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index)

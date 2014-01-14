@@ -284,7 +284,6 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const void *addr, tui
 	self->super.read_tuint32 = tlibc_compact_read_tuint32;
 	self->super.read_tuint64 = tlibc_compact_read_tuint64;
 	self->super.read_string = tlibc_compact_read_string;
-	self->super.read_counter = tlibc_compact_read_counter;
 
 
 
@@ -480,11 +479,6 @@ done:
 	return ret;
 }
 
-TLIBC_API tint32 tlibc_compact_read_counter(TLIBC_ABSTRACT_READER *super, const char *name, tuint32 *val)
-{
-	TLIBC_UNUSED(name);
-	return tlibc_compact_read_tuint32(super, val);
-}
 
 tint32 tlibc_compact_read_enum_number(TLIBC_ABSTRACT_READER *super, tint32 *val)
 {

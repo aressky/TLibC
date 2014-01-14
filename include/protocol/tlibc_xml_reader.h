@@ -60,6 +60,4 @@ TLIBC_API tint32 xml_read_vector_item_begin(TLIBC_ABSTRACT_READER *super, tuint3
 
 TLIBC_API tint32 xml_read_string(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len);
 
-TLIBC_API tint32 xml_read_counter(TLIBC_ABSTRACT_READER *super, const tchar *name, tuint32 *val);
-
 #endif

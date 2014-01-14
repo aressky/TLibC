@@ -41,7 +41,6 @@ void xml_reader_init(TLIBC_XML_READER *self, FILE *f)
 	self->super.read_tdouble = xml_read_tdouble;
 	self->super.read_string = xml_read_string;
 	self->super.read_tchar = xml_read_tchar;
-	self->super.read_counter = xml_read_counter;
 }
 
 static void skip_tab(TLIBC_XML_READER *self)
@@ -320,11 +319,3 @@ tint32 xml_read_string(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len
 	return E_TLIBC_NOERROR;
 }
 
-TLIBC_API tint32 xml_read_counter(TLIBC_ABSTRACT_READER *super, const tchar *name, tuint32 *val)
-{
-	xml_read_field_begin(super, name);
-	xml_read_tuint32(super, val);
-	xml_read_field_end(super, name);
-
-	return E_TLIBC_NOERROR;
-}
