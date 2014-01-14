@@ -35,7 +35,7 @@ void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
 
 
 	self->super.write_tdouble = xml_write_tdouble;
-	self->super.write_string = xml_write_string;
+	self->super.write_string = xml_write_tstring;
 	self->super.write_vector_item_begin = xml_write_vector_item_begin;
 	self->super.write_vector_item_end= xml_write_vector_item_end;
 	self->super.write_tchar = xml_write_tchar;
@@ -250,7 +250,7 @@ static void write_char(FILE* fout, tchar c)
 	}
 }
 
-tint32 xml_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
+tint32 xml_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	const tchar *i;
@@ -264,7 +264,7 @@ tint32 xml_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
 }
 tint32 xml_write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
 {
-	return xml_write_string(self, enum_name);
+	return xml_write_tstring(self, enum_name);
 }
 
 tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar val)

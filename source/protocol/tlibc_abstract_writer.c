@@ -191,7 +191,7 @@ tint32 write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
 	return self->write_enum_name(self, enum_name);
 }
 
-tint32 write_string(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
+tint32 write_tstring(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
 {
 	if(self->write_string == NULL)
 	{

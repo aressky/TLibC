@@ -283,7 +283,7 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const void *addr, tui
 	self->super.read_tuint16 = tlibc_compact_read_tuint16;
 	self->super.read_tuint32 = tlibc_compact_read_tuint32;
 	self->super.read_tuint64 = tlibc_compact_read_tuint64;
-	self->super.read_string = tlibc_compact_read_string;
+	self->super.read_string = tlibc_compact_read_tstring;
 
 
 
@@ -454,7 +454,7 @@ not_enough_bytebuff_size:
 }
 
 
-tint32 tlibc_compact_read_string(TLIBC_ABSTRACT_READER *super, tchar* str, tuint32 str_length)
+tint32 tlibc_compact_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuint32 str_length)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	tuint32 str_len = 0;

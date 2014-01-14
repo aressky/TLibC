@@ -53,11 +53,12 @@ TLIBC_API tint32 xml_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val);
 
 TLIBC_API tint32 xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val);
 
+TLIBC_API tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len);
 
 TLIBC_API tint32 xml_read_vector_item_end(TLIBC_ABSTRACT_READER *super, tuint32 index);
 
 TLIBC_API tint32 xml_read_vector_item_begin(TLIBC_ABSTRACT_READER *super, tuint32 index);
 
-TLIBC_API tint32 xml_read_string(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len);
+
 
 #endif

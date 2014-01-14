@@ -312,7 +312,7 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, void *addr, tuint32 s
 	self->super.write_tuint16 = tlibc_compact_write_tuint16;
 	self->super.write_tuint32 = tlibc_compact_write_tuint32;
 	self->super.write_tuint64 = tlibc_compact_write_tuint64;
-	self->super.write_string = tlibc_compact_write_string;
+	self->super.write_string = tlibc_compact_write_tstring;
 
 	self->addr = addr;
 	self->size = size;
@@ -473,7 +473,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
 }
 
-TLIBC_API tint32 tlibc_compact_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
+TLIBC_API tint32 tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 str_len = 0;

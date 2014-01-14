@@ -39,7 +39,7 @@ void xml_reader_init(TLIBC_XML_READER *self, FILE *f)
 	self->super.read_tuint64 = xml_read_tuint64;
 
 	self->super.read_tdouble = xml_read_tdouble;
-	self->super.read_string = xml_read_string;
+	self->super.read_string = xml_read_tstring;
 	self->super.read_tchar = xml_read_tchar;
 }
 
@@ -58,7 +58,7 @@ static void skip_tab(TLIBC_XML_READER *self)
 
 tint32 xml_read_enum_name(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length)
 {
-	xml_read_string(self, enum_name, enum_name_length);
+	xml_read_tstring(self, enum_name, enum_name_length);
 	return E_TLIBC_NOERROR;
 }
 
@@ -294,7 +294,7 @@ tint32 xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
 	return E_TLIBC_NOERROR;
 }
 
-tint32 xml_read_string(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len)
+tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	tuint32 len = 0;

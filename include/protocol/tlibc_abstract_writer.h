@@ -50,10 +50,10 @@ tint32 write_tuint32(TLIBC_ABSTRACT_WRITER *self, const tuint32 val);
 tint32 write_tuint64(TLIBC_ABSTRACT_WRITER *self, const tuint64 val);
 tint32 write_tchar(TLIBC_ABSTRACT_WRITER *self, const tchar val);	
 tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble val);
+tint32 write_tstring(TLIBC_ABSTRACT_WRITER *self, const tchar* str);
 
 tint32 write_enum_number(TLIBC_ABSTRACT_WRITER *self, const tint32 val);
 tint32 write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name);
-tint32 write_string(TLIBC_ABSTRACT_WRITER *self, const tchar* str);
 tint32 write_vector_item_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 tint32 write_vector_item_end(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 

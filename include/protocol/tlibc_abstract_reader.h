@@ -53,10 +53,11 @@ tint32 read_tuint32(TLIBC_ABSTRACT_READER *self, tuint32 *val);
 tint32 read_tuint64(TLIBC_ABSTRACT_READER *self, tuint64 *val);
 tint32 read_tchar(TLIBC_ABSTRACT_READER *self, tchar *val);
 tint32 read_tdouble(TLIBC_ABSTRACT_READER *self, tdouble *val);
+tint32 read_tstring(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
 
 tint32 read_enum_number(TLIBC_ABSTRACT_READER *self, tint32 *val);
 tint32 read_enum_name(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length);
-tint32 read_string(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length);
+
 
 #endif
 

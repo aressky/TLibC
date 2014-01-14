@@ -11,6 +11,7 @@ typedef unsigned int tuint32;
 typedef unsigned long long tuint64;
 typedef char tchar;
 typedef double tdouble;
+typedef char* tstring;
 
 #ifndef NULL
 #define NULL				0

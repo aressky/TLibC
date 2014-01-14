@@ -191,7 +191,7 @@ tint32 read_tdouble(TLIBC_ABSTRACT_READER *self, tdouble *val)
 	return self->read_tdouble(self, val);
 }
 
-tint32 read_string(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length)
+tint32 read_tstring(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length)
 {
 	if(self->read_string == NULL)
 	{

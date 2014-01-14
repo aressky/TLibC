@@ -36,7 +36,7 @@ TLIBC_API tint32 tlibc_compact_write_tchar(TLIBC_ABSTRACT_WRITER *super, const c
 
 TLIBC_API tint32 tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double val);
 
-TLIBC_API tint32 tlibc_compact_write_string(TLIBC_ABSTRACT_WRITER *super, const tchar* str);
+TLIBC_API tint32 tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str);
 
 TLIBC_API tint32 tlibc_compact_write_enum_number(TLIBC_ABSTRACT_WRITER *super, const tint32 val);
 
