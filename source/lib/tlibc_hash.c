@@ -36,6 +36,8 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 
 	val_head->key = key;
 	val_head->key_size = key_size;
+	init_tlibc_list_head(&val_head->data_list);
+	init_tlibc_list_head(&val_head->all_data_list);
 	
 	tlibc_list_add(&val_head->data_list, &bucket->data_list);
 	tlibc_list_add(&val_head->all_data_list, &self->all_data_list);
