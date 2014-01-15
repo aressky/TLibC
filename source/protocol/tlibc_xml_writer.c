@@ -7,11 +7,16 @@
 #include <assert.h>
 #include <stdio.h>
 
-void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
+TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 {
 	tlibc_abstract_writer_init(&self->super);
 
-	self->f = f;
+	self->f = fopen(file_name, "wb");
+	if(self->f == NULL)
+	{
+		goto ERROR_RET;
+	}
+
 	self->count = 0;
 	self->need_tab = hpfalse;
 
@@ -42,6 +47,15 @@ void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
 
 	self->super.write_enum_name = xml_write_enum_name;
 
+	return E_TLIBC_NOERROR;
+ERROR_RET:
+	return E_TLIBC_ERROR;
+
+}
+
+TLIBC_API void xml_writer_fini(TLIBC_XML_WRITER *self)
+{
+	fclose(self->f);
 }
 
 static void printf_tab(TLIBC_XML_WRITER *self)

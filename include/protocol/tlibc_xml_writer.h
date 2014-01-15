@@ -3,6 +3,7 @@
 
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_writer.h"
+#include "lib/tlibc_error_code.h"
 
 #include <stdio.h>
 
@@ -16,7 +17,7 @@ typedef struct _TLIBC_XML_WRITER
 	int need_tab;
 }TLIBC_XML_WRITER;
 
-TLIBC_API void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f);
+TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name);
 
 TLIBC_API void xml_writer_fini(TLIBC_XML_WRITER *self);
 
