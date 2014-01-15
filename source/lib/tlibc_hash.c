@@ -9,10 +9,11 @@ TLIBC_ERROR_CODE tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *bucket
 	self->size = size;
 	for(i = 0; i < self->size; ++i)
 	{
-		init_tlibc_list_head(&self->buckets[i].data_list);		
+		init_tlibc_list_head(&self->buckets[i].data_list);
 	}
 
 	init_tlibc_list_head(&self->all_data_list);
+	self->all_data_list_num = 0;
 
 	return E_TLIBC_NOERROR;
 }
@@ -41,6 +42,7 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 	
 	tlibc_list_add(&val_head->data_list, &bucket->data_list);
 	tlibc_list_add(&val_head->all_data_list, &self->all_data_list);
+	++self->all_data_list_num;
 }
 
 const tlibc_hash_head_t* tlibc_hash_find(const tlibc_hash_t *self, const char *key, tuint32 key_size)
@@ -48,15 +50,20 @@ const tlibc_hash_head_t* tlibc_hash_find(const tlibc_hash_t *self, const char *k
 	tuint32 key_hash = tlibc_hash_key(key, key_size);
 	tuint32 key_index = key_hash % self->size;
 	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
-
 	TLIBC_LIST_HEAD *iter;
+	tuint32 i = 0;
 	for(iter = bucket->data_list.next; iter != &bucket->data_list; iter = iter->next)
 	{
 		tlibc_hash_head_t *ele = TLIBC_CONTAINER_OF(iter, tlibc_hash_head_t, data_list);
+		if(i >= self->all_data_list_num)
+		{
+			break;
+		}
 		if((ele->key_size == key_size ) && (memcmp(ele->key, key, key_size) == 0))
 		{
 			return ele;
 		}
+		++i;
 	}
 	return NULL;
 }
@@ -65,6 +72,10 @@ void tlibc_hash_remove(tlibc_hash_t *self, tlibc_hash_head_t *ele)
 {
 	tlibc_list_del(&ele->all_data_list);
 	tlibc_list_del(&ele->data_list);
+	if(self->all_data_list_num > 0)
+	{
+		--self->all_data_list_num;
+	}
 }
 
 void tlibc_hash_clear(tlibc_hash_t *self)
@@ -80,4 +91,5 @@ void tlibc_hash_clear(tlibc_hash_t *self)
 		init_tlibc_list_head(&bucket->data_list);
 	}
 	init_tlibc_list_head(&self->all_data_list);
+	self->all_data_list_num = 0;
 }

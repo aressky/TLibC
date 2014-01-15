@@ -27,6 +27,7 @@ struct _tlibc_hash_t
 	tuint32					size;
 
 	TLIBC_LIST_HEAD			all_data_list;
+	tuint32					all_data_list_num;//‘§∑¿À¿—≠ª∑
 };
 
 TLIBC_ERROR_CODE tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *buckets, tuint32 size);
