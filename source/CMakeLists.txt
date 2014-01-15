@@ -5,7 +5,7 @@ set(RE2C_HEADER ${GEN_PATH}/tlibc_xml_reader_l.h)
 set(RE2C_OUTPUTS ${GEN_PATH}/tlibc_xml_reader_l.c)
 
 
-FILE(GLOB_RECURSE LIB_FILE_LIST ${INCLUDE}/lib/*.h ${SOURCE}/lib/*.c)
+FILE(GLOB_RECURSE LIB_FILE_LIST ${INCLUDE}/lib/*.h ${SOURCE}/lib/*.c ${SOURCE}/lib/*.h)
 source_group("lib" FILES ${LIB_FILE_LIST})
 
 FILE(GLOB_RECURSE PROTOCOL_FILE_LIST ${INCLUDE}/protocol/*.h ${SOURCE}/protocol/*.c)
@@ -21,6 +21,7 @@ add_custom_command(OUTPUT ${RE2C_HEADER} ${RE2C_OUTPUTS}
 INCLUDE_DIRECTORIES(
 	${INCLUDE}
 	${GEN_PATH}
+	.
 	)
 
 ADD_LIBRARY(TLibC ${PROTOCOL_FILE_LIST} ${LIB_FILE_LIST} ${RE2C_HEADER} ${RE2C_OUTPUTS} ${RE2C_FILE})

@@ -4,56 +4,48 @@
 #include "lib/tlibc_error_code.h"
 #include "tlibc_xml_reader_l.h"
 
+#include "protocol/tlibc_xml_reader_scanner.h"
+
 #include <string.h>
 #include <assert.h>
 #include <stdio.h>
+
+
 
 
 TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 {
 	FILE* fin;
 	char c;
-	YYCTYPE* yy_start;
-	tuint32 i = 0;
-	tuint32 len = 0;
-	SCANNER_CONTEXT *scanner = NULL;
+	TLIBC_XML_READER_SCANNER_CONTEXT *scanner = NULL;
 
-	strncpy(self->yylloc.file_name, file_name, TLIBC_MAX_FILE_PATH_LENGTH);
-	self->yylloc.file_name[TLIBC_MAX_FILE_PATH_LENGTH - 1] = 0;
+	strncpy(self->scanner_context.yylloc.file_name, file_name, TLIBC_MAX_FILE_PATH_LENGTH);
+	self->scanner_context.yylloc.file_name[TLIBC_MAX_FILE_PATH_LENGTH - 1] = 0;
 
 
-	self->buff_curr = self->buff;
-	self->buff_limit = self->buff + MAX_LEX_BUFF_SIZE;
-
+	self->buff_size = 0;
 	fin = fopen(file_name, "rb");
 	while((c = (char)fgetc(fin)) != EOF)
 	{
-		if(self->buff_curr == self->buff_limit)
+		if(self->buff_size >= TLIBC_LEX_LEX_BUFF_SIZE)
 		{
 			goto ERROR_RET;
 		}
-		*self->buff_curr = c;
-		++(self->buff_curr);
+		self->buff[self->buff_size] = c;
+		++self->buff_size;
 	}
 
 	scanner = &self->scanner_context;
-	yy_start = self->buff;
-	scanner->yy_start = yy_start;
-	scanner->yy_limit = self->buff_curr;
 	scanner->yy_state = yycINITIAL;
+	scanner->yy_start = self->buff;
+	scanner->yy_cursor = scanner->yy_start;
+	scanner->yy_limit = scanner->yy_start + TLIBC_LEX_LEX_BUFF_SIZE;	
 	scanner->yy_marker = scanner->yy_start;
 	scanner->yy_last = scanner->yy_start;
-	scanner->yy_cursor = scanner->yy_start;	
 	scanner->yylineno = 1;
 	scanner->yycolumn = 1;
 
-	self->level = 0;
-
-
-
-
-
-
+	self->struct_deep = 0;
 
 
 
@@ -100,13 +92,12 @@ tint32 xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const char *struct_na
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);	
 	
-	if(self->level == 0)
+	if(self->struct_deep == 0)
 	{
-		XML_TOKEN_VALUE token_value;
-		xml_scan(self, &token_value);
+		tlibc_xml_reader_get_token(&self->scanner_context);
 	}
 	
-	++self->level;
+	++self->struct_deep;
 	
 	return E_TLIBC_NOERROR;
 }
@@ -115,13 +106,12 @@ tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const char *struct_name
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	
-	if(self->level == 0)
+	if(self->struct_deep == 0)
 	{
-		XML_TOKEN_VALUE token_value;
-		xml_scan(self, &token_value);
+		tlibc_xml_reader_get_token(&self->scanner_context);
 	}
 	
-	--self->level;
+	--self->struct_deep;
 	return E_TLIBC_NOERROR;
 }
 
@@ -143,8 +133,7 @@ tint32 xml_read_vector_end(TLIBC_ABSTRACT_READER *super)
 tint32 xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	XML_TOKEN_VALUE token_value;
-	xml_scan(self, &token_value);
+	tlibc_xml_reader_get_token(&self->scanner_context);
 
 	return E_TLIBC_NOERROR;
 }
@@ -152,8 +141,7 @@ tint32 xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name)
 tint32 xml_read_field_end(TLIBC_ABSTRACT_READER *super, const char *var_name)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);	
-	XML_TOKEN_VALUE token_value;
-	xml_scan(self, &token_value);
+	tlibc_xml_reader_get_token(&self->scanner_context);
 	return E_TLIBC_NOERROR;
 }
 
@@ -171,18 +159,13 @@ TLIBC_API tint32 xml_read_vector_item_end(TLIBC_ABSTRACT_READER *super, tuint32 
 	return xml_read_field_end(super, str);
 }
 
-static void get_content(TLIBC_XML_READER *self)
-{
-
-}
-
 tint32 xml_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	
-	*self->content_end = 0;
-	sscanf(self->content_begin, "%lf", val);
-	*self->content_end = '<';
+	*self->scanner_context.content_end = 0;
+	sscanf(self->scanner_context.content_begin, "%lf", val);
+	*self->scanner_context.content_end = '<';
 
 	return E_TLIBC_NOERROR;
 }
@@ -214,9 +197,9 @@ tint32 xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val)
 tint32 xml_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	*self->content_end = 0;
-	sscanf(self->content_begin, "%lld", val);
-	*self->content_end = '<';
+	*self->scanner_context.content_end = 0;
+	sscanf(self->scanner_context.content_begin, "%lld", val);
+	*self->scanner_context.content_end = '<';
 	return E_TLIBC_NOERROR;
 }
 
@@ -247,20 +230,20 @@ tint32 xml_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val)
 tint32 xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	*self->content_end = 0;
-	sscanf(self->content_begin, "%llu", val);
-	*self->content_end = '<';
+	*self->scanner_context.content_end = 0;
+	sscanf(self->scanner_context.content_begin, "%llu", val);
+	*self->scanner_context.content_end = '<';
 	return E_TLIBC_NOERROR;
 }
 
 
 static void read_char(TLIBC_XML_READER* self, tchar *ch)
 {
-	char c = *self->content_begin++;
+	char c = *self->scanner_context.content_begin++;
 	
 	if(c == '&')
 	{		
-		char c2 = *self->content_begin++;
+		char c2 = *self->scanner_context.content_begin++;
 		if(c2 == 'l')
 		{
 			//&lt
@@ -273,7 +256,7 @@ static void read_char(TLIBC_XML_READER* self, tchar *ch)
 		}
 		else
 		{
-			char c3 = *self->content_begin++;
+			char c3 = *self->scanner_context.content_begin++;
 			if(c3 == 'm')
 			{
 				//&amp
@@ -311,7 +294,7 @@ tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_le
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	tuint32 len = 0;
 
-	while(self->content_begin < self->content_end)
+	while(self->scanner_context.content_begin < self->scanner_context.content_end)
 	{
 		char c;
 		read_char(self, &c);
@@ -323,83 +306,3 @@ tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_le
 }
 
 
-
-void xml_locate(TLIBC_XML_READER *self)
-{
-	const char *i;
-	SCANNER_CONTEXT *sp = &self->scanner_context;
-	for(i = sp->yy_last; i < sp->yy_cursor;++i)
-	{
-		if(*i == '\n')
-		{
-			++(sp->yylineno);
-			sp->yycolumn = 1;
-		}		
-		else if(*i == '\r')
-		{
-			sp->yycolumn = 1;			
-		}
-		else
-		{
-			++(sp->yycolumn);
-		}
-	}
-	sp->yy_last = sp->yy_cursor;
-}
-
-int xml_scan(TLIBC_XML_READER *self, XML_TOKEN_VALUE *token_value)
-{
-	YYCTYPE *iter;
-	int token = tok_end;
-
-	token = tlibc_xml_scan(self, &self->yylloc);
-	if(token == tok_end)
-	{
-		goto done;
-	}
-	self->yylloc.last_line = self->scanner_context.yylineno;
-	self->yylloc.last_column = self->scanner_context.yycolumn;
-
-	switch(token)
-	{
-	case tok_tag_begin:
-		{
-			if(yyleng - 2 >= TLIBC_MAX_IDENTIFIER_LENGTH)
-			{
-				goto ERROR_RET;
-			}
-			memcpy(token_value->tag_start, yytext + 1, yyleng - 2);
-			token_value->tag_start[yyleng - 2] = 0;
-
-			//¼ÇÂ¼content
-			self->content_begin = self->scanner_context.yy_cursor;
-			for(iter = self->content_begin; iter < self->scanner_context.yy_limit; ++iter)
-			{
-				if(*iter == '<')
-				{
-					self->content_end = iter;
-					break;
-				}
-			}
-			if(*iter != '<')
-			{
-				goto ERROR_RET;
-			}
-		}
-	case tok_tag_end:
-		{
-			if(yyleng - 3 >= TLIBC_MAX_IDENTIFIER_LENGTH)
-			{
-				goto ERROR_RET;
-			}
-			memcpy(token_value->tag_end, yytext + 2, yyleng - 3);
-			token_value->tag_end[yyleng - 3] = 0;
-			break;
-		}
-	}
-done:
-	return token;
-
-ERROR_RET:
-	return tok_error;
-}

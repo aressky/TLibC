@@ -1,19 +1,21 @@
 #include "platform/tlibc_platform.h"
+#include "protocol/tlibc_xml_reader_scanner.h"
 #include "protocol/tlibc_xml_reader.h"
-
-
 #include "tlibc_xml_reader_l.h"
 
+
+
+
 		
-tint32 tlibc_xml_scan(TLIBC_XML_READER *self, YYLTYPE *yylloc)
+TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 {
 restart:
 	if(YYCURSOR >= YYLIMIT)
 	{
 		return tok_end;
 	}
-	yylloc->first_line = self->scanner_context.yylineno;
-	yylloc->first_column = self->scanner_context.yycolumn;
+	self->yylloc.first_line = self->yylineno;
+	self->yylloc.first_column = self->yycolumn;
 	yytext = YYCURSOR;
 /*!re2c
 re2c:yyfill:check = 0;
@@ -23,7 +25,7 @@ comment			("<!--".*"-->")
 anychar			([^])
 
 
-<!*> := yyleng = YYCURSOR - yytext; xml_locate(self);
+<!*> := yyleng = YYCURSOR - yytext; tlibc_xml_reader_locate(self);
 
 <*>{comment}							{	goto restart;																}
 

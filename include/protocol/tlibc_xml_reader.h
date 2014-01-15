@@ -3,85 +3,55 @@
 
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_reader.h"
-#include <stdio.h>
 #include "lib/tlibc_error_code.h"
 #include "tdata/tdata_types.h"
 
-typedef struct _YYLTYPE
+typedef struct _TLIBC_XML_READER_YYLTYPE
 {
 	char file_name[TLIBC_MAX_FILE_PATH_LENGTH];
 	int first_line;
 	int first_column;
 	int last_line;
 	int last_column;
-} YYLTYPE;
+} TLIBC_XML_READER_YYLTYPE;
 
-typedef union _XML_TOKEN_VALUE XML_TOKEN_VALUE;
-union _XML_TOKEN_VALUE
-{
-	char tag_start[TLIBC_MAX_IDENTIFIER_LENGTH];
-	char tag_end[TLIBC_MAX_IDENTIFIER_LENGTH];
-};
-
-#define YYSTYPE SCANNER_TOKEN_VALUE
-#define YYLTYPE_IS_DECLARED
-#define YYCTYPE   char
-#define YYFILL(n) 
-#define YYCURSOR  self->scanner_context.yy_cursor
-#define YYLIMIT   self->scanner_context.yy_limit
-#define YYMARKER self->scanner_context.yy_marker
-#define YYGETCONDITION()  self->scanner_context.yy_state
-#define YYSETCONDITION(s) self->scanner_context.yy_state = s
-#define yytext self->scanner_context.yy_text
-#define yyleng self->scanner_context.yy_leng
-
-#define STATE(name)  yyc##name
-#define BEGIN(state) YYSETCONDITION(STATE(state))
-#define YYSTATE      YYGETCONDITION()
-
-typedef struct _SCANNER_CONTEXT SCANNER_CONTEXT;
-struct _SCANNER_CONTEXT
+typedef struct _TLIBC_XML_READER_SCANNER_CONTEXT TLIBC_XML_READER_SCANNER_CONTEXT;
+struct _TLIBC_XML_READER_SCANNER_CONTEXT
 {
 	int yy_state;
-	YYCTYPE *yy_last;
-	YYCTYPE *yy_cursor;
-	YYCTYPE *yy_limit;
-	YYCTYPE *yy_text;
-	YYCTYPE *yy_marker;
-	YYCTYPE *yy_start;
+	tchar *yy_last;
+	tchar *yy_cursor;
+	tchar *yy_limit;
+	tchar *yy_text;
+	tchar *yy_marker;
+	tchar *yy_start;
 	tuint32 yy_leng;
 
 	tuint32 yylineno;
 	tuint32 yycolumn;
+
+	
+
+	TLIBC_XML_READER_YYLTYPE yylloc;
+
+	char tag_name[TLIBC_MAX_IDENTIFIER_LENGTH];
+	tchar *content_begin;
+	tchar *content_end;
 };
 
-enum EN_TOKEN
-{
-	tok_end = 0,						//½âÎö½áÊø
-	tok_error = 0,						//½âÎö´íÎó
-	tok_tag_begin = 1,
-	tok_tag_end = 2,
-};
 
-#define MAX_LEX_BUFF_SIZE 10000000
-#define MAX_SCANNER_STACK_SIZE 1024
+#define TLIBC_LEX_LEX_BUFF_SIZE 10000000
 
 typedef struct _TLIBC_XML_READER
 {
 	TLIBC_ABSTRACT_READER super;
 
-	SCANNER_CONTEXT scanner_context;
+	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context;
 
-	YYCTYPE *buff_limit;
-	YYCTYPE *buff_curr;
-	YYCTYPE buff[MAX_LEX_BUFF_SIZE];
+	tchar buff[TLIBC_LEX_LEX_BUFF_SIZE];
+	tuint32 buff_size;
 
-	YYCTYPE *content_begin;
-	YYCTYPE *content_end;
-
-	YYLTYPE yylloc;
-
-	tuint32 level;
+	tuint32 struct_deep;
 }TLIBC_XML_READER;
 
 
@@ -128,12 +98,6 @@ TLIBC_API tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuin
 TLIBC_API tint32 xml_read_vector_item_end(TLIBC_ABSTRACT_READER *super, tuint32 index);
 
 TLIBC_API tint32 xml_read_vector_item_begin(TLIBC_ABSTRACT_READER *super, tuint32 index);
-
-void xml_locate(TLIBC_XML_READER *self);
-
-tint32 tlibc_xml_scan(TLIBC_XML_READER *self, YYLTYPE *yylloc);
-
-int xml_scan(TLIBC_XML_READER *self, XML_TOKEN_VALUE *token_value);
 
 #endif
 
