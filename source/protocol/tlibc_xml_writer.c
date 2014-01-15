@@ -44,10 +44,6 @@ void xml_writer_init(TLIBC_XML_WRITER *self, FILE *f)
 
 }
 
-void xml_writer_fini(TLIBC_XML_WRITER *self)
-{
-}
-
 static void printf_tab(TLIBC_XML_WRITER *self)
 {
 	tuint32 i;
@@ -155,7 +151,6 @@ tint32 xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name)
 
 TLIBC_API tint32 xml_write_vector_item_begin(TLIBC_ABSTRACT_WRITER *super, tuint32 index)
 {
-	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	char str[1024];
 	snprintf(str, 1024, "[%d]", index);
 	return xml_write_field_begin(super, str);
@@ -163,13 +158,12 @@ TLIBC_API tint32 xml_write_vector_item_begin(TLIBC_ABSTRACT_WRITER *super, tuint
 
 TLIBC_API tint32 xml_write_vector_item_end(TLIBC_ABSTRACT_WRITER *super, tuint32 index)
 {
-	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	char str[1024];
 	snprintf(str, 1024, "[%d]", index);
 	return xml_write_field_end(super, str);
 }
 
-tint32 xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double val)
+tint32 xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	fprintf(self->f, "%lf", val);
@@ -177,49 +171,55 @@ tint32 xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double val)
 	return E_TLIBC_NOERROR;
 }
 
-tint32 xml_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 val)
+tint32 xml_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val)
 {
-	return xml_write_tint64(super, val);
+	tint64 v = *val;
+	return xml_write_tint64(super, &v);
 }
 
-tint32 xml_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 val)
+tint32 xml_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val)
 {
-	return xml_write_tint64(super, val);
+	tint64 v = *val;
+	return xml_write_tint64(super, &v);
 }
 
-tint32 xml_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 val)
+tint32 xml_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 *val)
 {
-	return xml_write_tint64(super, val);
+	tint64 v = *val;
+	return xml_write_tint64(super, &v);
 }
 
-tint32 xml_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 val)
+tint32 xml_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	fprintf(self->f, "%lld", val);
+	fprintf(self->f, "%lld", *val);
 	self->need_tab = hpfalse;
 	return E_TLIBC_NOERROR;
 }
 
 
-tint32 xml_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 val)
+tint32 xml_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 *val)
 {
-	return xml_write_tuint64(super, val);
+	tuint64 v = *val;
+	return xml_write_tuint64(super, &v);
 }
 
-tint32 xml_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 val)
+tint32 xml_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val)
 {
-	return xml_write_tuint64(super, val);
+	tuint64 v = *val;
+	return xml_write_tuint64(super, &v);
 }
 
-tint32 xml_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 val)
+tint32 xml_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 *val)
 {
-	return xml_write_tuint64(super, val);
+	tuint64 v = *val;
+	return xml_write_tuint64(super, &v);
 }
 
-tint32 xml_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 val)
+tint32 xml_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	fprintf(self->f, "%llu", val);
+	fprintf(self->f, "%llu", *val);
 	self->need_tab = hpfalse;
 	return E_TLIBC_NOERROR;
 }
@@ -267,10 +267,10 @@ tint32 xml_write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
 	return xml_write_tstring(self, enum_name);
 }
 
-tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar val)
+tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 
-	write_char(self->f, val);
+	write_char(self->f, *val);
 	return E_TLIBC_NOERROR;
 }

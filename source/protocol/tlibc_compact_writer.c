@@ -322,14 +322,14 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, void *addr, tuint32 s
 #define COMPACT_WRITER_CAPACITY(self) (self->size - self->offset)
 #define COMPACT_WRITER_PTR(self) (self->addr + self->offset)
 
-tint32 tlibc_compact_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 val)
+tint32 tlibc_compact_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(tint8))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tint8*)COMPACT_WRITER_PTR(self) = val;
+	*(tint8*)COMPACT_WRITER_PTR(self) = *val;
 	self->offset += sizeof(tint8);
 
 	return E_TLIBC_NOERROR;
@@ -337,11 +337,11 @@ not_enough_bytebuff_size:
 	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
 }
 
-tint32 tlibc_compact_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 val)
+tint32 tlibc_compact_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint16_encode(tlibc_host16_to_little(tlibc_zigzag_encode16(val)), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint16_encode(tlibc_host16_to_little(tlibc_zigzag_encode16(*val)), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -352,11 +352,11 @@ done:
 	return ret;
 }
 
-tint32 tlibc_compact_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 val)
+tint32 tlibc_compact_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint32_encode(tlibc_host32_to_little(tlibc_zigzag_encode16(val)), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint32_encode(tlibc_host32_to_little(tlibc_zigzag_encode16(*val)), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -367,7 +367,7 @@ done:
 	return ret;
 }
 
-tint32 tlibc_compact_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 val)
+tint32 tlibc_compact_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -383,14 +383,14 @@ done:
 }
 
 
-tint32 tlibc_compact_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 val)
+tint32 tlibc_compact_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(tuint8))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tuint8*)COMPACT_WRITER_PTR(self) = val;
+	*(tuint8*)COMPACT_WRITER_PTR(self) = *val;
 	self->offset += sizeof(tuint8);
 
 	return E_TLIBC_NOERROR;
@@ -398,11 +398,11 @@ not_enough_bytebuff_size:
 	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
 }
 
-tint32 tlibc_compact_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 val)
+tint32 tlibc_compact_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint16_encode(tlibc_host16_to_little(val), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint16_encode(tlibc_host16_to_little(*val), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -413,11 +413,11 @@ done:
 	return ret;
 }
 
-tint32 tlibc_compact_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 val)
+tint32 tlibc_compact_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint32_encode(tlibc_host32_to_little(val), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint32_encode(tlibc_host32_to_little(*val), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -428,11 +428,11 @@ done:
 	return ret;
 }
 
-tint32 tlibc_compact_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 val)
+tint32 tlibc_compact_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint64_encode(tlibc_host64_to_little(val), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint64_encode(tlibc_host64_to_little(*val), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -443,14 +443,14 @@ done:
 	return ret;
 }
 
-tint32 tlibc_compact_write_tchar(TLIBC_ABSTRACT_WRITER *super, const char val)
+tint32 tlibc_compact_write_tchar(TLIBC_ABSTRACT_WRITER *super, const char *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(char))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(char*)COMPACT_WRITER_PTR(self) = val;
+	*(char*)COMPACT_WRITER_PTR(self) = *val;
 	self->offset += sizeof(char);
 
 	return E_TLIBC_NOERROR;
@@ -458,14 +458,14 @@ not_enough_bytebuff_size:
 	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
 }
 
-tint32 tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double val)
+tint32 tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(double))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(double*)COMPACT_WRITER_PTR(self) = val;
+	*(double*)COMPACT_WRITER_PTR(self) = *val;
 	self->offset += sizeof(double);
 
 	return E_TLIBC_NOERROR;
@@ -493,7 +493,7 @@ done:
 	return ret;
 }
 
-TLIBC_API tint32 tlibc_compact_write_enum_number(TLIBC_ABSTRACT_WRITER *super, const tint32 val)
+TLIBC_API tint32 tlibc_compact_write_enum_number(TLIBC_ABSTRACT_WRITER *super, const tint32 *val)
 {
 	return tlibc_compact_write_tint32(super, val);
 }

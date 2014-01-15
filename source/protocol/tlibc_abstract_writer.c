@@ -83,7 +83,7 @@ tint32 write_field_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name)
 	return self->write_field_end(self, var_name);
 }
 
-tint32 write_tint8(TLIBC_ABSTRACT_WRITER *self, const tint8 val)
+tint32 write_tint8(TLIBC_ABSTRACT_WRITER *self, const tint8 *val)
 {
 	if(self->write_tint8 == NULL)
 	{
@@ -92,7 +92,7 @@ tint32 write_tint8(TLIBC_ABSTRACT_WRITER *self, const tint8 val)
 	return self->write_tint8(self, val);
 }
 
-tint32 write_tint16(TLIBC_ABSTRACT_WRITER *self, const tint16 val)
+tint32 write_tint16(TLIBC_ABSTRACT_WRITER *self, const tint16 *val)
 {
 	if(self->write_tint16 == NULL)
 	{
@@ -101,7 +101,7 @@ tint32 write_tint16(TLIBC_ABSTRACT_WRITER *self, const tint16 val)
 	return self->write_tint16(self, val);
 }
 
-tint32 write_tint32(TLIBC_ABSTRACT_WRITER *self, const tint32 val)
+tint32 write_tint32(TLIBC_ABSTRACT_WRITER *self, const tint32 *val)
 {
 	if(self->write_tint32 == NULL)
 	{
@@ -110,7 +110,7 @@ tint32 write_tint32(TLIBC_ABSTRACT_WRITER *self, const tint32 val)
 	return self->write_tint32(self, val);
 }
 
-tint32 write_tint64(TLIBC_ABSTRACT_WRITER *self, const tint64 val)
+tint32 write_tint64(TLIBC_ABSTRACT_WRITER *self, const tint64 *val)
 {
 	if(self->write_tint64 == NULL)
 	{
@@ -119,7 +119,7 @@ tint32 write_tint64(TLIBC_ABSTRACT_WRITER *self, const tint64 val)
 	return self->write_tint64(self, val);
 }
 
-tint32 write_tuint8(TLIBC_ABSTRACT_WRITER *self, const tuint8 val)
+tint32 write_tuint8(TLIBC_ABSTRACT_WRITER *self, const tuint8 *val)
 {
 	if(self->write_tuint8 == NULL)
 	{
@@ -128,7 +128,7 @@ tint32 write_tuint8(TLIBC_ABSTRACT_WRITER *self, const tuint8 val)
 	return self->write_tuint8(self, val);
 }
 
-tint32 write_tuint16(TLIBC_ABSTRACT_WRITER *self, const tuint16 val)
+tint32 write_tuint16(TLIBC_ABSTRACT_WRITER *self, const tuint16 *val)
 {
 	if(self->write_tuint16 == NULL)
 	{
@@ -137,7 +137,7 @@ tint32 write_tuint16(TLIBC_ABSTRACT_WRITER *self, const tuint16 val)
 	return self->write_tuint16(self, val);
 }
 
-tint32 write_tuint32(TLIBC_ABSTRACT_WRITER *self, const tuint32 val)
+tint32 write_tuint32(TLIBC_ABSTRACT_WRITER *self, const tuint32 *val)
 {
 	if(self->write_tuint32 == NULL)
 	{
@@ -146,7 +146,7 @@ tint32 write_tuint32(TLIBC_ABSTRACT_WRITER *self, const tuint32 val)
 	return self->write_tuint32(self, val);
 }
 
-tint32 write_tuint64(TLIBC_ABSTRACT_WRITER *self, const tuint64 val)
+tint32 write_tuint64(TLIBC_ABSTRACT_WRITER *self, const tuint64 *val)
 {
 	if(self->write_tuint64 == NULL)
 	{
@@ -155,7 +155,7 @@ tint32 write_tuint64(TLIBC_ABSTRACT_WRITER *self, const tuint64 val)
 	return self->write_tuint64(self, val);
 }
 
-tint32 write_tchar(TLIBC_ABSTRACT_WRITER *self, const tchar val)
+tint32 write_tchar(TLIBC_ABSTRACT_WRITER *self, const tchar *val)
 {
 	if(self->write_tchar == NULL)
 	{
@@ -164,7 +164,7 @@ tint32 write_tchar(TLIBC_ABSTRACT_WRITER *self, const tchar val)
 	return self->write_tchar(self, val);
 }
 
-tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble val)
+tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble *val)
 {
 	if(self->write_tdouble == NULL)
 	{
@@ -173,7 +173,7 @@ tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble val)
 	return self->write_tdouble(self, val);
 }
 
-tint32 write_enum_number(TLIBC_ABSTRACT_WRITER *self, const tint32 val)
+tint32 write_enum_number(TLIBC_ABSTRACT_WRITER *self, const tint32 *val)
 {
 	if(self->write_enum_number == NULL)
 	{
