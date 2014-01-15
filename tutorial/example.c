@@ -19,8 +19,10 @@ void test_hash()
 	tlibc_hash_t hash_table;//定义hash表
 	test_hash_data_t d0, d1, d2;
 	tlibc_hash_head_t *pos;
-	test_hash_data_t *data;
-	TLIBC_LIST_HEAD *iter;
+	const tlibc_hash_head_t *pos_const;
+	const test_hash_data_t *data;
+	const TLIBC_LIST_HEAD *iter;
+	const TLIBC_LIST_HEAD *iter_bucket;
 
 	//准备数据
 	d0.data = 0;
@@ -41,36 +43,41 @@ void test_hash()
 	tlibc_hash_insert(&hash_table, d1.key, strlen(d1.key), &d1.hash_head);
 	tlibc_hash_insert(&hash_table, d2.key, strlen(d2.key), &d2.hash_head);
 
-	pos = tlibc_hash_find(&hash_table, "d0", 2);
-	if(pos != NULL)
+	pos_const = tlibc_hash_find_const(&hash_table, "d0", 2);
+	if(pos_const != NULL)
 	{
-		data = TLIBC_CONTAINER_OF(pos, test_hash_data_t, hash_head);
+		data = TLIBC_CONTAINER_OF(pos_const, const test_hash_data_t, hash_head);
 		printf("find d0 data: %d\n", data->data);
 	}
 	
 
 	//遍历所有数据
 	printf("\n");
-	for(iter = hash_table.all_data_list.next; iter != &hash_table.all_data_list; iter = iter->next)
+	for(iter_bucket = hash_table.used_bucket_list.next; iter_bucket != &hash_table.used_bucket_list; iter_bucket = iter_bucket->next)
 	{
-		data = TLIBC_CONTAINER_OF(pos, test_hash_data_t, hash_head);
-		printf("key %s, data %d\n", data->key, data->data);
+		const tlibc_hash_bucket_t *bucket = TLIBC_CONTAINER_OF(iter_bucket, const tlibc_hash_bucket_t, used_bucket_list);
+		for(iter = bucket->data_list.next; iter != &bucket->data_list; iter = iter->next)
+		{
+			data = TLIBC_CONTAINER_OF(iter, const test_hash_data_t, hash_head);
+			printf("key %s, data %d\n", data->key, data->data);
+		}
 	}
+	
 	
 	//删除
 	printf("\n");
 	pos = tlibc_hash_find(&hash_table, "d2", 2);
 	if(pos != NULL)
 	{
-		data = TLIBC_CONTAINER_OF(pos, test_hash_data_t, hash_head);
+		data = TLIBC_CONTAINER_OF(pos, const test_hash_data_t, hash_head);
 		printf("find d2 data: %d\n", data->data);
 
 
 		tlibc_hash_remove(&hash_table, pos);
-		pos = tlibc_hash_find(&hash_table, "d2", 2);
-		if(pos == NULL)
+		pos_const = tlibc_hash_find_const(&hash_table, "d2", 2);
+		if(pos_const == NULL)
 		{
-			data = TLIBC_CONTAINER_OF(pos, test_hash_data_t, hash_head);
+			data = TLIBC_CONTAINER_OF(pos_const, const test_hash_data_t, hash_head);
 			printf("can not find d2\n");
 		}
 	}
@@ -78,8 +85,8 @@ void test_hash()
 	//清空hash表
 	printf("\n");
 	tlibc_hash_clear(&hash_table);
-	pos = tlibc_hash_find(&hash_table, "d0", 2);
-	if(pos == NULL)
+	pos_const = tlibc_hash_find_const(&hash_table, "d0", 2);
+	if(pos_const == NULL)
 	{
 		printf("can not find d0\n");
 	}
