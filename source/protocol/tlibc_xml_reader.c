@@ -52,7 +52,6 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	tlibc_abstract_reader_init(&self->super);
 
 
-	self->super.read_enum_name = xml_read_enum_name;
 	self->super.read_struct_begin = xml_read_struct_begin;
 	self->super.read_struct_end = xml_read_struct_end;
 	self->super.read_enum_begin = xml_read_enum_begin;
@@ -74,7 +73,7 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	self->super.read_tuint64 = xml_read_tuint64;
 
 	self->super.read_tdouble = xml_read_tdouble;
-	self->super.read_string = xml_read_tstring;
+	self->super.read_tstring = xml_read_tstring;
 	self->super.read_tchar = xml_read_tchar;
 	self->pre_read_uint16_field_once = hpfalse;
 	self->skip_int32_once = hpfalse;

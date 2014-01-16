@@ -24,9 +24,7 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 	self->write_tuint64 = NULL;
 	self->write_tchar = NULL;
 	self->write_tdouble = NULL;
-
-	self->write_enum_name = NULL;	
-	self->write_string = NULL;
+	self->write_tstring = NULL;
 
 }
 
@@ -211,20 +209,11 @@ tint32 write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble *val)
 	return self->write_tdouble(self, val);
 }
 
-tint32 write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
-{
-	if(self->write_enum_name == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_enum_name(self, enum_name);
-}
-
 tint32 write_tstring(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
 {
-	if(self->write_string == NULL)
+	if(self->write_tstring == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_string(self, str);
+	return self->write_tstring(self, str);
 }

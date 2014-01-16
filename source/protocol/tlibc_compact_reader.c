@@ -282,7 +282,7 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const void *addr, tui
 	self->super.read_tuint16 = tlibc_compact_read_tuint16;
 	self->super.read_tuint32 = tlibc_compact_read_tuint32;
 	self->super.read_tuint64 = tlibc_compact_read_tuint64;
-	self->super.read_string = tlibc_compact_read_tstring;
+	self->super.read_tstring = tlibc_compact_read_tstring;
 
 
 

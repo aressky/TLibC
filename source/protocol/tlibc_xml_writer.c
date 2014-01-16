@@ -42,10 +42,9 @@ TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 
 
 	self->super.write_tdouble = xml_write_tdouble;
-	self->super.write_string = xml_write_tstring;
+	self->super.write_tstring = xml_write_tstring;
 	self->super.write_tchar = xml_write_tchar;
 
-	self->super.write_enum_name = xml_write_enum_name;
 
 	self->skip_uint16_field_once = hpfalse;
 	self->skip_int32_once = hpfalse;
@@ -322,10 +321,6 @@ tint32 xml_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
 	}
 
 	return E_TLIBC_NOERROR;
-}
-tint32 xml_write_enum_name(TLIBC_ABSTRACT_WRITER *self, const tchar *enum_name)
-{
-	return xml_write_tstring(self, enum_name);
 }
 
 tint32 xml_write_tchar(TLIBC_ABSTRACT_WRITER *super, const tchar *val)

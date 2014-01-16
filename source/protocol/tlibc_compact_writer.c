@@ -311,7 +311,7 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, void *addr, tuint32 s
 	self->super.write_tuint16 = tlibc_compact_write_tuint16;
 	self->super.write_tuint32 = tlibc_compact_write_tuint32;
 	self->super.write_tuint64 = tlibc_compact_write_tuint64;
-	self->super.write_string = tlibc_compact_write_tstring;
+	self->super.write_tstring = tlibc_compact_write_tstring;
 
 	self->addr = addr;
 	self->size = size;

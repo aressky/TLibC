@@ -34,9 +34,6 @@ TLIBC_API tint32 xml_write_field_begin(TLIBC_ABSTRACT_WRITER *super, const char 
 
 TLIBC_API tint32 xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name);
 
-TLIBC_API tint32 xml_write_enum_name(TLIBC_ABSTRACT_WRITER *super, const tchar *enum_name);
-
-
 TLIBC_API tint32 xml_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val);
 
 TLIBC_API tint32 xml_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val);

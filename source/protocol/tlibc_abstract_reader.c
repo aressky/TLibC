@@ -24,9 +24,7 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_tuint64 = NULL;
 	self->read_tchar = NULL;
 	self->read_tdouble = NULL;
-
-	self->read_enum_name = NULL;
-	self->read_string = NULL;
+	self->read_tstring = NULL;
 
 }
 
@@ -196,15 +194,6 @@ tint32 read_tuint64(TLIBC_ABSTRACT_READER *self, tuint64 *val)
 	return self->read_tuint64(self, val);
 }
 
-tint32 read_enum_name(TLIBC_ABSTRACT_READER *self, tchar *enum_name, tuint32 enum_name_length)
-{
-	if(self->read_enum_name == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_enum_name(self, enum_name, enum_name_length);
-}
-
 tint32 read_tchar(TLIBC_ABSTRACT_READER *self, tchar *val)
 {
 	if(self->read_tchar == NULL)
@@ -225,9 +214,9 @@ tint32 read_tdouble(TLIBC_ABSTRACT_READER *self, tdouble *val)
 
 tint32 read_tstring(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length)
 {
-	if(self->read_string == NULL)
+	if(self->read_tstring == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->read_string(self, str, str_length);
+	return self->read_tstring(self, str, str_length);
 }
