@@ -50,6 +50,7 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 	if(bucket->data_list_num == 0)
 	{
 		tlibc_list_add(&bucket->used_bucket_list, &self->used_bucket_list);
+		++self->used_bucket_list_num;
 	}	
 	++bucket->data_list_num;
 }
@@ -59,17 +60,11 @@ const tlibc_hash_head_t* tlibc_hash_find_const(const tlibc_hash_t *self, const c
 	tuint32 key_hash = tlibc_hash_key(key, key_size);
 	tuint32 key_index = key_hash % self->size;
 	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
-	TLIBC_LIST_HEAD *iter;
+	TLIBC_LIST_HEAD *iter = bucket->data_list.next;
 	tuint32 i;
-	for(iter = bucket->data_list.next, i = 0; iter != &bucket->data_list; iter = iter->next, ++i)
+	for(i = 0; i < bucket->data_list_num; iter = iter->next, ++i)
 	{
 		tlibc_hash_head_t *ele = TLIBC_CONTAINER_OF(iter, tlibc_hash_head_t, data_list);
-		if(i >= bucket->data_list_num)
-		{
-			//如果执行到这里， 说明出现了说明严重的错误， 可能内存越界导致链表中有环， 可能删除了不在hash表中的数据导致统计错误
-			assert(0);
-			break;
-		}
 		if((ele->key_size == key_size ) && (memcmp(ele->key, key, key_size) == 0))
 		{
 			return ele;
@@ -83,17 +78,11 @@ tlibc_hash_head_t* tlibc_hash_find(tlibc_hash_t *self, const char *key, tuint32 
 	tuint32 key_hash = tlibc_hash_key(key, key_size);
 	tuint32 key_index = key_hash % self->size;
 	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
-	TLIBC_LIST_HEAD *iter;
+	TLIBC_LIST_HEAD *iter = iter = bucket->data_list.next;
 	tuint32 i;
-	for(iter = bucket->data_list.next, i = 0; iter != &bucket->data_list; iter = iter->next, ++i)
+	for(i = 0; i < bucket->data_list_num; iter = iter->next, ++i)
 	{
 		tlibc_hash_head_t *ele = TLIBC_CONTAINER_OF(iter, tlibc_hash_head_t, data_list);
-		if(i >= bucket->data_list_num)
-		{
-			//如果执行到这里， 说明出现了说明严重的错误， 可能内存越界导致链表中有环， 可能删除了不在hash表中的数据导致统计错误
-			assert(0);
-			break;
-		}
 		if((ele->key_size == key_size ) && (memcmp(ele->key, key, key_size) == 0))
 		{
 			return ele;
@@ -113,24 +102,18 @@ void tlibc_hash_remove(tlibc_hash_t *self, tlibc_hash_head_t *ele)
 		if(bucket->data_list_num == 0)
 		{
 			tlibc_list_del(&bucket->used_bucket_list);
+			--self->used_bucket_list_num;
 		}
 	}
 }
 
 void tlibc_hash_clear(tlibc_hash_t *self)
 {
-	TLIBC_LIST_HEAD *iter;
+	TLIBC_LIST_HEAD *iter = self->used_bucket_list.next;
 	tuint32 i;
-	for(iter = self->used_bucket_list.next, i = 0; iter != &self->used_bucket_list; iter = iter->next, ++i)
+	for(i = 0; i < self->used_bucket_list_num; iter = iter->next, ++i)
 	{
 		tlibc_hash_bucket_t *bucket = TLIBC_CONTAINER_OF(iter, tlibc_hash_bucket_t, used_bucket_list);
-		if(i >= self->size)
-		{
-			//如果执行到这里， 说明出现了说明严重的错误， 可能内存越界导致链表中有环， 可能删除了不在hash表中的数据导致统计错误
-			assert(0);
-			break;
-		}
-
 		init_tlibc_list_head(&bucket->data_list);
 		bucket->data_list_num = 0;
 	}
