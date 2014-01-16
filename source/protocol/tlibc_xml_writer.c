@@ -122,8 +122,9 @@ TLIBC_ERROR_CODE tlibc_xml_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const 
 TLIBC_ERROR_CODE tlibc_xml_write_vector_begin(TLIBC_ABSTRACT_WRITER *super)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);	
+	TLIBC_ERROR_CODE ret = tlibc_xml_write_field_begin(super, "vector");
 	self->skip_uint16_field_once = hptrue;
-	return tlibc_xml_write_field_begin(super, "vector");
+	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_write_vector_end(TLIBC_ABSTRACT_WRITER *super)
