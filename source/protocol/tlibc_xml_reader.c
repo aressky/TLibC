@@ -76,7 +76,7 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	self->super.read_tstring = xml_read_tstring;
 	self->super.read_tchar = xml_read_tchar;
 	self->pre_read_uint16_field_once = hpfalse;
-	self->skip_int32_once = hpfalse;
+	self->ignore_int32_once = hpfalse;
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -119,7 +119,7 @@ tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const char *struct_name
 tint32 xml_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	self->skip_int32_once = hptrue;
+	self->ignore_int32_once = hptrue;
 
 	return E_TLIBC_NOERROR;
 }
@@ -254,9 +254,10 @@ tint32 xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val)
 	tint64 i64;
 	tint32 ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	if(self->skip_int32_once)
+	if(self->ignore_int32_once)
 	{
-		self->skip_int32_once = hpfalse;
+		self->ignore_int32_once = hpfalse;
+		ret = E_TLIBC_IGNORE;
 		goto done;
 	}
 	

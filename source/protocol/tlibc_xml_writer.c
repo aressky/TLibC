@@ -47,7 +47,7 @@ TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 
 
 	self->skip_uint16_field_once = hpfalse;
-	self->skip_int32_once = hpfalse;
+	self->ignore_int32_once = hpfalse;
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -112,7 +112,7 @@ tint32 xml_write_struct_end(TLIBC_ABSTRACT_WRITER *super, const char *struct_nam
 tint32 xml_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const char *enum_name)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	self->skip_int32_once = hptrue;
+	self->ignore_int32_once = hptrue;
 	return E_TLIBC_NOERROR;
 }
 
@@ -229,9 +229,10 @@ tint32 xml_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 *val)
 	tint64 v;
 	tint32 ret = E_TLIBC_NOERROR;
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	if(self->skip_int32_once)
+	if(self->ignore_int32_once)
 	{
-		self->skip_int32_once = hpfalse;
+		self->ignore_int32_once = hpfalse;
+		ret = E_TLIBC_IGNORE;
 		goto done;
 	}
 	v = *val;

@@ -53,7 +53,7 @@ typedef struct _TLIBC_XML_READER
 
 	tuint32 struct_deep;
 
-	int skip_int32_once;
+	int ignore_int32_once;
 
 	int pre_read_uint16_field_once;
 	tuint16 ui16;
