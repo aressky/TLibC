@@ -5,15 +5,14 @@
  *  @generated
  */
 
-#ifndef _H_TDATA_TYPES_H
-#define _H_TDATA_TYPES_H
+#ifndef _H_TDATA_TDATA_TYPES_H
+#define _H_TDATA_TDATA_TYPES_H
 
 #include "platform/tlibc_platform.h"
-#include "tdata/tdata_types.h"
 
 
 
 #define TLIBC_MAX_IDENTIFIER_LENGTH 128
 
-#endif //_H_TDATA_TYPES_H
+#endif //_H_TDATA_TDATA_TYPES_H
 
