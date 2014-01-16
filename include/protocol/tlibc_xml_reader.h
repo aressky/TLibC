@@ -31,8 +31,6 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 	tuint32 yylineno;
 	tuint32 yycolumn;
 
-	
-
 	TLIBC_XML_READER_YYLTYPE yylloc;
 
 	char tag_name[TDATA_MAX_LENGTH_OF_IDENTIFIER];
@@ -41,15 +39,14 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 };
 
 
-#define TLIBC_LEX_LEX_BUFF_SIZE 10000000
-
+#define TLIBC_XML_READER_BUFF_SIZE 10000000
 typedef struct _TLIBC_XML_READER
 {
 	TLIBC_ABSTRACT_READER super;
 
 	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context;
 
-	tchar buff[TLIBC_LEX_LEX_BUFF_SIZE];
+	tchar buff[TLIBC_XML_READER_BUFF_SIZE];
 	tuint32 buff_size;
 
 	tuint32 struct_deep;
@@ -61,53 +58,43 @@ typedef struct _TLIBC_XML_READER
 }TLIBC_XML_READER;
 
 
-TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_name);
 
-//virtual public functions
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 
-TLIBC_API tint32 xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 
-TLIBC_API tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
 
-TLIBC_API tint32 xml_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_vector_begin(TLIBC_ABSTRACT_READER *self);
 
-TLIBC_API tint32 xml_read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_vector_end(TLIBC_ABSTRACT_READER *self);
 
-TLIBC_API tint32 xml_read_vector_begin(TLIBC_ABSTRACT_READER *self);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
-TLIBC_API tint32 xml_read_vector_end(TLIBC_ABSTRACT_READER *self);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
-TLIBC_API tint32 xml_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val);
 
-TLIBC_API tint32 xml_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val);
 
-TLIBC_API tint32 xml_read_enum_name(TLIBC_ABSTRACT_READER *super, tchar *enum_name, tuint32 enum_name_length);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val);
 
-TLIBC_API tint32 xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val);
 
-TLIBC_API tint32 xml_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val);
 
-TLIBC_API tint32 xml_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val);
 
-TLIBC_API tint32 xml_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tuint8(TLIBC_ABSTRACT_READER *super, tuint8 *val);
 
-TLIBC_API tint32 xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val);
 
-TLIBC_API tint32 xml_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val);
 
-TLIBC_API tint32 xml_read_tuint8(TLIBC_ABSTRACT_READER *super, tuint8 *val);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val);
 
-TLIBC_API tint32 xml_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val);
-
-TLIBC_API tint32 xml_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val);
-
-TLIBC_API tint32 xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val);
-
-TLIBC_API tint32 xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len);
-
-TLIBC_API tint32 xml_read_vector_item_end(TLIBC_ABSTRACT_READER *super, tuint32 index);
-
-TLIBC_API tint32 xml_read_vector_item_begin(TLIBC_ABSTRACT_READER *super, tuint32 index);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len);
 
 #endif
 

@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "lib/tlibc_hash.h"
+#include "core/tlibc_hash.h"
 #include <string.h>
 
 #define HASH_KEY_LENGTH 128

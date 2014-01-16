@@ -13,12 +13,13 @@ TLIBC_ERROR_CODE tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *bucket
 	self->size = size;
 	for(i = 0; i < self->size; ++i)
 	{
-		init_tlibc_list_head(&self->buckets[i].data_list);
-		init_tlibc_list_head(&self->buckets[i].used_bucket_list);
+		tlibc_list_init(&self->buckets[i].data_list);
+		tlibc_list_init(&self->buckets[i].used_bucket_list);
 		self->buckets[i].data_list_num = 0;
 	}
 
-	init_tlibc_list_head(&self->used_bucket_list);
+	tlibc_list_init(&self->used_bucket_list);
+	self->used_bucket_list_num = 0;
 
 	return E_TLIBC_NOERROR;
 }
@@ -44,8 +45,7 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 	val_head->key_size = key_size;
 	val_head->key_index = key_index;
 
-	init_tlibc_list_head(&val_head->data_list);
-	
+	tlibc_list_init(&val_head->data_list);
 	tlibc_list_add(&val_head->data_list, &bucket->data_list);
 	if(bucket->data_list_num == 0)
 	{
@@ -114,8 +114,9 @@ void tlibc_hash_clear(tlibc_hash_t *self)
 	for(i = 0; i < self->used_bucket_list_num; iter = iter->next, ++i)
 	{
 		tlibc_hash_bucket_t *bucket = TLIBC_CONTAINER_OF(iter, tlibc_hash_bucket_t, used_bucket_list);
-		init_tlibc_list_head(&bucket->data_list);
+		tlibc_list_init(&bucket->data_list);
 		bucket->data_list_num = 0;
 	}
-	init_tlibc_list_head(&self->used_bucket_list);
+	tlibc_list_init(&self->used_bucket_list);
+	self->used_bucket_list_num = 0;
 }

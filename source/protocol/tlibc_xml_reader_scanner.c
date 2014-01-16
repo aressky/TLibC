@@ -15,7 +15,7 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 		}		
 		else if(*i == '\r')
 		{
-			sp->yycolumn = 1;			
+			sp->yycolumn = 1;		
 		}
 		else
 		{
@@ -27,10 +27,9 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 
  TLIBC_ERROR_CODE tlibc_xml_reader_get_content(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 {
-	tchar *iter;	
+	tchar *iter;
 
 	//self->content_begin在读到tok_tag_begin的时候被记录
-
 	for(iter = self->content_begin; iter < self->yy_limit; ++iter)
 	{
 		if(*iter == '<')
@@ -43,14 +42,15 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 	{
 		goto ERROR_RET;	
 	}
+
 	return E_TLIBC_NOERROR;
 ERROR_RET:
-	return E_TLIBC_ERROR;
+	return E_TLIBC_XML_SYNTAX_ERROR;
 }
 
-int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
-{	
-	int token = tok_end;
+TLIBC_XML_READER_TOKEN tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
+{
+	TLIBC_XML_READER_TOKEN token = tok_end;
 
 	token = tlibc_xml_reader_scan(self);
 	if(token == tok_end)
@@ -85,6 +85,8 @@ int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 			self->tag_name[self->yy_leng - 3] = 0;
 			break;
 		}
+	default:
+		goto ERROR_RET;
 	}
 done:
 	return token;

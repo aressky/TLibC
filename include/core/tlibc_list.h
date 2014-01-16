@@ -6,7 +6,7 @@ typedef struct _TLIBC_LIST_HEAD
 	struct _TLIBC_LIST_HEAD *next, *prev;
 }TLIBC_LIST_HEAD;
 
-#define init_tlibc_list_head(_head)\
+#define tlibc_list_init(_head)\
 do\
 {\
 	(_head)->next = _head;\
