@@ -65,6 +65,10 @@ TLIBC_API tint32 xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *
 
 TLIBC_API tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 
+TLIBC_API tint32 xml_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+
+TLIBC_API tint32 xml_read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+
 TLIBC_API tint32 xml_read_vector_begin(TLIBC_ABSTRACT_READER *self);
 
 TLIBC_API tint32 xml_read_vector_end(TLIBC_ABSTRACT_READER *self);

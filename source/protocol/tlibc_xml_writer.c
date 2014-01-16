@@ -22,6 +22,8 @@ TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 
 	self->super.write_struct_begin = xml_write_struct_begin;
 	self->super.write_struct_end = xml_write_struct_end;
+	self->super.write_enum_begin = xml_write_enum_begin;
+	self->super.write_enum_end = xml_write_enum_end;
 
 	self->super.write_vector_begin = xml_write_vector_begin;
 	self->super.write_vector_end = xml_write_vector_end;
@@ -104,6 +106,16 @@ tint32 xml_write_struct_end(TLIBC_ABSTRACT_WRITER *super, const char *struct_nam
 		}
 		fputc('>', self->f);
 	}
+	return E_TLIBC_NOERROR;
+}
+
+tint32 xml_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const char *enum_name)
+{
+	return E_TLIBC_NOERROR;
+}
+
+tint32 xml_write_enum_end(TLIBC_ABSTRACT_WRITER *super, const char *enum_name)
+{
 	return E_TLIBC_NOERROR;
 }
 

@@ -5,6 +5,10 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 {
 	self->read_struct_begin = NULL;
 	self->read_struct_end = NULL;
+	self->read_enum_begin = NULL;
+	self->read_enum_end = NULL;
+	self->read_union_begin = NULL;
+	self->read_union_end = NULL;
 	self->read_vector_begin = NULL;
 	self->read_vector_end = NULL;
 	self->read_field_begin = NULL;
@@ -44,6 +48,46 @@ tint32 read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name)
 	}
 	return self->read_struct_end(self, struct_name);
 }
+
+
+tint32 read_union_begin(TLIBC_ABSTRACT_READER *self, const char *union_name)
+{
+	if(self->read_union_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_union_begin(self, union_name);
+}
+
+tint32 read_union_end(TLIBC_ABSTRACT_READER *self, const char *union_name)
+{
+	if(self->read_union_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_union_end(self, union_name);
+}
+
+
+tint32 read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name)
+{
+	if(self->read_enum_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_enum_begin(self, enum_name);
+}
+
+tint32 read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name)
+{
+	if(self->read_enum_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_enum_end(self, enum_name);
+}
+
+
 
 tint32 read_vector_begin(TLIBC_ABSTRACT_READER *self)
 {

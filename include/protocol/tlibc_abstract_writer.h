@@ -8,6 +8,10 @@ struct _TLIBC_ABSTRACT_WRITER
 {
 	tint32 (*write_struct_begin)(TLIBC_ABSTRACT_WRITER *self, const char *struct_name);
 	tint32 (*write_struct_end)(TLIBC_ABSTRACT_WRITER *self, const char *struct_name);
+	tint32 (*write_union_begin)(TLIBC_ABSTRACT_WRITER *self, const char *union_name);
+	tint32 (*write_union_end)(TLIBC_ABSTRACT_WRITER *self, const char *union_name);
+	tint32 (*write_enum_begin)(TLIBC_ABSTRACT_WRITER *self, const char *enum_name);
+	tint32 (*write_enum_end)(TLIBC_ABSTRACT_WRITER *self, const char *enum_name);
 	tint32 (*write_vector_begin)(TLIBC_ABSTRACT_WRITER *self);
 	tint32 (*write_vector_end)(TLIBC_ABSTRACT_WRITER *self);
 	tint32 (*write_field_begin)(TLIBC_ABSTRACT_WRITER *self, const char *var_name);
@@ -32,6 +36,10 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self);
 
 tint32 write_struct_begin(TLIBC_ABSTRACT_WRITER *self, const char *struct_name);
 tint32 write_struct_end(TLIBC_ABSTRACT_WRITER *self, const char *struct_name);
+tint32 write_union_begin(TLIBC_ABSTRACT_WRITER *self, const char *union_name);
+tint32 write_union_end(TLIBC_ABSTRACT_WRITER *self, const char *union_name);
+tint32 write_enum_begin(TLIBC_ABSTRACT_WRITER *self, const char *enum_name);
+tint32 write_enum_end(TLIBC_ABSTRACT_WRITER *self, const char *enum_name);
 tint32 write_vector_begin(TLIBC_ABSTRACT_WRITER *self);
 tint32 write_vector_end(TLIBC_ABSTRACT_WRITER *self);
 tint32 write_field_begin(TLIBC_ABSTRACT_WRITER *self, const char *var_name);

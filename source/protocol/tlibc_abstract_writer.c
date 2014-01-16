@@ -5,6 +5,10 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 {
 	self->write_struct_begin = NULL;
 	self->write_struct_end = NULL;
+	self->write_union_begin = NULL;
+	self->write_union_end = NULL;
+	self->write_enum_begin = NULL;
+	self->write_enum_end = NULL;
 	self->write_vector_begin = NULL;
 	self->write_vector_end = NULL;
 	self->write_field_begin = NULL;
@@ -43,6 +47,43 @@ tint32 write_struct_end(TLIBC_ABSTRACT_WRITER *self, const char *struct_name)
 		return E_TLIBC_NOERROR;
 	}
 	return self->write_struct_end(self, struct_name);
+}
+
+tint32 write_union_begin(TLIBC_ABSTRACT_WRITER *self, const char *union_name)
+{
+	if(self->write_union_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_union_begin(self, union_name);
+}
+
+tint32 write_union_end(TLIBC_ABSTRACT_WRITER *self, const char *union_name)
+{
+	if(self->write_union_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_union_end(self, union_name);
+}
+
+
+tint32 write_enum_begin(TLIBC_ABSTRACT_WRITER *self, const char *enum_name)
+{
+	if(self->write_enum_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_enum_begin(self, enum_name);
+}
+
+tint32 write_enum_end(TLIBC_ABSTRACT_WRITER *self, const char *enum_name)
+{
+	if(self->write_enum_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_enum_end(self, enum_name);
 }
 
 tint32 write_vector_begin(TLIBC_ABSTRACT_WRITER *self)

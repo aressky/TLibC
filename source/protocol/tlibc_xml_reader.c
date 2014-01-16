@@ -55,6 +55,8 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	self->super.read_enum_name = xml_read_enum_name;
 	self->super.read_struct_begin = xml_read_struct_begin;
 	self->super.read_struct_end = xml_read_struct_end;
+	self->super.read_enum_begin = xml_read_enum_begin;
+	self->super.read_enum_end = xml_read_enum_end;
 
 	self->super.read_vector_begin = xml_read_vector_begin;
 	self->super.read_vector_end = xml_read_vector_end;
@@ -111,6 +113,16 @@ tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const char *struct_name
 	}
 	
 	--self->struct_deep;
+	return E_TLIBC_NOERROR;
+}
+
+tint32 xml_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name)
+{
+	return E_TLIBC_NOERROR;
+}
+
+tint32 xml_read_enum_end(TLIBC_ABSTRACT_READER *super, const char *enum_name)
+{
 	return E_TLIBC_NOERROR;
 }
 

@@ -8,6 +8,10 @@ struct _TLIBC_ABSTRACT_READER
 {
 	tint32 (*read_struct_begin)(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 	tint32 (*read_struct_end)(TLIBC_ABSTRACT_READER *self, const char *struct_name);
+	tint32 (*read_union_begin)(TLIBC_ABSTRACT_READER *self, const char *union_name);
+	tint32 (*read_union_end)(TLIBC_ABSTRACT_READER *self, const char *union_name);
+	tint32 (*read_enum_begin)(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+	tint32 (*read_enum_end)(TLIBC_ABSTRACT_READER *self, const char *enum_name);
 	tint32 (*read_vector_begin)(TLIBC_ABSTRACT_READER *self);
 	tint32 (*read_vector_end)(TLIBC_ABSTRACT_READER *self);
 	tint32 (*read_field_begin)(TLIBC_ABSTRACT_READER *self, const char *var_name);
@@ -33,6 +37,10 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self);
 
 tint32 read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 tint32 read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
+tint32 read_union_begin(TLIBC_ABSTRACT_READER *self, const char *union_name);
+tint32 read_union_end(TLIBC_ABSTRACT_READER *self, const char *union_name);
+tint32 read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
+tint32 read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name);
 tint32 read_vector_begin(TLIBC_ABSTRACT_READER *self);
 tint32 read_vector_end(TLIBC_ABSTRACT_READER *self);
 tint32 read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
