@@ -272,7 +272,6 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const void *addr, tui
 {
 	tlibc_abstract_reader_init(&self->super);
 
-	self->super.read_enum_number = tlibc_compact_read_enum_number;
 	self->super.read_tchar = tlibc_compact_read_tchar;
 	self->super.read_tdouble = tlibc_compact_read_tdouble;
 	self->super.read_tint8 = tlibc_compact_read_tint8;
@@ -479,8 +478,3 @@ done:
 	return ret;
 }
 
-
-tint32 tlibc_compact_read_enum_number(TLIBC_ABSTRACT_READER *super, tint32 *val)
-{
-	return tlibc_compact_read_tint32(super, val);
-}

@@ -47,7 +47,8 @@ TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 
 	self->super.write_enum_name = xml_write_enum_name;
 
-	self->skip_a_uint16_field = hpfalse;
+	self->skip_uint16_field_once = hpfalse;
+	self->skip_int32_once = hpfalse;
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -111,6 +112,8 @@ tint32 xml_write_struct_end(TLIBC_ABSTRACT_WRITER *super, const char *struct_nam
 
 tint32 xml_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const char *enum_name)
 {
+	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
+	self->skip_int32_once = hptrue;
 	return E_TLIBC_NOERROR;
 }
 
@@ -124,7 +127,7 @@ tint32 xml_write_vector_begin(TLIBC_ABSTRACT_WRITER *super)
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);	
 	xml_write_field_begin(super, "vector");
 	++self->count;
-	self->skip_a_uint16_field = hptrue;
+	self->skip_uint16_field_once = hptrue;
 	return E_TLIBC_NOERROR;
 }
 
@@ -140,7 +143,7 @@ tint32 xml_write_field_begin(TLIBC_ABSTRACT_WRITER *super, const char *var_name)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	const char *i;
-	if(self->skip_a_uint16_field)
+	if(self->skip_uint16_field_once)
 	{
 		goto done;
 	}
@@ -163,9 +166,9 @@ tint32 xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);	
 	const char *i;
-	if(self->skip_a_uint16_field)
+	if(self->skip_uint16_field_once)
 	{
-		self->skip_a_uint16_field = hpfalse;
+		self->skip_uint16_field_once = hpfalse;
 		goto done;
 	}
 
@@ -224,8 +227,18 @@ tint32 xml_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val)
 
 tint32 xml_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 *val)
 {
-	tint64 v = *val;
-	return xml_write_tint64(super, &v);
+	tint64 v;
+	tint32 ret = E_TLIBC_NOERROR;
+	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
+	if(self->skip_int32_once)
+	{
+		self->skip_int32_once = hpfalse;
+		goto done;
+	}
+	v = *val;
+	ret = xml_write_tint64(super, &v);
+done:
+	return ret;
 }
 
 tint32 xml_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *val)
@@ -248,7 +261,7 @@ tint32 xml_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val)
 	tuint64 v = *val;
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 
-	if(self->skip_a_uint16_field)
+	if(self->skip_uint16_field_once)
 	{
 		goto done;
 	}

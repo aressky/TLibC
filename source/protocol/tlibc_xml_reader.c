@@ -76,7 +76,8 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	self->super.read_tdouble = xml_read_tdouble;
 	self->super.read_string = xml_read_tstring;
 	self->super.read_tchar = xml_read_tchar;
-	self->pre_read_a_uint16_field = hpfalse;
+	self->pre_read_uint16_field_once = hpfalse;
+	self->skip_int32_once = hpfalse;
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -118,6 +119,9 @@ tint32 xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const char *struct_name
 
 tint32 xml_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name)
 {
+	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
+	self->skip_int32_once = hptrue;
+
 	return E_TLIBC_NOERROR;
 }
 
@@ -156,8 +160,8 @@ tint32 xml_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 
 	xml_read_field_begin(super, "vector");
 
-	self->pre_read_a_uint16_field = hptrue;
-	self->a_uint16_field = count;
+	self->pre_read_uint16_field_once = hptrue;
+	self->ui16 = count;
 	
 	return E_TLIBC_NOERROR;
 }
@@ -174,7 +178,7 @@ tint32 xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 
-	if(self->pre_read_a_uint16_field)
+	if(self->pre_read_uint16_field_once)
 	{
 		goto done;
 	}
@@ -187,9 +191,9 @@ tint32 xml_read_field_end(TLIBC_ABSTRACT_READER *super, const char *var_name)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);	
 
-	if(self->pre_read_a_uint16_field)
+	if(self->pre_read_uint16_field_once)
 	{
-		self->pre_read_a_uint16_field = hpfalse;
+		self->pre_read_uint16_field_once = hpfalse;
 		goto done;
 	}
 	tlibc_xml_reader_get_token(&self->scanner_context);
@@ -249,8 +253,17 @@ tint32 xml_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val)
 tint32 xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val)
 {
 	tint64 i64;
-	tint32 ret = xml_read_tint64(super, &i64);
+	tint32 ret = E_TLIBC_NOERROR;
+	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
+	if(self->skip_int32_once)
+	{
+		self->skip_int32_once = hpfalse;
+		goto done;
+	}
+	
+	ret = xml_read_tint64(super, &i64);
 	*val = (tint32)i64;
+done:
 	return ret;
 }
 
@@ -286,9 +299,9 @@ tint32 xml_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val)
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	tuint64 ui64;
 	tint32 ret;
-	if(self->pre_read_a_uint16_field)
+	if(self->pre_read_uint16_field_once)
 	{
-		ui64 = self->a_uint16_field;
+		ui64 = self->ui16;
 		ret = E_TLIBC_NOERROR;
 	}
 	else

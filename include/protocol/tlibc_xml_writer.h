@@ -16,7 +16,9 @@ typedef struct _TLIBC_XML_WRITER
 	FILE *f;
 	int need_tab;
 
-	int skip_a_uint16_field;
+	int skip_uint16_field_once;
+
+	int skip_int32_once;
 }TLIBC_XML_WRITER;
 
 TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name);

@@ -38,6 +38,4 @@ TLIBC_API tint32 tlibc_compact_read_tdouble(TLIBC_ABSTRACT_READER *super, double
 
 TLIBC_API tint32 tlibc_compact_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuint32 str_length);
 
-TLIBC_API tint32 tlibc_compact_read_enum_number(TLIBC_ABSTRACT_READER *super, tint32 *val);
-
 #endif
