@@ -370,7 +370,7 @@ tint32 tlibc_compact_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *va
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	tuint32 buff_size = COMPACT_WRITER_CAPACITY(self);
-	tint32 ret = tlibc_compact_varint64_encode(tlibc_host64_to_little(tlibc_zigzag_encode64(val)), COMPACT_WRITER_PTR(self), &buff_size);
+	tint32 ret = tlibc_compact_varint64_encode(tlibc_host64_to_little(tlibc_zigzag_encode64(*val)), COMPACT_WRITER_PTR(self), &buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
