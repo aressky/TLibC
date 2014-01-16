@@ -12,8 +12,6 @@ struct _TLIBC_ABSTRACT_READER
 	tint32 (*read_vector_end)(TLIBC_ABSTRACT_READER *self);
 	tint32 (*read_field_begin)(TLIBC_ABSTRACT_READER *self, const char *var_name);
 	tint32 (*read_field_end)(TLIBC_ABSTRACT_READER *self, const char *var_name);
-	tint32 (*read_vector_item_begin)(TLIBC_ABSTRACT_READER *self, tuint32 index);
-	tint32 (*read_vector_item_end)(TLIBC_ABSTRACT_READER *self, tuint32 index);
 
 	tint32 (*read_tint8)(TLIBC_ABSTRACT_READER *self, tint8 *val);
 	tint32 (*read_tint16)(TLIBC_ABSTRACT_READER *self, tint16 *val);
@@ -39,8 +37,6 @@ tint32 read_vector_begin(TLIBC_ABSTRACT_READER *self);
 tint32 read_vector_end(TLIBC_ABSTRACT_READER *self);
 tint32 read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 tint32 read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
-tint32 read_vector_item_begin(TLIBC_ABSTRACT_READER *self, tuint32 index);
-tint32 read_vector_item_end(TLIBC_ABSTRACT_READER *self, tuint32 index);
 
 
 tint32 read_tint8(TLIBC_ABSTRACT_READER *self, tint8 *val);

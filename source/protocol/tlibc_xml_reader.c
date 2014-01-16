@@ -60,8 +60,6 @@ TLIBC_ERROR_CODE xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 	self->super.read_vector_end = xml_read_vector_end;
 	self->super.read_field_begin = xml_read_field_begin;
 	self->super.read_field_end = xml_read_field_end;
-	self->super.read_vector_item_begin = xml_read_vector_item_begin;
-	self->super.read_vector_item_end= xml_read_vector_item_end;
 
 	self->super.read_tint8 = xml_read_tint8;
 	self->super.read_tint16 = xml_read_tint16;

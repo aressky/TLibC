@@ -41,8 +41,6 @@ TLIBC_ERROR_CODE xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 
 	self->super.write_tdouble = xml_write_tdouble;
 	self->super.write_string = xml_write_tstring;
-	self->super.write_vector_item_begin = xml_write_vector_item_begin;
-	self->super.write_vector_item_end= xml_write_vector_item_end;
 	self->super.write_tchar = xml_write_tchar;
 
 	self->super.write_enum_name = xml_write_enum_name;

@@ -9,8 +9,6 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 	self->write_vector_end = NULL;
 	self->write_field_begin = NULL;
 	self->write_field_end = NULL;
-	self->write_vector_item_begin = NULL;
-	self->write_vector_item_end = NULL;
 
 	self->write_tint8 = NULL;
 	self->write_tint16 = NULL;
@@ -198,22 +196,4 @@ tint32 write_tstring(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
 		return E_TLIBC_NOERROR;
 	}
 	return self->write_string(self, str);
-}
-
-tint32 write_vector_item_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index)
-{
-	if(self->write_vector_item_begin == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_vector_item_begin(self, index);
-}
-
-tint32 write_vector_item_end(TLIBC_ABSTRACT_WRITER *self, tuint32 index)
-{
-	if(self->write_vector_item_end == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->write_vector_item_end(self, index);
 }

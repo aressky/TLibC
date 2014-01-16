@@ -9,8 +9,6 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_vector_end = NULL;
 	self->read_field_begin = NULL;
 	self->read_field_end = NULL;
-	self->read_vector_item_begin = NULL;
-	self->read_vector_item_end = NULL;
 
 	self->read_tint8 = NULL;
 	self->read_tint16 = NULL;
@@ -198,24 +196,4 @@ tint32 read_tstring(TLIBC_ABSTRACT_READER *self, tchar* str, tuint32 str_length)
 		return E_TLIBC_NOERROR;
 	}
 	return self->read_string(self, str, str_length);
-}
-
-tint32 read_vector_item_begin(TLIBC_ABSTRACT_READER *self, tuint32 index)
-{
-	if(self->read_vector_item_begin == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-
-	return self->read_vector_item_begin(self, index);
-}
-
-tint32 read_vector_item_end(TLIBC_ABSTRACT_READER *self, tuint32 index)
-{
-	if(self->read_vector_item_end == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-
-	return self->read_vector_item_end(self, index);
 }
