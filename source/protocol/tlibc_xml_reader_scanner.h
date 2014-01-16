@@ -34,5 +34,7 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self);
 
 int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self);
 
+TLIBC_ERROR_CODE tlibc_xml_reader_get_content(TLIBC_XML_READER_SCANNER_CONTEXT *self);
+
 #endif//_H_TLIBC_XML_READER_SCANNER_H
 

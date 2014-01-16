@@ -25,9 +25,31 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 	sp->yy_last = sp->yy_cursor;
 }
 
-int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
+ TLIBC_ERROR_CODE tlibc_xml_reader_get_content(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 {
-	tchar *iter;
+	tchar *iter;	
+
+	//self->content_begin在读到tok_tag_begin的时候被记录
+
+	for(iter = self->content_begin; iter < self->yy_limit; ++iter)
+	{
+		if(*iter == '<')
+		{
+			self->content_end = iter;
+			break;
+		}
+	}
+	if(*iter != '<')
+	{
+		goto ERROR_RET;	
+	}
+	return E_TLIBC_NOERROR;
+ERROR_RET:
+	return E_TLIBC_ERROR;
+}
+
+int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
+{	
 	int token = tok_end;
 
 	token = tlibc_xml_reader_scan(self);
@@ -49,20 +71,9 @@ int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 			memcpy(self->tag_name, self->yy_text + 1, self->yy_leng - 2);
 			self->tag_name[self->yy_leng - 2] = 0;
 
-			//记录content
-			self->content_begin = self->yy_cursor;
-			for(iter = self->content_begin; iter < self->yy_limit; ++iter)
-			{
-				if(*iter == '<')
-				{
-					self->content_end = iter;
-					break;
-				}
-			}
-			if(*iter != '<')
-			{
-				goto ERROR_RET;
-			}
+			//记录值开始的位置
+			self->content_begin = self->yy_cursor;			
+			break;
 		}
 	case tok_tag_end:
 		{
