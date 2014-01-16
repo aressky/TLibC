@@ -1,5 +1,5 @@
 #include "protocol/tlibc_abstract_writer.h"
-#include "lib/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
 
 void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 {

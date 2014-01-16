@@ -1,5 +1,5 @@
-#ifndef _H_TLIBC_NUMBER
-#define _H_TLIBC_NUMBER
+#ifndef _H_TLIBC_UTIL
+#define _H_TLIBC_UTIL
 
 #include "platform/tlibc_platform.h"
 
@@ -74,6 +74,6 @@
 #define tlibc_zigzag_decode32(n) ((tint32)((n >> 1) ^ -(tint32)(n & 1)))
 #define tlibc_zigzag_decode64(n) ((tint64)((n >> 1) ^ -(tint64)(n & 1)))
 
-#endif
+#endif//_H_TLIBC_UTIL
 
 

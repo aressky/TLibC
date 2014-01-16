@@ -2,8 +2,8 @@
 #define _H_TLIBC_HASH
 
 #include "platform/tlibc_platform.h"
-#include "lib/tlibc_list.h"
-#include "lib/tlibc_error_code.h"
+#include "core/tlibc_list.h"
+#include "core/tlibc_error_code.h"
 
 typedef struct _tlibc_hash_head_t tlibc_hash_head_t;
 struct _tlibc_hash_head_t

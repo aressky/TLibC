@@ -1,8 +1,8 @@
 #include "protocol/tlibc_compact_reader.h"
 #include "platform/tlibc_platform.h"
-#include "lib/tlibc_code.h"
+#include "core/tlibc_util.h"
 #include "protocol/tlibc_abstract_reader.h"
-#include "lib/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
 
 #include <string.h>
 #include <assert.h>
@@ -52,7 +52,7 @@ done:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -125,7 +125,7 @@ done:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -265,7 +265,7 @@ done:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const void *addr, tuint32 size)
@@ -307,7 +307,7 @@ tint32 tlibc_compact_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 tint32 tlibc_compact_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val)
@@ -370,7 +370,7 @@ tint32 tlibc_compact_read_tuint8(TLIBC_ABSTRACT_READER *super, tuint8 *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 tint32 tlibc_compact_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val)
@@ -433,7 +433,7 @@ tint32 tlibc_compact_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -449,7 +449,7 @@ tint32 tlibc_compact_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -463,7 +463,7 @@ tint32 tlibc_compact_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuin
 	{
 		if(str_len >= str_length)
 		{
-			ret = E_TLIBC_NOT_ENOUGH_STRING_SIZE;
+			ret = E_TLIBC_OUT_OF_MEMORY;
 			goto done;
 		}
 		str[str_len++] = self->addr[self->offset];
@@ -473,7 +473,7 @@ tint32 tlibc_compact_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuin
 			goto done;
 		}
 	}
-	ret = E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	ret = E_TLIBC_OUT_OF_MEMORY;
 done:
 	return ret;
 }

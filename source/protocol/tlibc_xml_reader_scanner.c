@@ -64,7 +64,7 @@ int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 	{
 	case tok_tag_begin:
 		{
-			if(self->yy_leng - 2 >= TLIBC_MAX_IDENTIFIER_LENGTH)
+			if(self->yy_leng - 2 >= TDATA_MAX_LENGTH_OF_IDENTIFIER)
 			{
 				goto ERROR_RET;
 			}
@@ -77,7 +77,7 @@ int tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self)
 		}
 	case tok_tag_end:
 		{
-			if(self->yy_leng - 3 >= TLIBC_MAX_IDENTIFIER_LENGTH)
+			if(self->yy_leng - 3 >= TDATA_MAX_LENGTH_OF_IDENTIFIER)
 			{
 				goto ERROR_RET;
 			}

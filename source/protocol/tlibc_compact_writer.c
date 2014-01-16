@@ -1,8 +1,8 @@
 #include "protocol/tlibc_compact_writer.h"
 #include "platform/tlibc_platform.h"
-#include "lib/tlibc_code.h"
+#include "core/tlibc_util.h"
 #include "protocol/tlibc_abstract_writer.h"
-#include "lib/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
 
 #include <string.h>
 #include <assert.h>
@@ -50,7 +50,7 @@ done:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -127,7 +127,7 @@ done:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 static TLIBC_ERROR_CODE tlibc_compact_varint64_encode(tuint64 n, char *buff_ptr, tuint32 *buff_size)
@@ -293,7 +293,7 @@ size1:
 	return E_TLIBC_NOERROR;
 
 not_enough_byte_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 
@@ -333,7 +333,7 @@ tint32 tlibc_compact_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 tint32 tlibc_compact_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val)
@@ -394,7 +394,7 @@ tint32 tlibc_compact_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 *va
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 tint32 tlibc_compact_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val)
@@ -454,7 +454,7 @@ tint32 tlibc_compact_write_tchar(TLIBC_ABSTRACT_WRITER *super, const char *val)
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 tint32 tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val)
@@ -469,7 +469,7 @@ tint32 tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *v
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
-	return E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	return E_TLIBC_OUT_OF_MEMORY;
 }
 
 TLIBC_API tint32 tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str)
@@ -487,7 +487,7 @@ TLIBC_API tint32 tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const
 			goto done;
 		}
 	}
-	ret = E_TLIBC_NOT_ENOUGH_BYTEBUFF_SIZE;
+	ret = E_TLIBC_OUT_OF_MEMORY;
 done:
 	return ret;
 }

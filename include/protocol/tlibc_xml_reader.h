@@ -3,7 +3,8 @@
 
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_reader.h"
-#include "lib/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
+
 #include "tdata/tdata_types.h"
 
 typedef struct _TLIBC_XML_READER_YYLTYPE
@@ -34,7 +35,7 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 
 	TLIBC_XML_READER_YYLTYPE yylloc;
 
-	char tag_name[TLIBC_MAX_IDENTIFIER_LENGTH];
+	char tag_name[TDATA_MAX_LENGTH_OF_IDENTIFIER];
 	tchar *content_begin;
 	tchar *content_end;
 };
