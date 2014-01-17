@@ -1,22 +1,42 @@
 #ifndef _H_TLIBC_PLATFORM_COMMON
 #define _H_TLIBC_PLATFORM_COMMON
 
-typedef signed char tint8;
-typedef signed short int tint16;
-typedef signed int tint32;
-typedef signed long long tint64;
-typedef unsigned char tuint8;
-typedef unsigned short int tuint16;
-typedef unsigned int tuint32;
-typedef unsigned long long tuint64;
-typedef char tchar;
-typedef double tdouble;
-typedef char* tstring;
-
 #ifndef NULL
 #define NULL				0
 #endif
 
+#ifndef TRUE
+#define TRUE				1
+#endif
+
+#ifndef FALSE
+#define FALSE				0
+#endif
+
+
+#ifndef TLIBC_IN
+#define TLIBC_IN
+#endif
+
+#ifndef TLIBC_OUT
+#define TLIBC_OUT
+#endif
+
+#ifndef TLIBC_INOUT
+#define TLIBC_INOUT
+#endif
+
+#define TLIBC_UNUSED(x) (void)(x)
+
+#define TLIBC_FILE_SEPARATOR '/'
+
+
+
+#if (defined (SHARED_EXPORTS))
+#define TLIBC_API __declspec(dllexport)
+#else
+#define TLIBC_API extern
+#endif
 
 #define TLIBC_UINT64_MAX ((((tuint64)0xffffffffUL) << 32) | 0xffffffffUL)
 #define TLIBC_UINT32_MAX ((tuint32)0xffffffffUL)
@@ -37,38 +57,25 @@ typedef char* tstring;
 #define TLIBC_BIG_ENDIAN (0x12)
 
 
-#define TLIBC_MAX_ENUM_LENGTH 512
-#define TLIBC_MAX_FILE_PATH_LENGTH 1024
 
 #define TLIBC_OFFSET_OF(type, member) ((size_t) &((type *)0)->member)
 
 #define TLIBC_CONTAINER_OF(ptr, type, member) ((type *)((size_t)ptr - TLIBC_OFFSET_OF(type, member)))
 
 
-#ifndef TLIBC_IN
-#define TLIBC_IN
-#endif
 
-#ifndef TLIBC_OUT
-#define TLIBC_OUT
-#endif
+typedef signed char tint8;
+typedef signed short int tint16;
+typedef signed int tint32;
+typedef signed long long tint64;
+typedef unsigned char tuint8;
+typedef unsigned short int tuint16;
+typedef unsigned int tuint32;
+typedef unsigned long long tuint64;
+typedef char tchar;
+typedef double tdouble;
+typedef char* tstring;
 
-#ifndef TLIBC_INOUT
-#define TLIBC_INOUT
-#endif
-
-#if (defined (SHARED_EXPORTS))
-#define TLIBC_API __declspec(dllexport)
-#else
-#define TLIBC_API extern
-#endif
-
-
-#define TLIBC_UNUSED(x) (void)(x)
-
-#define hptrue 1
-#define hpfalse 0
-
-#define TLIBC_FILE_SEPARATOR '/'
+#define TLIBC_MAX_PATH_LENGTH 1024
 
 #endif

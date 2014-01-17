@@ -18,8 +18,8 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 	char c;
 	TLIBC_XML_READER_SCANNER_CONTEXT *scanner = NULL;
 
-	strncpy(self->scanner_context.yylloc.file_name, file_name, TLIBC_MAX_FILE_PATH_LENGTH);
-	self->scanner_context.yylloc.file_name[TLIBC_MAX_FILE_PATH_LENGTH - 1] = 0;
+	strncpy(self->scanner_context.yylloc.file_name, file_name, TLIBC_MAX_PATH_LENGTH);
+	self->scanner_context.yylloc.file_name[TLIBC_MAX_PATH_LENGTH - 1] = 0;
 
 
 	self->buff_size = 0;
@@ -79,8 +79,8 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 	self->super.read_tdouble = tlibc_xml_read_tdouble;
 	self->super.read_tstring = tlibc_xml_read_tstring;
 	self->super.read_tchar = tlibc_xml_read_tchar;
-	self->pre_read_uint16_field_once = hpfalse;
-	self->ignore_int32_once = hpfalse;
+	self->pre_read_uint16_field_once = FALSE;
+	self->ignore_int32_once = FALSE;
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -153,7 +153,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_enum_begin(TLIBC_ABSTRACT_READER *super, const c
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	TLIBC_UNUSED(enum_name);
 
-	self->ignore_int32_once = hptrue;
+	self->ignore_int32_once = TRUE;
 
 	return E_TLIBC_NOERROR;
 }
@@ -189,7 +189,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 	}while(level != 0);
 
 	ret = tlibc_xml_read_field_begin(super, "vector");
-	self->pre_read_uint16_field_once = hptrue;
+	self->pre_read_uint16_field_once = TRUE;
 	self->ui16 = count;
 
 	return ret;
@@ -238,7 +238,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *super, const ch
 
 	if(self->pre_read_uint16_field_once)
 	{
-		self->pre_read_uint16_field_once = hpfalse;
+		self->pre_read_uint16_field_once = FALSE;
 		goto done;
 	}
 	token = tlibc_xml_reader_get_token(&self->scanner_context);
@@ -309,7 +309,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	if(self->ignore_int32_once)
 	{
-		self->ignore_int32_once = hpfalse;
+		self->ignore_int32_once = FALSE;
 		ret = E_TLIBC_IGNORE;
 		goto done;
 	}

@@ -9,7 +9,7 @@
 
 typedef struct _TLIBC_XML_READER_YYLTYPE
 {
-	char file_name[TLIBC_MAX_FILE_PATH_LENGTH];
+	char file_name[TLIBC_MAX_PATH_LENGTH];
 	int first_line;
 	int first_column;
 	int last_line;
