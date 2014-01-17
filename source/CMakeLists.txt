@@ -7,13 +7,13 @@ set(RE2C_HEADER ${GEN_PATH}/tlibc_xml_reader_l.h)
 set(RE2C_OUTPUTS ${GEN_PATH}/tlibc_xml_reader_l.c)
 
 
-FILE(GLOB_RECURSE PLATFORM_FILE_LIST ${INCLUDE}/platform/*.h ${SOURCE}/platform/*.c ${SOURCE}/platform/*.h)
+FILE(GLOB_RECURSE PLATFORM_FILE_LIST ${INCLUDE}/tlibc/platform/*.h)
 source_group("platform" FILES ${PLATFORM_FILE_LIST})
 
 FILE(GLOB_RECURSE CORE_FILE_LIST ${INCLUDE}/core/*.h ${SOURCE}/core/*.c ${SOURCE}/core/*.h)
 source_group("core" FILES ${CORE_FILE_LIST})
 
-FILE(GLOB_RECURSE PROTOCOL_FILE_LIST ${INCLUDE}/protocol/*.h ${SOURCE}/protocol/*.c)
+FILE(GLOB_RECURSE PROTOCOL_FILE_LIST ${INCLUDE}/tlibc/protocol/*.h ${SOURCE}/protocol/*.c)
 source_group("protocol" FILES ${PROTOCOL_FILE_LIST} ${RE2C_HEADER} ${RE2C_OUTPUTS})
 
 
