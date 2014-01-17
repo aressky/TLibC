@@ -68,4 +68,6 @@ typedef char* tstring;
 #define hptrue 1
 #define hpfalse 0
 
+#define TLIBC_FILE_SEPARATOR '/'
+
 #endif

@@ -8,6 +8,7 @@
 #include <stddef.h>
 //如果不包含stdlib.h strtoll会出错
 #include <stdlib.h>
+#include <direct.h>
 
 #define strtoll(begin_ptr, end_ptr, radix) _strtoi64(begin_ptr, end_ptr, radix)
 #define strtoull(begin_ptr, end_ptr, radix) _strtoui64(begin_ptr, end_ptr, radix)
@@ -16,8 +17,7 @@
 
 #define PRIu64 "I64u"
 #define PRIi64 "I64d"
-#define TLIBC_FILE_SEPARATOR '/'
 
-#pragma warning(disable:4996)
+#define tlibc_mkdir(path, mode) mkdir(path)
 
 #endif
