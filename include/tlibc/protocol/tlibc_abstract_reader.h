@@ -1,9 +1,9 @@
 #ifndef _H_TLIBC_ABSTRACT_READR
 #define _H_TLIBC_ABSTRACT_READR
 
-#include "platform/tlibc_platform.h"
+#include "tlibc/platform/tlibc_platform.h"
 
-#include "core/tlibc_error_code.h"
+#include "tlibc/core/tlibc_error_code.h"
 
 typedef struct _TLIBC_ABSTRACT_READER TLIBC_ABSTRACT_READER;
 struct _TLIBC_ABSTRACT_READER

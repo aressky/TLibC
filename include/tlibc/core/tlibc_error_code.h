@@ -1,7 +1,7 @@
 #ifndef _H_TLIBC_ERROR_CODE
 #define _H_TLIBC_ERROR_CODE
 
-#include "platform/tlibc_platform.h"
+#include "tlibc/platform/tlibc_platform.h"
 
 typedef enum _TLIBC_ERROR_CODE
 {

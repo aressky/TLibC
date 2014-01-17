@@ -1,11 +1,11 @@
 #ifndef _H_TLIBC_XML_READER
 #define _H_TLIBC_XML_READER
 
-#include "platform/tlibc_platform.h"
-#include "protocol/tlibc_abstract_reader.h"
-#include "core/tlibc_error_code.h"
+#include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/protocol/tlibc_abstract_reader.h"
+#include "tlibc/core/tlibc_error_code.h"
 
-#include "tdata/tdata_types.h"
+#include "tlibc/tdata/tdata_types.h"
 
 typedef struct _TLIBC_XML_READER_YYLTYPE
 {

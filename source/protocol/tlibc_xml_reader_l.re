@@ -1,6 +1,6 @@
-#include "platform/tlibc_platform.h"
+#include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/protocol/tlibc_xml_reader.h"
 #include "protocol/tlibc_xml_reader_scanner.h"
-#include "protocol/tlibc_xml_reader.h"
 #include "tlibc_xml_reader_l.h"
 
 

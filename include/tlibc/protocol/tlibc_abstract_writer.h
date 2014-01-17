@@ -1,8 +1,8 @@
 #ifndef _H_TLIBC_ABSTRACT_WRITER
 #define _H_TLIBC_ABSTRACT_WRITER
 
-#include "platform/tlibc_platform.h"
-#include "core/tlibc_error_code.h"
+#include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/core/tlibc_error_code.h"
 
 typedef struct _TLIBC_ABSTRACT_WRITER TLIBC_ABSTRACT_WRITER;
 struct _TLIBC_ABSTRACT_WRITER

@@ -1,6 +1,6 @@
-#include "core/tlibc_hash.h"
-#include "core/tlibc_list.h"
-#include "core/tlibc_error_code.h"
+#include "tlibc/core/tlibc_hash.h"
+#include "tlibc/core/tlibc_list.h"
+#include "tlibc/core/tlibc_error_code.h"
 
 #include <memory.h>
 #include <assert.h>

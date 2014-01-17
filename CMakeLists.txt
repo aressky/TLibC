@@ -16,13 +16,11 @@ ENDIF()
 
 set(DIR_HOME ${TLibC_SOURCE_DIR})
 set(BUILD_HOME ${TLibC_BINARY_DIR})
-set(LIBRARY_PATH "lib")
-set(BINARY_PATH "bin")
 
 set(INCLUDE  ${DIR_HOME}/include)
 set(SOURCE  ${DIR_HOME}/source)
 
 add_subdirectory(source)
-install(DIRECTORY cmake DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(DIRECTORY include DESTINATION ${CMAKE_INSTALL_PREFIX})
-install(FILES README.md DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(DIRECTORY cmake DESTINATION ".")
+install(DIRECTORY include DESTINATION ".")
+install(FILES README.md DESTINATION ".")

@@ -1,8 +1,8 @@
 #ifndef _H_TLIBC_COMPACT_WRITER
 #define _H_TLIBC_COMPACT_WRITER
 
-#include "platform/tlibc_platform.h"
-#include "protocol/tlibc_abstract_writer.h"
+#include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/protocol/tlibc_abstract_writer.h"
 
 typedef struct _TLIBC_COMPACT_WRITER
 {

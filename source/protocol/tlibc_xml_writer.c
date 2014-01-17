@@ -1,7 +1,8 @@
-#include "protocol/tlibc_xml_writer.h"
-#include "core/tlibc_util.h"
-#include "protocol/tlibc_abstract_writer.h"
-#include "core/tlibc_error_code.h"
+#include "tlibc/protocol/tlibc_xml_writer.h"
+#include "tlibc/core/tlibc_error_code.h"
+#include "tlibc/core/tlibc_util.h"
+#include "tlibc/protocol/tlibc_abstract_writer.h"
+
 
 #include <string.h>
 #include <assert.h>
