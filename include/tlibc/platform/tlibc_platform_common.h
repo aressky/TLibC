@@ -19,15 +19,16 @@ typedef char* tstring;
 
 
 #define TLIBC_UINT64_MAX ((((tuint64)0xffffffffUL) << 32) | 0xffffffffUL)
+#define TLIBC_UINT32_MAX ((tuint32)0xffffffffUL)
+#define TLIBC_UINT16_MAX ((tuint16)0xffffUL)
+#define TLIBC_UINT8_MAX  255
+
 #define TLIBC_INT64_MAX  ((((tint64) 0x7fffffffL) << 32) | 0xffffffffL)
 #define TLIBC_INT64_MIN  ((-TLIBC_INT64_MAX) - 1)
-#define TLIBC_UINT32_MAX ((tuint32)0xffffffffUL)
 #define TLIBC_INT32_MAX  ((tint32) 0x7fffffffL)
 #define TLIBC_INT32_MIN  ((-TLIBC_INT32_MAX) - 1)
-#define TLIBC_UINT16_MAX ((tuint16)0xffffUL)
 #define TLIBC_INT16_MAX  ((tint16) 0x7fffL)
 #define TLIBC_INT16_MIN  ((-TLIBC_INT16_MAX) - 1)
-#define TLIBC_UINT8_MAX  255
 #define TLIBC_INT8_MAX   127
 #define TLIBC_INT8_MIN   ((-TLIBC_INT8_MAX) - 1)
 
