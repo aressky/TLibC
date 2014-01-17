@@ -187,7 +187,7 @@ done:
 TLIBC_ERROR_CODE tlibc_xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	fprintf(self->f, "%lf", val);
+	fprintf(self->f, "%lf", *val);
 	self->need_tab = hpfalse;
 	return E_TLIBC_NOERROR;
 }

@@ -1,6 +1,8 @@
 PROJECT(TLibC)
 
 set(GEN_PATH ${TLibC_BINARY_DIR}/gen)
+execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${GEN_PATH})
+
 set(RE2C_HEADER ${GEN_PATH}/tlibc_xml_reader_l.h)
 set(RE2C_OUTPUTS ${GEN_PATH}/tlibc_xml_reader_l.c)
 
