@@ -7,8 +7,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-//ÆÁ±Îµô¹ã¸æwarning
-#pragma warning (disable: 4996)
 
 TLIBC_ERROR_CODE tlibc_xml_writer_init(TLIBC_XML_WRITER *self, const char *file_name)
 {

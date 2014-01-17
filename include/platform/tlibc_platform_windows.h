@@ -20,4 +20,7 @@
 
 #define tlibc_mkdir(path, mode) mkdir(path)
 
+//ÆÁ±Î¹ã¸æ
+#pragma warning (disable: 4996)
+
 #endif

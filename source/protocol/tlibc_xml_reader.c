@@ -11,8 +11,6 @@
 #include <stdio.h>
 #include <errno.h>
 
-//ÆÁ±Îµô¹ã¸æwarning
-#pragma warning (disable: 4996)
 TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_name)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
