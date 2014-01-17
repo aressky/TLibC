@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 
-#define MAX_VECTOR_DEEP 1024
 typedef struct _TLIBC_XML_WRITER
 {
 	TLIBC_ABSTRACT_WRITER super;
