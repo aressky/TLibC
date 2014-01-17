@@ -1,6 +1,9 @@
 #ifndef _H_TLIBC_LIST
 #define _H_TLIBC_LIST
 
+//while(0)会导致条件判断为常量的警告
+#pragma warning (disable:4127)
+
 typedef struct _TLIBC_LIST_HEAD
 {
 	struct _TLIBC_LIST_HEAD *next, *prev;
