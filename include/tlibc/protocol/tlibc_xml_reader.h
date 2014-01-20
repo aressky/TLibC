@@ -39,14 +39,13 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 };
 
 
-#define TLIBC_XML_READER_BUFF_SIZE 10000000
 typedef struct _TLIBC_XML_READER
 {
 	TLIBC_ABSTRACT_READER super;
 
 	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context;
 
-	tchar buff[TLIBC_XML_READER_BUFF_SIZE];
+	char *buff;
 	tuint32 buff_size;
 
 	tuint32 struct_deep;
@@ -57,8 +56,9 @@ typedef struct _TLIBC_XML_READER
 	tuint16 ui16;
 }TLIBC_XML_READER;
 
-
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_name);
+
+TLIBC_API void tlibc_xml_reader_fini(TLIBC_XML_READER *self);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 

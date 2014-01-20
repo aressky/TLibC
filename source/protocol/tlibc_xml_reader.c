@@ -15,8 +15,12 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	FILE* fin;
+	size_t file_size;
 	char c;
 	TLIBC_XML_READER_SCANNER_CONTEXT *scanner = NULL;
+	char *buff;
+	size_t buff_size;
+	
 
 	strncpy(self->scanner_context.yylloc.file_name, file_name, TLIBC_MAX_PATH_LENGTH);
 	self->scanner_context.yylloc.file_name[TLIBC_MAX_PATH_LENGTH - 1] = 0;
@@ -29,22 +33,35 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 		ret = E_TLIBC_CAN_NOT_OPEN_FILE;
 		goto ERROR_RET;
 	}
+	fseek(fin, 0, SEEK_END);
+	file_size = ftell(fin);
+	fseek(fin, 0, SEEK_SET);
+	buff = (char*)malloc(file_size);
+	if(buff == NULL)
+	{
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto ERROR_RET;
+	}
+	buff_size = 0;
+
 	while((c = (char)fgetc(fin)) != EOF)
 	{
-		if(self->buff_size >= TLIBC_XML_READER_BUFF_SIZE)
+		if(buff_size >= file_size)
 		{
 			ret = E_TLIBC_OUT_OF_MEMORY;
 			goto ERROR_RET;
 		}
-		self->buff[self->buff_size] = c;
-		++self->buff_size;
+		buff[buff_size] = c;
+		++buff_size;
 	}
+	self->buff = buff;
+	self->buff_size = buff_size;
 
 	scanner = &self->scanner_context;
 	scanner->yy_state = yycINITIAL;
 	scanner->yy_start = self->buff;
 	scanner->yy_cursor = scanner->yy_start;
-	scanner->yy_limit = scanner->yy_start + TLIBC_XML_READER_BUFF_SIZE;	
+	scanner->yy_limit = scanner->yy_start + file_size;	
 	scanner->yy_marker = scanner->yy_start;
 	scanner->yy_last = scanner->yy_start;
 	scanner->yylineno = 1;
@@ -85,6 +102,11 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 	return E_TLIBC_NOERROR;
 ERROR_RET:
 	return ret;
+}
+
+void tlibc_xml_reader_fini(TLIBC_XML_READER *self)
+{
+	free(self->buff);
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const char *struct_name)
