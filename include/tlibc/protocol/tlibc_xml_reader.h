@@ -20,12 +20,12 @@ typedef struct _TLIBC_XML_READER_SCANNER_CONTEXT TLIBC_XML_READER_SCANNER_CONTEX
 struct _TLIBC_XML_READER_SCANNER_CONTEXT
 {
 	int yy_state;
-	tchar *yy_last;
-	tchar *yy_cursor;
-	tchar *yy_limit;
-	tchar *yy_text;
-	tchar *yy_marker;
-	tchar *yy_start;
+	const tchar *yy_last;
+	const tchar *yy_cursor;
+	const tchar *yy_limit;
+	const tchar *yy_text;
+	const tchar *yy_marker;
+	const tchar *yy_start;
 	tuint32 yy_leng;
 
 	tuint32 yylineno;
@@ -34,8 +34,7 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 	TLIBC_XML_READER_YYLTYPE yylloc;
 
 	char tag_name[TDATA_MAX_LENGTH_OF_IDENTIFIER];
-	tchar *content_begin;
-	tchar *content_end;
+	const tchar *content_begin;
 };
 
 
@@ -44,8 +43,8 @@ typedef struct _TLIBC_XML_READER
 	TLIBC_ABSTRACT_READER super;
 
 	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context;
-
-	char *buff;
+	void *addr;
+	const char *buff;
 	tuint32 buff_size;
 
 	tuint32 struct_deep;

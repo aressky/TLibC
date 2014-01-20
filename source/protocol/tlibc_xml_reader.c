@@ -54,6 +54,7 @@ TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_
 		buff[buff_size] = c;
 		++buff_size;
 	}
+	self->addr = buff;
 	self->buff = buff;
 	self->buff_size = buff_size;
 
@@ -106,7 +107,7 @@ ERROR_RET:
 
 void tlibc_xml_reader_fini(TLIBC_XML_READER *self)
 {
-	free(self->buff);
+	free(self->addr);
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const char *struct_name)
@@ -286,17 +287,8 @@ TLIBC_ERROR_CODE tlibc_xml_read_tdouble(TLIBC_ABSTRACT_READER *super, double *va
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	TLIBC_ERROR_CODE ret;
 	
-	ret = tlibc_xml_reader_get_content(&self->scanner_context);
-	if(ret != E_TLIBC_NOERROR)
-	{
-		goto ERROR_RET;
-	}
-	
-	
 	errno = 0;
-	*self->scanner_context.content_end = 0;
-	sscanf(self->scanner_context.content_begin, "%lf", val);
-	*self->scanner_context.content_end = '<';
+	*val = strtod(self->scanner_context.content_begin, NULL);
 	if(errno != 0)
 	{
 		ret = E_TLIBC_XML_CONTENT_CONVERT_ERROR;
@@ -346,13 +338,9 @@ TLIBC_ERROR_CODE tlibc_xml_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	tlibc_xml_reader_get_content(&self->scanner_context);
-
 
 	errno = 0;
-	*self->scanner_context.content_end = 0;
-	sscanf(self->scanner_context.content_begin, "%lld", val);
-	*self->scanner_context.content_end = '<';
+	*val = strtoll(self->scanner_context.content_begin, NULL, 10);
 	if(errno != 0)
 	{
 		ret = E_TLIBC_XML_CONTENT_CONVERT_ERROR;
@@ -403,12 +391,8 @@ TLIBC_ERROR_CODE tlibc_xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *v
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	tlibc_xml_reader_get_content(&self->scanner_context);
-
 	errno = 0;
-	*self->scanner_context.content_end = 0;
-	sscanf(self->scanner_context.content_begin, "%llu", val);
-	*self->scanner_context.content_end = '<';
+	*val = strtoull(self->scanner_context.content_begin, NULL, 10);
 	if(errno != 0)
 	{
 		ret = E_TLIBC_XML_CONTENT_CONVERT_ERROR;
@@ -424,8 +408,8 @@ ERROR_RET:
 static TLIBC_ERROR_CODE read_char(TLIBC_XML_READER* self, tchar *ch)
 {
 	char c;
-	if(self->scanner_context.content_begin >= self->scanner_context.content_end)
-	{		
+	if(self->scanner_context.content_begin >= self->scanner_context.yy_limit)
+	{
 		goto ERROR_RET;
 	}
 	c = *self->scanner_context.content_begin++;
@@ -433,7 +417,7 @@ static TLIBC_ERROR_CODE read_char(TLIBC_XML_READER* self, tchar *ch)
 	if(c == '&')
 	{
 		char c2;
-		if(self->scanner_context.content_begin >= self->scanner_context.content_end)
+		if(self->scanner_context.content_begin >= self->scanner_context.yy_limit)
 		{
 			goto ERROR_RET;
 		}
@@ -451,7 +435,7 @@ static TLIBC_ERROR_CODE read_char(TLIBC_XML_READER* self, tchar *ch)
 		else
 		{
 			char c3;
-			if(self->scanner_context.content_begin >= self->scanner_context.content_end)
+			if(self->scanner_context.content_begin >= self->scanner_context.yy_limit)
 			{
 				goto ERROR_RET;
 			}
@@ -486,15 +470,7 @@ ERROR_RET:
 TLIBC_ERROR_CODE tlibc_xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	TLIBC_ERROR_CODE ret;
-	ret = tlibc_xml_reader_get_content(&self->scanner_context);
-	if(ret != E_TLIBC_NOERROR)
-	{
-		goto ERROR_RET;
-	}
 	return read_char(self, val);
-ERROR_RET:
-	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len)
@@ -503,19 +479,18 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 	tuint32 len = 0;
 	TLIBC_ERROR_CODE ret;
 
-	ret = tlibc_xml_reader_get_content(&self->scanner_context);
-	if(ret != E_TLIBC_NOERROR)
-	{
-		goto ERROR_RET;
-	}
-
-	while(self->scanner_context.content_begin < self->scanner_context.content_end)
+	while(self->scanner_context.content_begin < self->scanner_context.yy_limit)
 	{
 		char c;
 		ret = read_char(self, &c);
 		if(ret != E_TLIBC_NOERROR)
 		{
 			goto ERROR_RET;
+		}
+		if(c == '<')
+		{
+			--self->scanner_context.yy_cursor;
+			break;
 		}
 		if(len >= str_len)
 		{
