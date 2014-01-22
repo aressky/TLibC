@@ -37,7 +37,7 @@ ERROR_RET:
 	return -1;
 }
 
-#define MID_BUILD(code, index) (((tuint64)code << 32) | index & TLIBC_INT32_MAX)
+#define MID_BUILD(code, index) (((tuint64)code << 32) | (index & TLIBC_INT32_MAX))
 #define MID_GET_CODE(mid) (mid >> 32)
 #define MID_GET_INDEX(mid) (mid & TLIBC_INT32_MAX)
 
