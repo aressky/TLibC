@@ -1,0 +1,40 @@
+#ifndef _H_TLIBC_BINARY_READER
+#define _H_TLIBC_BINARY_READER
+
+#include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/protocol/tlibc_abstract_reader.h"
+
+typedef struct _TLIBC_BINARY_READER
+{
+	TLIBC_ABSTRACT_READER super;
+
+	const char *addr;
+	tuint32 size;
+	tuint32 offset;
+}TLIBC_BINARY_READER;
+
+TLIBC_API void tlibc_binary_reader_init(TLIBC_BINARY_READER *self, const char *addr, tuint32 size);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tuint8(TLIBC_ABSTRACT_READER *super, tuint8 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tchar(TLIBC_ABSTRACT_READER *super, char *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_binary_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuint32 str_length);
+
+#endif
