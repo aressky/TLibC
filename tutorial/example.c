@@ -2,6 +2,8 @@
 
 #include "tlibc/core/tlibc_hash.h"
 #include <string.h>
+#include <time.h>
+#include "tlibc/core/tlibc_timer.h"
 
 #define HASH_KEY_LENGTH 128
 typedef struct _test_hash_data_t
@@ -92,9 +94,74 @@ void test_hash()
 	}
 }
 
+typedef struct _timer_data_t
+{
+	tlibc_timer_entry_t timer_entry;
+
+	int data;
+}timer_data_t;
+
+timer_data_t timer_db;
+tlibc_timer_t timer;
+
+#define TIMER_INTERVAL_MS 1000
+#ifdef _WIN32
+#include <winsock2.h>
+time_t get_current_ms()
+{
+	time_t tv_usec;
+	time_t tv_sec;
+	union {
+		long long ns100;
+		FILETIME ft;
+	} now;
+
+	GetSystemTimeAsFileTime (&now.ft);
+	tv_usec = (long) ((now.ns100 / 10LL) % 1000000LL);
+	tv_sec = (long) ((now.ns100 - 116444736000000000LL) / 10000000LL);
+
+	return tv_sec*1000 + tv_usec/1000;
+}
+#else
+time_t get_current_ms()
+{
+	struct timeval tv;	
+	gettimeofday(&tv, NULL);
+
+	return tv.tv_sec*1000 + tv.tv_usec/1000;
+}
+#endif/*_WIN32*/
+
+
+void timer_callback(const tlibc_timer_entry_t* header)
+{
+	timer_data_t *self = TLIBC_CONTAINER_OF(header, timer_data_t, timer_entry);
+	printf("hello world %d!\n", self->data);
+	tlibc_timer_push(&timer, &timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS);
+}
+time_t start_ms;
+void test_timer()
+{	
+	tuint32 i = 0;
+	tuint32 count = 0;
+	tuint64 start_ms = get_current_ms();
+
+	timer_db.data = 123456;
+
+	tlibc_timer_init(&timer, 0);
+	
+	tlibc_timer_push(&timer, &timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS);
+	for(;;)
+	{
+		tlibc_timer_tick(&timer, get_current_ms() - start_ms, timer_callback);		
+	}
+}
+
 int main()
 {
-	test_hash();
+	//test_hash();
+
+	test_timer();
 
 	return 0;
 }
