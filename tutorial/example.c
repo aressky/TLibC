@@ -153,7 +153,15 @@ void test_timer()
 	tlibc_timer_push(&timer, &timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS);
 	for(;;)
 	{
-		tlibc_timer_tick(&timer, get_current_ms() - start_ms, timer_callback);		
+		TLIBC_ERROR_CODE ret = tlibc_timer_tick(&timer, get_current_ms() - start_ms, timer_callback);
+		if(ret == E_TLIBC_AGAIN )
+		{
+			++count;
+			if(count > 50)
+			{
+				Sleep(0);
+			}
+		}
 	}
 }
 

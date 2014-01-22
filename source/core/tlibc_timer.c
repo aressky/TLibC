@@ -123,8 +123,10 @@ static int cascade(tlibc_timer_t *self, tlibc_timer_vec_t *tv, int index)
 	return index;
 }
 
-void tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_timer_callback fn)
+TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_timer_callback fn)
 {
+	TLIBC_ERROR_CODE ret = E_TLIBC_AGAIN;
+
 	if(self->jiffies <= jiffies)
 	{
 		int index = self->jiffies & TLIBC_TVR_MASK;
@@ -140,11 +142,17 @@ void tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_timer_callback
 		++self->jiffies;
 
 		tv_old = self->tv1.vec + index;
+		if(!tlibc_list_empty(tv_old))
+		{
+			ret = E_TLIBC_NOERROR;
+		}
 		while(!tlibc_list_empty(tv_old))
 		{
 			tlibc_timer_entry_t *timer = TLIBC_CONTAINER_OF(tv_old->next, tlibc_timer_entry_t, entry);			
 			tlibc_list_del(tv_old->next);
 			fn(timer);
-		}			
- 	}	
+		}
+ 	}
+
+	return ret;
 }
