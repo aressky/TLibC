@@ -1,9 +1,13 @@
-#include <stdio.h>
-
 #include "tlibc/core/tlibc_hash.h"
+#include "tlibc/core/tlibc_timer.h"
+#include "tlibc/core/tlibc_mempool.h"
+
+
+#include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "tlibc/core/tlibc_timer.h"
+#include <assert.h>
+
 
 #define HASH_KEY_LENGTH 128
 typedef struct _test_hash_data_t
@@ -165,11 +169,60 @@ void test_timer()
 	}
 }
 
+typedef struct _unit_t
+{
+	int data;
+}unit_t;
+
+char mem[102400];
+
+void test_mempool()
+{
+	tlibc_mempool_t *mp = (tlibc_mempool_t*)mem;
+	int unit_size = tlibc_mempool_init(mp, sizeof(mem), sizeof(unit_t));
+	tuint64 mid, mid_last;
+	void *addr;
+	int i;
+
+	for(i = 0; i < unit_size; ++i)
+	{		
+		mid = tlibc_mempool_alloc(mp);
+		assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
+		addr = tlibc_mempool_get(mp, mid);
+		assert(addr != NULL);
+		mid_last = mid;
+	}
+	mid = tlibc_mempool_alloc(mp);
+	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
+	addr = tlibc_mempool_get(mp, mid);
+	assert(addr == NULL);
+
+	tlibc_mempool_free(mp, mid_last);
+	//重复删除不会出错
+	tlibc_mempool_free(mp, mid_last);
+	mid = tlibc_mempool_alloc(mp);
+	//mid不重用
+	assert(mid != mid_last);
+	assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
+	addr = tlibc_mempool_get(mp, mid);
+	assert(addr != NULL);
+
+	tlibc_mempool_free(mp, mid_last + 1);
+	mid = tlibc_mempool_alloc(mp);
+	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
+	addr = tlibc_mempool_get(mp, mid);
+	assert(addr == NULL);
+
+	printf("%d\n", unit_size);
+}
+
 int main()
 {
 	//test_hash();
 
-	test_timer();
+	//test_timer();
+
+	test_mempool();
 
 	return 0;
 }
