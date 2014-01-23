@@ -6,7 +6,7 @@
 #include "tlibc/core/tlibc_error_code.h"
 
 typedef struct _tlibc_timer_entry_t tlibc_timer_entry_t;
-typedef void (*tlibc_timer_callback)(const struct _tlibc_timer_entry_t*);
+typedef void (*tlibc_timer_callback)(struct _tlibc_timer_entry_t*);
 struct _tlibc_timer_entry_t
 {
 	TLIBC_LIST_HEAD entry;
