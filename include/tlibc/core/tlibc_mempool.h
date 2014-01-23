@@ -20,10 +20,18 @@ typedef struct _tlibc_mempool_t
 	char data[1];
 }tlibc_mempool_t;
 
+//计算元素需要多大的内存池
+#define TLIBC_MEMPOOL_SIZE(unit_size, unit_num) (TLIBC_OFFSET_OF(tlibc_mempool_t, data) + \
+	(unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * unit_num)
+
+//计算内存池可以容纳多少元素
+#define TLIBC_MEMPOOL_UNIT_NUM(poll_size, unit_size) (poll_size - TLIBC_OFFSET_OF(tlibc_mempool_t, data))\
+	/ (unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data));
+
 #define TLIBC_MEMPOOL_INVALID_INDEX TLIBC_UINT64_MAX
 
 //如果错误返回-1, 否则返回可以容纳的元素个数
-TLIBC_API int tlibc_mempool_init(tlibc_mempool_t* self, size_t size, size_t unit_size);
+TLIBC_API int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size);
 
 TLIBC_API tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self);
 

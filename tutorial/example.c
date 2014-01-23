@@ -174,7 +174,8 @@ typedef struct _unit_t
 	int data;
 }unit_t;
 
-char mem[102400];
+#define MAX_UNIT_NUM 1024
+char mem[TLIBC_MEMPOOL_SIZE(sizeof(unit_t), MAX_UNIT_NUM)];
 
 void test_mempool()
 {
@@ -184,6 +185,7 @@ void test_mempool()
 	void *addr;
 	int i;
 
+	assert(unit_size == MAX_UNIT_NUM);
 	for(i = 0; i < unit_size; ++i)
 	{		
 		mid = tlibc_mempool_alloc(mp);
