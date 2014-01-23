@@ -141,7 +141,8 @@ void timer_callback(const tlibc_timer_entry_t* header)
 {
 	timer_data_t *self = TLIBC_CONTAINER_OF(header, timer_data_t, timer_entry);
 	printf("hello world %d!\n", self->data);
-	tlibc_timer_push(&timer, &timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS);
+	timer_db.timer_entry.expires = timer.jiffies + TIMER_INTERVAL_MS;
+	tlibc_timer_push(&timer, &timer_db.timer_entry);
 }
 time_t start_ms;
 void test_timer()
@@ -150,14 +151,16 @@ void test_timer()
 	tuint32 count = 0;
 	tuint64 start_ms = get_current_ms();
 
+	tlibc_timer_init(&timer, 0);
 	timer_db.data = 123456;
 
-	tlibc_timer_init(&timer, 0);
+	TIMER_ENTRY_BUILD(&timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS, timer_callback);
 	
-	tlibc_timer_push(&timer, &timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS);
+
+	
 	for(;;)
 	{
-		TLIBC_ERROR_CODE ret = tlibc_timer_tick(&timer, get_current_ms() - start_ms, timer_callback);
+		TLIBC_ERROR_CODE ret = tlibc_timer_tick(&timer, get_current_ms() - start_ms);
 		if(ret == E_TLIBC_AGAIN )
 		{
 			++count;

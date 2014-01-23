@@ -5,14 +5,21 @@
 #include "tlibc/core/tlibc_list.h"
 #include "tlibc/core/tlibc_error_code.h"
 
-typedef struct _tlibc_timer_entry_t
+typedef struct _tlibc_timer_entry_t tlibc_timer_entry_t;
+typedef void (*tlibc_timer_callback)(const struct _tlibc_timer_entry_t*);
+struct _tlibc_timer_entry_t
 {
 	TLIBC_LIST_HEAD entry;
 	tuint64 expires;
-}tlibc_timer_entry_t;
+	tlibc_timer_callback callback;
+};
 
-typedef void (*tlibc_timer_callback)(const tlibc_timer_entry_t*);
-
+#define TIMER_ENTRY_BUILD(en, exp, c)\
+	{\
+		tlibc_list_init(&(en)->entry);\
+		(en)->expires = exp;\
+		(en)->callback = c;\
+	}
 
 #define TLIBC_TVN_BITS (6)
 #define TLIBC_TVR_BITS (8)
@@ -49,9 +56,9 @@ void tlibc_timer_init(tlibc_timer_t *base, tuint64 jiffies);
 TLIBC_API void tlibc_timer_pop(tlibc_timer_entry_t *timer);
 
 
-TLIBC_API void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer, tuint64 expires);
+void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer);
 
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_timer_callback fn);
+TLIBC_API TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies);
 
 #endif//_H_TLIBC_TIMER_H

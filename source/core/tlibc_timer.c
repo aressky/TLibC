@@ -44,13 +44,13 @@ void tlibc_timer_pop(tlibc_timer_entry_t *self)
 }
 
 
-void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer, tuint64 expires)
+void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer)
 {
+	tuint64 expires = timer->expires;
 	tuint64 idx;
 	TLIBC_LIST_HEAD *vec;
 	int i;
 	
-	timer->expires = expires;
 	if(expires <= self->jiffies)
 	{
 		vec = self->tv1.vec + (self->jiffies & TLIBC_TVR_MASK);
@@ -116,14 +116,14 @@ static int cascade(tlibc_timer_t *self, tlibc_timer_vec_t *tv, int index)
 		TLIBC_LIST_HEAD *next = iter->next;
 		timer = TLIBC_CONTAINER_OF(iter, tlibc_timer_entry_t, entry);
 		//这里要小心冲入哦~~
-		tlibc_timer_push(self, timer, timer->expires);
+		tlibc_timer_push(self, timer);
 		iter = next;
 	}
 
 	return index;
 }
 
-TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_timer_callback fn)
+TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_AGAIN;
 
@@ -150,7 +150,7 @@ TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies, tlibc_ti
 		{
 			tlibc_timer_entry_t *timer = TLIBC_CONTAINER_OF(tv_old->next, tlibc_timer_entry_t, entry);			
 			tlibc_list_del(tv_old->next);
-			fn(timer);
+			timer->callback(timer);
 		}
  	}
 
