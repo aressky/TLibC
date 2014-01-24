@@ -27,7 +27,7 @@ int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size
 	{
 		goto ERROR_RET;
 	}
-	self->code |= (tuint32)(time(0) ^ rand());
+	self->code |= (time(0) << 16 | rand() & 0xffff);
 
 	for(i = 0; i < self->unit_num; ++i)
 	{
