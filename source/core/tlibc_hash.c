@@ -46,10 +46,10 @@ void tlibc_hash_insert(tlibc_hash_t *self, const char* key, tuint32 key_size, tl
 	val_head->key_index = key_index;
 
 	tlibc_list_init(&val_head->data_list);
-	tlibc_list_add(&val_head->data_list, &bucket->data_list);
+	tlibc_list_add_tail(&val_head->data_list, &bucket->data_list);
 	if(bucket->data_list_num == 0)
 	{
-		tlibc_list_add(&bucket->used_bucket_list, &self->used_bucket_list);
+		tlibc_list_add_tail(&bucket->used_bucket_list, &self->used_bucket_list);
 		++self->used_bucket_list_num;
 	}	
 	++bucket->data_list_num;
