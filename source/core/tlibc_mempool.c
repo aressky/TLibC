@@ -2,6 +2,8 @@
 #include "tlibc/core/tlibc_error_code.h"
 #include "tlibc/platform/tlibc_platform.h"
 
+#include <time.h>
+
 
 #define GET_BLOCK(p, idx) ((tlibc_mempool_block_t*)((char*)p->data + \
 	(p->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * (idx)))
@@ -24,7 +26,7 @@ int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size
 	{
 		goto ERROR_RET;
 	}
-	++self->code;
+	self->code = (tuint32)time(0);
 
 	for(i = 0; i < self->unit_num; ++i)
 	{
