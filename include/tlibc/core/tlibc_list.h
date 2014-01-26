@@ -12,7 +12,7 @@ typedef struct _TLIBC_LIST_HEAD
 	(_head)->prev = _head;\
 }
 
-#define	tlibc_list_empty(list) (list->next == list)
+#define	tlibc_list_empty(list) ((list)->next == list)
 
 #define __tlibc_list_add(_new, _prev, _next)\
 {\
