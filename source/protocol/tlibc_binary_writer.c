@@ -54,7 +54,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tint16(TLIBC_ABSTRACT_WRITER *super, const t
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tint16*)WRITER_PTR(self) = tlibc_host16_to_little(*val);
+	*(tint16*)WRITER_PTR(self) = *val;
+	tlibc_host16_to_little(*(tint16*)WRITER_PTR(self));
 	self->offset += sizeof(tint16);
 
 	return E_TLIBC_NOERROR;
@@ -69,7 +70,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tint32(TLIBC_ABSTRACT_WRITER *super, const t
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tint32*)WRITER_PTR(self) = tlibc_host32_to_little(*val);
+	*(tint32*)WRITER_PTR(self) = *val;
+	tlibc_host32_to_little(*(tint32*)WRITER_PTR(self));
 	self->offset += sizeof(tint32);
 
 	return E_TLIBC_NOERROR;
@@ -84,7 +86,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tint64(TLIBC_ABSTRACT_WRITER *super, const t
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tint64*)WRITER_PTR(self) = tlibc_host64_to_little(*val);
+	*(tint64*)WRITER_PTR(self) = *val;
+	tlibc_host64_to_little(*(tint64*)WRITER_PTR(self));
 	self->offset += sizeof(tint64);
 
 	return E_TLIBC_NOERROR;
@@ -115,7 +118,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const 
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tuint16*)WRITER_PTR(self) = tlibc_host16_to_little(*val);
+	*(tuint16*)WRITER_PTR(self) = *val;
+	tlibc_host16_to_little(*(tuint16*)WRITER_PTR(self));
 	self->offset += sizeof(tuint16);
 
 	return E_TLIBC_NOERROR;
@@ -130,7 +134,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const 
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tuint32*)WRITER_PTR(self) = tlibc_host32_to_little(*val);
+	*(tuint32*)WRITER_PTR(self) = *val;
+	tlibc_host32_to_little(*(tuint32*)WRITER_PTR(self));
 	self->offset += sizeof(tuint32);
 
 	return E_TLIBC_NOERROR;
@@ -145,7 +150,8 @@ TLIBC_ERROR_CODE tlibc_binary_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const 
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*(tuint64*)WRITER_PTR(self) = tlibc_host64_to_little(*val);
+	*(tuint64*)WRITER_PTR(self) = *val;
+	tlibc_host64_to_little(*(tuint64*)WRITER_PTR(self));
 	self->offset += sizeof(tuint64);
 
 	return E_TLIBC_NOERROR;

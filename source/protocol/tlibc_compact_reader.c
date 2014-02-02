@@ -320,7 +320,8 @@ TLIBC_ERROR_CODE tlibc_compact_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 
 	{
 		goto done;
 	}
-	*val = tlibc_zigzag_decode16(tlibc_little_to_host16(res));
+	tlibc_little_to_host16(res);
+	*val = tlibc_zigzag_decode16(res);
 	self->offset +=buff_size;
 done:
 	return ret;
@@ -336,7 +337,8 @@ TLIBC_ERROR_CODE tlibc_compact_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 
 	{
 		goto done;
 	}
-	*val = tlibc_zigzag_decode32(tlibc_little_to_host32(res));
+	tlibc_little_to_host32(res);
+	*val = tlibc_zigzag_decode32(res);
 	self->offset +=buff_size;
 done:
 	return ret;
@@ -352,7 +354,8 @@ TLIBC_ERROR_CODE tlibc_compact_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 
 	{
 		goto done;
 	}
-	*val = tlibc_zigzag_decode64(tlibc_little_to_host64(res));
+	tlibc_little_to_host64(res);
+	*val = tlibc_zigzag_decode64(res);
 	self->offset +=buff_size;
 done:
 	return ret;
@@ -376,14 +379,13 @@ not_enough_bytebuff_size:
 TLIBC_ERROR_CODE tlibc_compact_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
-	tuint16 res;
 	tuint32 buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	TLIBC_ERROR_CODE ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
 	}
-	*val = tlibc_little_to_host16(res);
+	tlibc_little_to_host16(*val);
 	self->offset += buff_size;
 done:
 	return ret;
@@ -392,14 +394,13 @@ done:
 TLIBC_ERROR_CODE tlibc_compact_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
-	tuint32 res;
 	tuint32 buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	TLIBC_ERROR_CODE ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
 	}
-	*val = tlibc_little_to_host32(res);
+	tlibc_little_to_host32(*val);
 	self->offset += buff_size;
 done:
 	return ret;
@@ -408,14 +409,13 @@ done:
 TLIBC_ERROR_CODE tlibc_compact_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
-	tuint64 res;
 	tuint32 buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	TLIBC_ERROR_CODE ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
 	}
-	*val = tlibc_little_to_host64(res);
+	tlibc_little_to_host64(*val);
 	self->offset += buff_size;
 done:
 	return ret;

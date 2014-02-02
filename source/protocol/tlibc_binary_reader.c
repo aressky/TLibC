@@ -57,7 +57,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host16(*(tint16*)READER_PTR(self));
+	*val = *(tint16*)READER_PTR(self);
+	tlibc_little_to_host16(*val);
 	self->offset += sizeof(tint16);
 
 	return E_TLIBC_NOERROR;
@@ -72,7 +73,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host32(*(tint32*)READER_PTR(self));
+	*val = *(tint32*)READER_PTR(self);
+	tlibc_little_to_host32(*val);
 	self->offset += sizeof(tint32);
 
 	return E_TLIBC_NOERROR;
@@ -87,7 +89,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host64(*(tint64*)READER_PTR(self));
+	*val = *(tint64*)READER_PTR(self);
+	tlibc_little_to_host64(*val)
 	self->offset += sizeof(tint64);
 
 	return E_TLIBC_NOERROR;
@@ -117,7 +120,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host16(*(tuint8*)READER_PTR(self));
+	*val = *(tuint8*)READER_PTR(self);
+	tlibc_little_to_host16(*val);
 	self->offset += sizeof(tuint8);
 
 	return E_TLIBC_NOERROR;
@@ -132,7 +136,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host32(*(tuint32*)READER_PTR(self));
+	*val = *(tuint32*)READER_PTR(self);
+	tlibc_little_to_host32(*val);
 	self->offset += sizeof(tuint32);
 
 	return E_TLIBC_NOERROR;
@@ -147,7 +152,8 @@ TLIBC_ERROR_CODE tlibc_binary_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = tlibc_little_to_host64(*(tuint64*)READER_PTR(self));
+	*val = *(tuint64*)READER_PTR(self);
+	tlibc_little_to_host64(*val);
 	self->offset += sizeof(tuint64);
 
 	return E_TLIBC_NOERROR;

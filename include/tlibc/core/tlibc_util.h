@@ -33,35 +33,21 @@
 	)
 
 #if TLIBC_BYTE_ORDER == TLIBC_LITTLE_ENDIAN 
-	#define tlibc_ntoh16(x) tlibc_swap16(x)
-	#define tlibc_ntoh32(x) tlibc_swap32(x)
-	#define tlibc_ntoh64(x) tlibc_swap64(x)
-	#define tlibc_hton16(x) tlibc_swap16(x)
-	#define tlibc_hton32(x) tlibc_swap32(x)
-	#define tlibc_hton64(x) tlibc_swap64(x)
-
-	#define tlibc_little_to_host16(x) (x)
-	#define tlibc_little_to_host32(x) (x)
-	#define tlibc_little_to_host64(x) (x)
-	#define tlibc_host16_to_little(x) (x)
-	#define tlibc_host32_to_little(x) (x)
-	#define tlibc_host64_to_little(x) (x)
+	#define tlibc_little_to_host16(x)
+	#define tlibc_little_to_host32(x)
+	#define tlibc_little_to_host64(x)
+	#define tlibc_host16_to_little(x)
+	#define tlibc_host32_to_little(x)
+	#define tlibc_host64_to_little(x)
 #endif
 
 #if TLIBC_BYTE_ORDER == TLIBC_BIG_ENDIAN
-	#define tlibc_ntoh16(x) (x) 
-	#define tlibc_ntoh32(x) (x)
-	#define tlibc_ntoh64(x) (x)
-	#define tlibc_hton16(x) (x) 
-	#define tlibc_hton32(x) (x)
-	#define tlibc_hton64(x) (x)
-
-	#define tlibc_little_to_host16(x) tlibc_swap16(x)
-	#define tlibc_little_to_host32(x) tlibc_swap32(x)
-	#define tlibc_little_to_host64(x) tlibc_swap64(x)
-	#define tlibc_host16_to_little(x) tlibc_swap16(x)
-	#define tlibc_host32_to_little(x) tlibc_swap32(x)
-	#define tlibc_host64_to_little(x) tlibc_swap64(x)
+	#define tlibc_little_to_host16(x) (x = tlibc_swap16(x))
+	#define tlibc_little_to_host32(x) (x = tlibc_swap32(x))
+	#define tlibc_little_to_host64(x) (x = tlibc_swap64(x))
+	#define tlibc_host16_to_little(x) (x = tlibc_swap16(x))
+	#define tlibc_host32_to_little(x) (x = tlibc_swap32(x))
+	#define tlibc_host64_to_little(x) (x = tlibc_swap64(x))
 #endif
 
 
