@@ -11,13 +11,18 @@
 
 const char* tlibc_xlsx_reader_workbook_rels_search_file(tlibc_xlsx_reader_t *self, const char* rid);
 const char* tlibc_xlsx_reader_workbook_search_rid(tlibc_xlsx_reader_t *self, const char* sheet);
+void tlibc_xlsx_reader_load_sharedstring(tlibc_xlsx_reader_t *self);
+void tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self);
 
+#define XL_PREFIX "xl/"
 TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name, const char* sheet)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_unzip_s unzip;
 	const char *rid;
 	const char *file;
+	char sheet_file[TLIBC_MAX_PATH_LENGTH] = {XL_PREFIX};
+
 
 	ret = tlibc_unzip_init(&unzip, file_name);
 	if(ret != E_TLIBC_NOERROR)
@@ -80,6 +85,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *f
 		goto ERROR_RET;
 	}
 	file = tlibc_xlsx_reader_workbook_rels_search_file(self, rid);
+	strncpy(sheet_file + strlen(XL_PREFIX), file, TLIBC_MAX_PATH_LENGTH - strlen(XL_PREFIX) - 1);
 
 
 
@@ -95,7 +101,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *f
 		goto ERROR_RET;
 	}
 	self->sharedstring_buff_size = unzip.cur_file_info.uncompressed_size;
-	self->sharedstring_buff = (char*)malloc(self->sharedstring_buff_size);
+	self->sharedstring_buff = (char*)malloc(self->sharedstring_buff_size);	
 	ret = tlibc_read_current_file(&unzip, self->sharedstring_buff, &self->sharedstring_buff_size);
 	if(ret != E_TLIBC_NOERROR)
 	{
@@ -106,6 +112,33 @@ TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *f
 	{
 		goto ERROR_RET;
 	}
+	tlibc_xlsx_reader_load_sharedstring(self);
+
+
+	//load sheet
+	ret = tlibc_unzip_locate(&unzip, sheet_file);
+	if(ret != E_TLIBC_NOERROR)
+	{
+		goto ERROR_RET;
+	}
+	ret = tlibc_unzip_open_current_file(&unzip);
+	if(ret != E_TLIBC_NOERROR)
+	{
+		goto ERROR_RET;
+	}
+	self->sheet_buff_size = unzip.cur_file_info.uncompressed_size;
+	self->sheet_buff = (char*)malloc(self->sheet_buff_size);	
+	ret = tlibc_read_current_file(&unzip, self->sheet_buff, &self->sheet_buff_size);
+	if(ret != E_TLIBC_NOERROR)
+	{
+		goto ERROR_RET;
+	}
+	ret = tlibc_unzip_close_current_file (&unzip);
+	if(ret != E_TLIBC_NOERROR)
+	{
+		goto ERROR_RET;
+	}
+	tlibc_xlsx_reader_loadsheet(self);
 
 
 

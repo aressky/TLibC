@@ -16,10 +16,10 @@ typedef struct _TLIBC_LIST_HEAD
 
 #define __tlibc_list_add(_new, _prev, _next)\
 {\
-	(_next)->prev = (_new);\
 	(_new)->next = (_next);\
 	(_new)->prev = (_prev);\
-	(_prev)->next = (_new);\
+	(_new)->next->prev = (_new);\
+	(_new)->prev->next = (_new);\
 }
 
 #define tlibc_list_add(_new, _head)\
