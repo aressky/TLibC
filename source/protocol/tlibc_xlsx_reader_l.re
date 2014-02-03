@@ -13,28 +13,73 @@
 re2c:yyfill:enable   = 0;
 */
 
-void tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self)
+void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 {
+	self->col = 0;
+	while(*xpos >='A')
+	{
+		self->col *= 26;
+		self->col += *xpos - 'A';
+		++xpos;
+	}
+
+	self->row = 0;
+	while(*xpos != 0)
+	{
+		self->row *= 10;
+		self->row += *xpos - '0';
+		++xpos;
+	}
+}
+
+TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self)
+{
+	tlibc_xlsx_cell_s *cell = NULL;
+
 	self->scanner.cursor = self->sheet_buff;
 	self->scanner.limit = self->sheet_buff + self->sheet_buff_size;
 	self->scanner.marker = self->scanner.cursor;
 	self->scanner.state = yycINITIAL;
+	self->cell_matrix = NULL;
 
 restart:
 	if(self->scanner.cursor >= self->scanner.limit)
 	{
-		return;
+		return E_TLIBC_NOERROR;
 	}
 /*!re2c
 <INITIAL>"<dimension ref=\""
 {
-	char *size = YYCURSOR;
+	char *size_min = YYCURSOR;
+	char *size_max = NULL;
+
+	
 	while(*YYCURSOR != '"')
 	{
-		++YYCURSOR;
+		if(*YYCURSOR == ':')
+		{
+			*YYCURSOR = 0;
+			++YYCURSOR;
+			size_max = YYCURSOR;
+		}
+		else
+		{
+			++YYCURSOR;
+		}
 	}
 	*YYCURSOR = 0;
 	++YYCURSOR;
+
+	xpos2pos(&self->cell_min_pos, size_min);
+	xpos2pos(&self->cell_max_pos, size_max);
+	self->cell_row_size = (self->cell_max_pos.row - self->cell_min_pos.row + 1);
+	self->cell_col_size = (self->cell_max_pos.col - self->cell_min_pos.col + 1);
+	self->cell_matrix = malloc(sizeof(tlibc_xlsx_cell_s) * self->cell_row_size * self->cell_col_size);
+	if(self->cell_matrix == NULL)
+	{
+		return E_TLIBC_ERROR;
+	}
+	goto restart;
 }
 <INITIAL>"<sheetData>"				{ BEGIN(IN_SHEETDATA);goto restart;	}
 <IN_SHEETDATA>"<row"
@@ -58,12 +103,33 @@ restart:
 	BEGIN(IN_ROW);
 	goto restart;
 }
+<IN_ROW>"<c r=\""
+{
+	const char* xpos = YYCURSOR;
+	tlibc_xlsx_pos pos;
+	while(*YYCURSOR != '"')
+	{
+		++YYCURSOR;
+	}
+	*YYCURSOR = 0;
+	++YYCURSOR;
+
+	xpos2pos(&pos, xpos);
+	cell = self->cell_matrix + (pos.row - self->cell_min_pos.row) * self->cell_col_size + pos.col;
+	cell->xpos = xpos;
+
+	while(*YYCURSOR != '>')
+	{
+		++YYCURSOR;
+	}
+	++YYCURSOR;
+	goto restart;
+}
+<IN_ROW>"<v>"						{ cell->val_begin = YYCURSOR; goto restart;}
+<IN_ROW>"</v>"						{ cell->val_end = YYCURSOR - 4; goto restart;}
 <IN_ROW>"</row>"					{ BEGIN(IN_SHEETDATA); goto restart; }
 <IN_SHEETDATA>"</sheetData>"		{ BEGIN(INITIAL); goto restart;		}
 <INITIAL>"</sheetData>"				{ BEGIN(INITIAL);goto restart;		}
 <*>[^]								{ goto restart;}
 */
 }
-
-
-

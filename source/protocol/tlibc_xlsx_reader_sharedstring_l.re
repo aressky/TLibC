@@ -66,11 +66,6 @@ re2c:yyfill:enable   = 0;
 <IN_SST>"</t>"
 {
 	*(YYCURSOR - 4) = 0;
-	if(self->sharedstring_list_num >= TLIBC_XLSX_SHAREDSTRING_NUM)
-	{
-		free(self->sharedstring_list);
-		return E_TLIBC_OUT_OF_MEMORY;
-	}
 	self->sharedstring_list[self->sharedstring_list_num] = str_begin;
 	++self->sharedstring_list_num;
 	goto restart;

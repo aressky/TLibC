@@ -12,7 +12,7 @@
 const char* tlibc_xlsx_reader_workbook_rels_search_file(tlibc_xlsx_reader_t *self, const char* rid);
 const char* tlibc_xlsx_reader_workbook_search_rid(tlibc_xlsx_reader_t *self, const char* sheet);
 void tlibc_xlsx_reader_load_sharedstring(tlibc_xlsx_reader_t *self);
-void tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self);
+TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self);
 
 #define XL_PREFIX "xl/"
 TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name, const char* sheet)
