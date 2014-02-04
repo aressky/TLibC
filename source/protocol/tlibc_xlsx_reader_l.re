@@ -35,6 +35,7 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self)
 {
 	tlibc_xlsx_cell_s *cell = NULL;
+	int is_sharedstring = FALSE;
 
 	self->scanner.cursor = self->sheet_buff;
 	self->scanner.limit = self->sheet_buff + self->sheet_buff_size;
@@ -103,7 +104,15 @@ restart:
 	BEGIN(IN_ROW);
 	goto restart;
 }
-<IN_ROW>"<c r=\""
+<IN_ROW>"<c"
+{
+	cell = NULL;
+	is_sharedstring = FALSE;
+
+	BEGIN(IN_COL);
+	goto restart;
+}
+<IN_COL>"r=\""
 {
 	const char* xpos = YYCURSOR;
 	tlibc_xlsx_pos pos;
@@ -118,15 +127,40 @@ restart:
 	cell = self->cell_matrix + (pos.row - self->cell_min_pos.row) * self->cell_col_size + pos.col;
 	cell->xpos = xpos;
 
+	goto restart;
+}
+<IN_COL>"t=\""
+{
+	if((*YYCURSOR == 's') && (*(YYCURSOR + 1) == '"'))
+	{
+		is_sharedstring = TRUE;
+	}	
+	
 	while(*YYCURSOR != '>')
 	{
 		++YYCURSOR;
 	}
 	++YYCURSOR;
+}
+<IN_COL>"</c>"
+{
+	if(is_sharedstring)
+	{
+		tuint32 string_index;
+		errno = 0;
+		string_index = strtoul(cell->val_begin, NULL, 10);
+		if(errno != 0)
+		{
+			return E_TLIBC_ERROR;
+		}
+		cell->val_begin = self->sharedstring_begin_list[string_index];
+		cell->val_end = self->sharedstring_end_list[string_index];
+	}
+	BEGIN(IN_ROW);
 	goto restart;
 }
-<IN_ROW>"<v>"						{ cell->val_begin = YYCURSOR; goto restart;}
-<IN_ROW>"</v>"						{ cell->val_end = YYCURSOR - 4; goto restart;}
+<IN_COL>"<v>"						{ cell->val_begin = YYCURSOR; goto restart;}
+<IN_COL>"</v>"						{ cell->val_end = YYCURSOR - 4; *(YYCURSOR - 4)= 0; goto restart;}
 <IN_ROW>"</row>"					{ BEGIN(IN_SHEETDATA); goto restart; }
 <IN_SHEETDATA>"</sheetData>"		{ BEGIN(INITIAL); goto restart;		}
 <INITIAL>"</sheetData>"				{ BEGIN(INITIAL);goto restart;		}

@@ -47,7 +47,8 @@ typedef struct _tlibc_xlsx_reader_t
 
 	tlibc_xlsx_reader_scanner_t scanner;
 
-	char** sharedstring_list;
+	char** sharedstring_begin_list;
+	char** sharedstring_end_list;
 	tuint32 sharedstring_list_num;
 
 	tlibc_xlsx_pos cell_min_pos;
