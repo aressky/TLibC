@@ -53,7 +53,7 @@ re2c:yyfill:enable   = 0;
 }
 <IN_SHEETS>"\"/>"
 {
-	if(strcmp(name_begin, sheet) == 0)
+	if((sheet == NULL) || (strcmp(name_begin, sheet) == 0))
 		return rid_begin;
 	goto restart;
 }
