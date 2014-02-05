@@ -44,18 +44,18 @@ re2c:yyfill:enable   = 0;
 	num = strtoul(number_begin, NULL, 10);
 	if(errno != 0)
 	{
-		return E_TLIBC_ERROR;
+		goto ERROR_RET;
 	}
 	self->sharedstring_begin_list = malloc(sizeof(char*) * num);
 	if(self->sharedstring_begin_list == NULL)
 	{
-		return E_TLIBC_ERROR;
+		goto ERROR_RET;
 	}
 
 	self->sharedstring_end_list = malloc(sizeof(char*) * num);
 	if(self->sharedstring_end_list == NULL)
 	{
-		return E_TLIBC_ERROR;
+		goto ERROR_RET;
 	}
 
 	while(*YYCURSOR != '>')
@@ -84,7 +84,17 @@ re2c:yyfill:enable   = 0;
 }
 <*>[^] {goto restart;}
 */
-}
+ERROR_RET:
+	if(self->sharedstring_begin_list != NULL)
+	{
+		free(self->sharedstring_begin_list);
+	}
 
+	if(self->sharedstring_end_list != NULL)
+	{
+		free(self->sharedstring_end_list);
+	}
+	return E_TLIBC_ERROR;
+}
 
 

@@ -94,6 +94,6 @@ TLIBC_ERROR_CODE tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, size_t 
 
 TLIBC_ERROR_CODE tlibc_unzip_close_current_file(tlibc_unzip_s *self);
 
-TLIBC_ERROR_CODE tlibc_unzip_fini(tlibc_unzip_s *self);
+void tlibc_unzip_fini(tlibc_unzip_s *self);
 
 #endif//_H_TLIBC_UNZIP_H

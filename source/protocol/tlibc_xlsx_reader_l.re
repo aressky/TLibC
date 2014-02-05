@@ -32,20 +32,29 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 	}
 }
 
-TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self)
+TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, tuint32 bindinfo_row, tuint32 data_row)
 {
 	tlibc_xlsx_cell_s *cell = NULL;
 	int is_sharedstring = FALSE;
+	tlibc_xlsx_cell_s *current_row = NULL;
 
+	self->cell_matrix = NULL;
 	self->scanner.cursor = self->sheet_buff;
 	self->scanner.limit = self->sheet_buff + self->sheet_buff_size;
 	self->scanner.marker = self->scanner.cursor;
 	self->scanner.state = yycINITIAL;
 	self->cell_matrix = NULL;
+	self->real_row_size = 0;
+	self->bindinfo_row = NULL;
+	self->data_row = NULL;
 
 restart:
 	if(self->scanner.cursor >= self->scanner.limit)
 	{
+		if((self->bindinfo_row == NULL) || (self->data_row == NULL))
+		{
+			goto ERROR_RET;
+		}
 		return E_TLIBC_NOERROR;
 	}
 /*!re2c
@@ -78,30 +87,60 @@ restart:
 	self->cell_matrix = malloc(sizeof(tlibc_xlsx_cell_s) * self->cell_row_size * self->cell_col_size);
 	if(self->cell_matrix == NULL)
 	{
-		return E_TLIBC_ERROR;
+		goto ERROR_RET;
 	}
 	goto restart;
 }
 <INITIAL>"<sheetData>"				{ BEGIN(IN_SHEETDATA);goto restart;	}
-<IN_SHEETDATA>"<row"
+<IN_SHEETDATA>"<row r=\""
 {
-	int single_field = FALSE;
+	tuint32 i;
+	const char *r = YYCURSOR;
+	tuint32 row;
+	int is_single = FALSE;
+	while(*YYCURSOR != '"')
+	{
+		++YYCURSOR;
+	}
+	*YYCURSOR = 0;
+	errno = 0;
+	row = strtoul(r, NULL, 10);
+	if(errno != 0)
+	{
+		goto ERROR_RET;
+	}
+	
 	while(*YYCURSOR != '>')
 	{
 		if(*YYCURSOR == '/')
 		{
-			single_field = TRUE;
+			is_single = TRUE;
 		}
 		++YYCURSOR;
 	}
 	++YYCURSOR;
-	YYMARKER = YYCURSOR;
-	if(single_field)
+	if(is_single)
 	{
 		goto restart;
 	}
 
+	current_row = self->cell_matrix + self->real_row_size;	
+	for(i = 0; i < self->cell_col_size; ++i)
+	{
+		current_row[i].empty = TRUE;
+	}
+
+	if(row == bindinfo_row)
+	{
+		self->bindinfo_row = current_row;
+	}
+	else if(row == data_row)
+	{
+		self->data_row = current_row;
+		self->data_real_row_index = self->real_row_size;
+	}
 	BEGIN(IN_ROW);
+	++self->real_row_size;
 	goto restart;
 }
 <IN_ROW>"<c"
@@ -109,7 +148,7 @@ restart:
 	cell = NULL;
 	is_sharedstring = FALSE;
 
-	BEGIN(IN_COL);
+	BEGIN(IN_COL);	
 	goto restart;
 }
 <IN_COL>"r=\""
@@ -124,9 +163,9 @@ restart:
 	++YYCURSOR;
 
 	xpos2pos(&pos, xpos);
-	cell = self->cell_matrix + (pos.row - self->cell_min_pos.row) * self->cell_col_size + pos.col;
+	cell = current_row + (pos.col - self->cell_min_pos.col);
 	cell->xpos = xpos;
-
+		
 	goto restart;
 }
 <IN_COL>"t=\""
@@ -142,6 +181,11 @@ restart:
 	}
 	++YYCURSOR;
 }
+<IN_COL>"/>"
+{
+	BEGIN(IN_ROW);
+	goto restart;
+}
 <IN_COL>"</c>"
 {
 	if(is_sharedstring)
@@ -151,7 +195,7 @@ restart:
 		string_index = strtoul(cell->val_begin, NULL, 10);
 		if(errno != 0)
 		{
-			return E_TLIBC_ERROR;
+			goto ERROR_RET;
 		}
 		cell->val_begin = self->sharedstring_begin_list[string_index];
 		cell->val_end = self->sharedstring_end_list[string_index];
@@ -166,4 +210,10 @@ restart:
 <INITIAL>"</sheetData>"				{ BEGIN(INITIAL);goto restart;		}
 <*>[^]								{ goto restart;}
 */
+ERROR_RET:
+	if(self->cell_matrix != NULL)
+	{
+		free(self->cell_matrix);
+	}
+	return E_TLIBC_ERROR;
 }

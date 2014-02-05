@@ -864,10 +864,9 @@ done:
     return err;
 }
 
-TLIBC_ERROR_CODE  tlibc_unzip_fini (tlibc_unzip_s *self)
+void  tlibc_unzip_fini (tlibc_unzip_s *self)
 {
     fclose(self->filestream);
-    return E_TLIBC_NOERROR;
 }
 
 TLIBC_ERROR_CODE tlibc_unzip_open_current_file (tlibc_unzip_s *self)
