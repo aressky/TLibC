@@ -122,6 +122,24 @@ TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *v
 	return self->read_field_end(self, var_name);
 }
 
+TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, tuint32 index)
+{
+	if(self->read_vector_element_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_vector_element_begin(self, index);
+}
+
+TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, tuint32 index)
+{
+	if(self->read_vector_element_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->read_vector_element_end(self, index);
+}
+
 TLIBC_ERROR_CODE tlibc_read_tint8(TLIBC_ABSTRACT_READER *self, tint8 *val)
 {
 	if(self->read_tint8 == NULL)

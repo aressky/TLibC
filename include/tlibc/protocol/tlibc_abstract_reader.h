@@ -16,6 +16,8 @@ struct _TLIBC_ABSTRACT_READER
 	TLIBC_ERROR_CODE (*read_enum_end)(TLIBC_ABSTRACT_READER *self, const char *enum_name);
 	TLIBC_ERROR_CODE (*read_vector_begin)(TLIBC_ABSTRACT_READER *self);
 	TLIBC_ERROR_CODE (*read_vector_end)(TLIBC_ABSTRACT_READER *self);
+	TLIBC_ERROR_CODE (*read_vector_element_begin)(TLIBC_ABSTRACT_READER *self, tuint32 index);
+	TLIBC_ERROR_CODE (*read_vector_element_end)(TLIBC_ABSTRACT_READER *self, tuint32 index);
 	TLIBC_ERROR_CODE (*read_field_begin)(TLIBC_ABSTRACT_READER *self, const char *var_name);
 	TLIBC_ERROR_CODE (*read_field_end)(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
@@ -44,6 +46,8 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_read_vector_begin(TLIBC_ABSTRACT_READER *self);
 TLIBC_API TLIBC_ERROR_CODE tlibc_read_vector_end(TLIBC_ABSTRACT_READER *self);
 TLIBC_API TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 TLIBC_API TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, tuint32 index);
+TLIBC_API TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_read_tint8(TLIBC_ABSTRACT_READER *self, tint8 *val);
 TLIBC_API TLIBC_ERROR_CODE tlibc_read_tint16(TLIBC_ABSTRACT_READER *self, tint16 *val);

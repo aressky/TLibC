@@ -103,6 +103,11 @@ TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *f
 
 	tlibc_abstract_reader_init(&self->super);
 
+	self->super.read_vector_begin = tlibc_xlsx_read_vector_begin;
+	self->super.read_vector_end = tlibc_xlsx_read_vector_end;
+
+	self->vector_level = 0;
+
 	return E_TLIBC_NOERROR;
 free_sharedstring:
 	free(self->sharedstring_buff);
@@ -182,4 +187,25 @@ void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self)
 	free(self->sharedstring_buff);
 	
 	tlibc_unzip_fini(&self->unzip);
+}
+
+
+TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super)
+{
+	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);	
+	++self->vector_level;
+	return E_TLIBC_NOERROR;
+}
+
+TLIBC_ERROR_CODE tlibc_xlsx_read_vector_end(TLIBC_ABSTRACT_READER *super)
+{
+	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);	
+	--self->vector_level;
+	return E_TLIBC_NOERROR;
+}
+
+TLIBC_ERROR_CODE tlibc_xlsx_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name)
+{
+	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
+	return E_TLIBC_NOERROR;
 }

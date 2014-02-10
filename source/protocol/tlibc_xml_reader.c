@@ -237,12 +237,13 @@ TLIBC_ERROR_CODE tlibc_xml_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tuint32 level;
 	tuint16 count;
-	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);		
+	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
+	TLIBC_XML_READER self_copy = *self;
 	count = 0;
 	level = 0;
 	do
 	{
-		TLIBC_XML_READER_TOKEN token = tlibc_xml_reader_get_token(self);
+		TLIBC_XML_READER_TOKEN token = tlibc_xml_reader_get_token(&self_copy);
 		switch(token)
 		{
 			case tok_tag_begin:				
@@ -529,16 +530,18 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	tuint32 len = 0;
 	TLIBC_ERROR_CODE ret;
-
+	const char* curr = self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin;
+	const char* limit = self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit;
 	while(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin < self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit)
 	{
 		char c;
-		ret = tlibc_xml_str2c(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin
-			, self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit, &c);
+		ret = tlibc_xml_str2c(curr, limit, &c);
 		if(ret != E_TLIBC_NOERROR)
 		{
 			goto ERROR_RET;
 		}
+		++curr;
+
 		if(c == '<')
 		{
 			--self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_cursor;
@@ -549,7 +552,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 			ret = E_TLIBC_OUT_OF_MEMORY;
 			goto ERROR_RET;
 		}
-		str[len++] = c;
+		str[len++] = c;		
 	}
 	str[len] = 0;
 

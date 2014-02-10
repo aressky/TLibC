@@ -17,6 +17,8 @@ struct _TLIBC_ABSTRACT_WRITER
 	TLIBC_ERROR_CODE (*write_vector_end)(TLIBC_ABSTRACT_WRITER *self);
 	TLIBC_ERROR_CODE (*write_field_begin)(TLIBC_ABSTRACT_WRITER *self, const char *var_name);
 	TLIBC_ERROR_CODE (*write_field_end)(TLIBC_ABSTRACT_WRITER *self, const char *var_name);	
+	TLIBC_ERROR_CODE (*write_vector_element_begin)(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
+	TLIBC_ERROR_CODE (*write_vector_element_end)(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 
 	TLIBC_ERROR_CODE (*write_tint8)(TLIBC_ABSTRACT_WRITER *self, const tint8 *val);
 	TLIBC_ERROR_CODE (*write_tint16)(TLIBC_ABSTRACT_WRITER *self, const tint16 *val);
@@ -43,6 +45,8 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_write_vector_begin(TLIBC_ABSTRACT_WRITER *self)
 TLIBC_API TLIBC_ERROR_CODE tlibc_write_vector_end(TLIBC_ABSTRACT_WRITER *self);
 TLIBC_API TLIBC_ERROR_CODE tlibc_write_field_begin(TLIBC_ABSTRACT_WRITER *self, const char *var_name);
 TLIBC_API TLIBC_ERROR_CODE tlibc_write_field_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name);
+TLIBC_API TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
+TLIBC_API TLIBC_ERROR_CODE tlibc_write_vector_element_end(TLIBC_ABSTRACT_WRITER *self, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_write_tint8(TLIBC_ABSTRACT_WRITER *self, const tint8 *val);
 TLIBC_API TLIBC_ERROR_CODE tlibc_write_tint16(TLIBC_ABSTRACT_WRITER *self, const tint16 *val);

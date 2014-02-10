@@ -110,6 +110,24 @@ TLIBC_ERROR_CODE tlibc_write_field_begin(TLIBC_ABSTRACT_WRITER *self, const char
 	return self->write_field_begin(self, var_name);
 }
 
+TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, tuint32 index)
+{
+	if(self->write_vector_element_begin == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_vector_element_begin(self, index);
+}
+
+TLIBC_ERROR_CODE tlibc_write_vector_element_end(TLIBC_ABSTRACT_WRITER *self, tuint32 index)
+{
+	if(self->write_vector_element_end == NULL)
+	{
+		return E_TLIBC_NOERROR;
+	}
+	return self->write_vector_element_end(self, index);
+}
+
 TLIBC_ERROR_CODE tlibc_write_field_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name)
 {
 	if(self->write_field_end == NULL)
