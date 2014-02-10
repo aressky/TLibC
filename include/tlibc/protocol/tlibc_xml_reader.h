@@ -22,10 +22,11 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 	int yy_state;
 	const tchar *yy_last;
 	const tchar *yy_cursor;
-	const tchar *yy_limit;
-	const tchar *yy_text;
+	const tchar *yy_limit;	
 	const tchar *yy_marker;
 	const tchar *yy_start;
+
+	const tchar *yy_text;
 	tuint32 yy_leng;
 
 	tuint32 yylineno;
@@ -35,29 +36,39 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 
 	char tag_name[TDATA_MAX_LENGTH_OF_IDENTIFIER];
 	const tchar *content_begin;
+
+	void *filecontent_ptr;
 };
 
-
+#define TLIBC_XML_MAX_INCLUDE 1024
+#define TLIBC_XML_MAX_DEEP 1024
 typedef struct _TLIBC_XML_READER
 {
 	TLIBC_ABSTRACT_READER super;
 
-	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context;
-	void *addr;
-	const char *buff;
-	tuint32 buff_size;
+	TLIBC_XML_READER_SCANNER_CONTEXT scanner_context_stack[TLIBC_XML_MAX_DEEP];
+	size_t scanner_context_stack_num;
+
+	const char *include[TLIBC_XML_MAX_INCLUDE];
+	size_t include_num;
 
 	tuint32 struct_deep;
-
 	int ignore_int32_once;
-
 	int pre_read_uint16_field_once;
 	tuint16 ui16;
 }TLIBC_XML_READER;
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_xml_reader_init(TLIBC_XML_READER *self, const char *file_name);
+TLIBC_API void tlibc_xml_reader_init(TLIBC_XML_READER *self);
 
-TLIBC_API void tlibc_xml_reader_fini(TLIBC_XML_READER *self);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_add_include(TLIBC_XML_READER *self, const char *path);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_reader_push_file(TLIBC_XML_READER *self, const char *file_name);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_reader_push_buff(TLIBC_XML_READER *self, const char *xml_start, const char* xml_limit);
+
+TLIBC_API void tlibc_xml_reader_pop_file(TLIBC_XML_READER *self);
+
+TLIBC_API void tlibc_xml_reader_pop_buff(TLIBC_XML_READER *self);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 

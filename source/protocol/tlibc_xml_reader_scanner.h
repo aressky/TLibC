@@ -7,13 +7,13 @@
 #define YYLTYPE_IS_DECLARED
 #define YYCTYPE   char
 #define YYFILL(n) 
-#define YYCURSOR  self->yy_cursor
-#define YYLIMIT   self->yy_limit
-#define YYMARKER self->yy_marker
-#define YYGETCONDITION()  self->yy_state
-#define YYSETCONDITION(s) self->yy_state = s
-#define yytext self->yy_text
-#define yyleng self->yy_leng
+#define YYCURSOR  sp->yy_cursor
+#define YYLIMIT   sp->yy_limit
+#define YYMARKER sp->yy_marker
+#define YYGETCONDITION()  sp->yy_state
+#define YYSETCONDITION(s) sp->yy_state = s
+#define yytext sp->yy_text
+#define yyleng sp->yy_leng
 
 #define STATE(name)  yyc##name
 #define BEGIN(state) YYSETCONDITION(STATE(state))
@@ -23,16 +23,16 @@
 typedef enum _TLIBC_XML_READER_TOKEN
 {
 	tok_end = 0,						//解析结束
-	tok_error = 0,						//解析错误
-	tok_tag_begin = 1,
-	tok_tag_end = 2,
+	tok_error = 1,						//解析错误
+	tok_tag_begin = 2,
+	tok_tag_end = 3,
 }TLIBC_XML_READER_TOKEN;
 
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER_SCANNER_CONTEXT *self);
+TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER *self);
 
-void tlibc_xml_reader_locate(TLIBC_XML_READER_SCANNER_CONTEXT *self);
+void tlibc_xml_reader_locate(TLIBC_XML_READER *self);
 
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_get_token(TLIBC_XML_READER_SCANNER_CONTEXT *self);
+TLIBC_XML_READER_TOKEN tlibc_xml_reader_get_token(TLIBC_XML_READER *self);
 
 #endif//_H_TLIBC_XML_READER_SCANNER_H
 
