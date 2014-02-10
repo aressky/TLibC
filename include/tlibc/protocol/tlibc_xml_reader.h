@@ -70,6 +70,10 @@ TLIBC_API void tlibc_xml_reader_pop_file(TLIBC_XML_READER *self);
 
 TLIBC_API void tlibc_xml_reader_pop_buff(TLIBC_XML_READER *self);
 
+//获取实体引用表示的字符
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_str2c(const char* curr, const char* limit, tchar *ch);
+
+
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);

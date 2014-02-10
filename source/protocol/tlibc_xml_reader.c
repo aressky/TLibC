@@ -455,23 +455,23 @@ ERROR_RET:
 }
 
 
-static TLIBC_ERROR_CODE read_char(TLIBC_XML_READER* self, tchar *ch)
+TLIBC_ERROR_CODE tlibc_xml_str2c(const char* curr, const char* limit, tchar *ch)
 {
 	char c;
-	if(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin >= self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit)
+	if(curr >= limit)
 	{
 		goto ERROR_RET;
 	}
-	c = *self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin++;
+	c = *curr++;
 	
 	if(c == '&')
 	{
 		char c2;
-		if(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin >= self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit)
+		if(curr >= limit)
 		{
 			goto ERROR_RET;
 		}
-		c2 = *self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin++;
+		c2 = *curr++;
 		if(c2 == 'l')
 		{
 			//&lt
@@ -485,11 +485,11 @@ static TLIBC_ERROR_CODE read_char(TLIBC_XML_READER* self, tchar *ch)
 		else
 		{
 			char c3;
-			if(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin >= self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit)
+			if(curr >= limit)
 			{
 				goto ERROR_RET;
 			}
-			c3 = *self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin++;
+			c3 = *curr++;
 			if(c3 == 'm')
 			{
 				//&amp
@@ -520,7 +520,8 @@ ERROR_RET:
 TLIBC_ERROR_CODE tlibc_xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
-	return read_char(self, val);
+	return tlibc_xml_str2c(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin
+		, self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit, val);
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len)
@@ -532,7 +533,8 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 	while(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin < self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit)
 	{
 		char c;
-		ret = read_char(self, &c);
+		ret = tlibc_xml_str2c(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin
+			, self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit, &c);
 		if(ret != E_TLIBC_NOERROR)
 		{
 			goto ERROR_RET;
@@ -555,5 +557,3 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 ERROR_RET:
 	return ret;
 }
-
-
