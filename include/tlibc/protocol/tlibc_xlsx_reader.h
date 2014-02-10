@@ -30,6 +30,7 @@ typedef struct _tlibc_xlsx_cell_s
 	const char* val_end;
 }tlibc_xlsx_cell_s;
 
+#define TLIBC_XLSX_READER_NAME_LENGTH 65536
 typedef struct _tlibc_xlsx_reader_t
 {
 	TLIBC_ABSTRACT_READER super;
@@ -66,7 +67,13 @@ typedef struct _tlibc_xlsx_reader_t
 	tuint32 data_real_row_index;
 	tlibc_xlsx_cell_s *data_row;
 
+	tlibc_xlsx_cell_s *curr_row;
+	char curr_name[TLIBC_XLSX_READER_NAME_LENGTH];
+	char *curr_name_ptr;
+
 	size_t vector_level;
+	int skip_a_field;
+	int read_rowsize;
 }tlibc_xlsx_reader_t;
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name);
@@ -82,6 +89,10 @@ TLIBC_API void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_end(TLIBC_ABSTRACT_READER *super);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_begin(TLIBC_ABSTRACT_READER *super, const char* var_name, tuint32 index);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_end(TLIBC_ABSTRACT_READER *super, const char* var_name, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name);
 

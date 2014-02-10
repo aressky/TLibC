@@ -33,6 +33,8 @@ TLIBC_ERROR_CODE tlibc_xml_writer_init(TLIBC_XML_WRITER *self, const char *file_
 	self->super.write_vector_end = tlibc_xml_write_vector_end;
 	self->super.write_field_begin = tlibc_xml_write_field_begin;
 	self->super.write_field_end = tlibc_xml_write_field_end;
+	self->super.write_vector_element_begin = tlibc_xml_write_vector_element_begin;
+	self->super.write_vector_element_end = tlibc_xml_write_vector_element_end;
 	
 	self->super.write_tint8 = tlibc_xml_write_tint8;
 	self->super.write_tint16 = tlibc_xml_write_tint16;
@@ -50,7 +52,7 @@ TLIBC_ERROR_CODE tlibc_xml_writer_init(TLIBC_XML_WRITER *self, const char *file_
 	self->super.write_tchar = tlibc_xml_write_tchar;
 
 
-	self->skip_uint16_field_once = FALSE;
+	self->skip_uint32_field_once = FALSE;
 	self->ignore_int32_once = FALSE;
 
 	return E_TLIBC_NOERROR;
@@ -125,7 +127,7 @@ TLIBC_ERROR_CODE tlibc_xml_write_vector_begin(TLIBC_ABSTRACT_WRITER *super)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);	
 	TLIBC_ERROR_CODE ret = tlibc_xml_write_field_begin(super, "vector");
-	self->skip_uint16_field_once = TRUE;
+	self->skip_uint32_field_once = TRUE;
 	return ret;
 }
 
@@ -138,7 +140,7 @@ TLIBC_ERROR_CODE tlibc_xml_write_field_begin(TLIBC_ABSTRACT_WRITER *super, const
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	const char *i;
-	if(self->skip_uint16_field_once)
+	if(self->skip_uint32_field_once)
 	{
 		goto done;
 	}
@@ -161,9 +163,9 @@ TLIBC_ERROR_CODE tlibc_xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const c
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);	
 	const char *i;
-	if(self->skip_uint16_field_once)
+	if(self->skip_uint32_field_once)
 	{
-		self->skip_uint16_field_once = FALSE;
+		self->skip_uint32_field_once = FALSE;
 		goto done;
 	}
 
@@ -184,6 +186,18 @@ TLIBC_ERROR_CODE tlibc_xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const c
 
 done:
 	return E_TLIBC_NOERROR;
+}
+
+TLIBC_ERROR_CODE tlibc_xml_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *super, const char *var_name, tuint32 index)
+{
+	TLIBC_UNUSED(index);
+	return tlibc_xml_write_field_begin(super, var_name);
+}
+
+TLIBC_ERROR_CODE tlibc_xml_write_vector_element_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name, tuint32 index)
+{
+	TLIBC_UNUSED(index);
+	return tlibc_xml_write_field_end(super, var_name);
 }
 
 TLIBC_ERROR_CODE tlibc_xml_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val)
@@ -241,22 +255,21 @@ TLIBC_ERROR_CODE tlibc_xml_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuin
 TLIBC_ERROR_CODE tlibc_xml_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val)
 {
 	tuint64 v = *val;
-	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-
-	if(self->skip_uint16_field_once)
-	{
-		goto done;
-	}
-
+	
 	return tlibc_xml_write_tuint64(super, &v);
-done:
-	return E_TLIBC_NOERROR;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 *val)
 {
 	tuint64 v = *val;
+	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
+	if(self->skip_uint32_field_once)
+	{
+		goto done;
+	}
 	return tlibc_xml_write_tuint64(super, &v);
+done:
+	return E_TLIBC_NOERROR;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 *val)

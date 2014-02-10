@@ -54,8 +54,8 @@ typedef struct _TLIBC_XML_READER
 
 	tuint32 struct_deep;
 	int ignore_int32_once;
-	int pre_read_uint16_field_once;
-	tuint16 ui16;
+	int pre_read_uint32_field_once;
+	tuint32 ui32;
 }TLIBC_XML_READER;
 
 TLIBC_API void tlibc_xml_reader_init(TLIBC_XML_READER *self);
@@ -87,6 +87,10 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_vector_end(TLIBC_ABSTRACT_READER *self
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, tuint32 index);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_tchar(TLIBC_ABSTRACT_READER *super, char *val);
 

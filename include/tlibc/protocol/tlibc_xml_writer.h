@@ -15,7 +15,7 @@ typedef struct _TLIBC_XML_WRITER
 	FILE *f;
 	int need_tab;
 
-	int skip_uint16_field_once;
+	int skip_uint32_field_once;
 
 	int ignore_int32_once;
 }TLIBC_XML_WRITER;
@@ -32,6 +32,10 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_vector_end(TLIBC_ABSTRACT_WRITER *sup
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_field_begin(TLIBC_ABSTRACT_WRITER *super, const char *var_name);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_field_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *super, const char *var_name, tuint32 index);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_vector_element_end(TLIBC_ABSTRACT_WRITER *super, const char *var_name, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val);
 

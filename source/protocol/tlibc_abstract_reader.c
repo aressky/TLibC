@@ -13,6 +13,8 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_vector_end = NULL;
 	self->read_field_begin = NULL;
 	self->read_field_end = NULL;
+	self->read_vector_element_begin = NULL;
+	self->read_vector_element_end = NULL;
 
 	self->read_tint8 = NULL;
 	self->read_tint16 = NULL;
@@ -25,7 +27,6 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_tchar = NULL;
 	self->read_tdouble = NULL;
 	self->read_tstring = NULL;
-
 }
 
 TLIBC_ERROR_CODE tlibc_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name)
@@ -122,22 +123,22 @@ TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *v
 	return self->read_field_end(self, var_name);
 }
 
-TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, tuint32 index)
+TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, tuint32 index)
 {
 	if(self->read_vector_element_begin == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->read_vector_element_begin(self, index);
+	return self->read_vector_element_begin(self, var_name, index);
 }
 
-TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, tuint32 index)
+TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, tuint32 index)
 {
 	if(self->read_vector_element_end == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->read_vector_element_end(self, index);
+	return self->read_vector_element_end(self, var_name, index);
 }
 
 TLIBC_ERROR_CODE tlibc_read_tint8(TLIBC_ABSTRACT_READER *self, tint8 *val)
