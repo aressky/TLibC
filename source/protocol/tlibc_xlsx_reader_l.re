@@ -124,7 +124,7 @@ restart:
 		goto restart;
 	}
 
-	current_row = self->cell_matrix + self->real_row_size;	
+	current_row = self->cell_matrix + self->real_row_size * self->cell_col_size;
 	for(i = 0; i < self->cell_col_size; ++i)
 	{
 		current_row[i].empty = TRUE;
@@ -164,6 +164,7 @@ restart:
 
 	xpos2pos(&pos, xpos);
 	cell = current_row + (pos.col - self->cell_min_pos.col);
+	cell->empty = FALSE;
 	cell->xpos = xpos;
 		
 	goto restart;

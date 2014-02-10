@@ -6,6 +6,7 @@
 #include "tlibc/core/tlibc_error_code.h"
 #include "tlibc/core/tlibc_unzip.h"
 #include "tlibc/tdata/tdata_types.h"
+#include "tlibc/core/tlibc_hash.h"
 
 typedef struct _tlibc_xlsx_reader_scanner_t
 {
@@ -23,6 +24,7 @@ typedef struct _tlibc_xlsx_pos
 
 typedef struct _tlibc_xlsx_cell_s
 {
+	tlibc_hash_head_t name2index;
 	int empty;
 	const char* xpos;
 
@@ -30,6 +32,7 @@ typedef struct _tlibc_xlsx_cell_s
 	const char* val_end;
 }tlibc_xlsx_cell_s;
 
+#define TLIBC_XLSX_HASH_BUCKET 65536
 #define TLIBC_XLSX_READER_NAME_LENGTH 65536
 typedef struct _tlibc_xlsx_reader_t
 {
@@ -70,10 +73,14 @@ typedef struct _tlibc_xlsx_reader_t
 	tlibc_xlsx_cell_s *curr_row;
 	char curr_name[TLIBC_XLSX_READER_NAME_LENGTH];
 	char *curr_name_ptr;
+	tlibc_xlsx_cell_s *curr_cell;
 
 	size_t vector_level;
 	int skip_a_field;
 	int read_rowsize;
+
+	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
+	tlibc_hash_t name2index;
 }tlibc_xlsx_reader_t;
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name);
