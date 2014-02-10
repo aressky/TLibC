@@ -1,5 +1,6 @@
 #include "tlibc/protocol/tlibc_xlsx_reader.h"
 #include "tlibc_xlsx_reader_l.h"
+#include <errno.h>
 
 #define YYGETCONDITION()  self->scanner.state
 #define YYSETCONDITION(s) self->scanner.state = s
@@ -57,6 +58,7 @@ restart:
 /*!re2c
 <INITIAL>"<dimension ref=\""
 {
+	tuint32 i;
 	char *size_min = YYCURSOR;
 	char *size_max = NULL;
 
@@ -86,12 +88,15 @@ restart:
 	{
 		goto ERROR_RET;
 	}
+	for(i = 0; i < self->cell_row_size * self->cell_col_size; ++i)
+	{
+		self->cell_matrix[i].empty = TRUE;
+	}
 	goto restart;
 }
 <INITIAL>"<sheetData>"				{ BEGIN(IN_SHEETDATA);goto restart;	}
 <IN_SHEETDATA>"<row r=\""
 {
-	tuint32 i;
 	const char *r = YYCURSOR;
 	tuint32 row;
 	int is_single = FALSE;
@@ -107,10 +112,6 @@ restart:
 		goto ERROR_RET;
 	}
 	current_row = self->cell_matrix + (row - self->cell_min_pos.row) * self->cell_col_size;
-	for(i = 0; i < self->cell_col_size; ++i)
-	{
-		current_row[i].empty = TRUE;
-	}
 
 	while(*YYCURSOR != '>')
 	{

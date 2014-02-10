@@ -874,7 +874,7 @@ TLIBC_ERROR_CODE tlibc_unzip_open_current_file (tlibc_unzip_s *self)
     return unzOpenCurrentFile3(self, NULL, NULL, 0);
 }
 
-TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, size_t *len)
+TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, tuint32 *len)
 {
     TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
     uInt iRead = 0;

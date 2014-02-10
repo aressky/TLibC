@@ -1,6 +1,7 @@
 #include "tlibc/protocol/tlibc_xlsx_reader.h"
 #include "tlibc_xlsx_reader_sharedstring_l.h"
 #include <string.h>
+#include <errno.h>
 
 #define YYGETCONDITION()  self->scanner.state
 #define YYSETCONDITION(s) self->scanner.state = s
