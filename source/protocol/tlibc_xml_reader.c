@@ -36,7 +36,7 @@ TLIBC_ERROR_CODE tlibc_xml_reader_push_file(TLIBC_XML_READER *self, const char *
 	}
 	if(fin == NULL)
 	{
-		ret = E_TLIBC_CAN_NOT_OPEN_FILE;
+		ret = E_TLIBC_NOT_FOUND;
 		goto ERROR_RET;
 	}	
 
@@ -145,22 +145,23 @@ void tlibc_xml_reader_init(TLIBC_XML_READER *self)
 
 	self->pre_read_uint32_field_once = FALSE;
 	self->ignore_int32_once = FALSE;
-	self->struct_deep = 0;
 	self->scanner_context_stack_num = 0;
 	self->include_num = 0;
+	self->struct_deep = 0;
 }
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_add_include(TLIBC_XML_READER *self, const char *path)
 {
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	if(self->include_num >= TLIBC_XML_MAX_INCLUDE)
 	{
-		goto ERROR_RET;
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
 	}
 	self->include[self->include_num] = path;
 	++self->include_num;
-	return E_TLIBC_NOERROR;
-ERROR_RET:
-	return E_TLIBC_ERROR;
+done:
+	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const char *struct_name)
@@ -171,56 +172,53 @@ TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const
 
 	if(self->struct_deep != 0)
 	{
+		++self->struct_deep;
 		goto done;
 	}
 
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = E_TLIBC_XML_SYNTAX_ERROR;
-		goto ERROR_RET;
+		ret = E_TLIBC_SYNTAX;
+		goto done;
 	}
 
 	if(strcmp(struct_name, self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name) != 0)
 	{
-		ret = E_TLIBC_XML_TAG_MISMATCH;
-		goto ERROR_RET;
+		ret = E_TLIBC_MISMATCH;
+		goto done;
 	}
-
-done:
 	++self->struct_deep;
+done:	
 	return E_TLIBC_NOERROR;
-ERROR_RET:
-	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const char *struct_name)
 {
-	TLIBC_ERROR_CODE ret;
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	TLIBC_XML_READER_TOKEN token;
 
 	if(self->struct_deep != 0)
 	{
+		--self->struct_deep;
 		goto done;		
 	}
 
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = E_TLIBC_XML_SYNTAX_ERROR;
-		goto ERROR_RET;
+		ret = E_TLIBC_SYNTAX;
+		goto done;
 	}
 	if(strcmp(struct_name, self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name) != 0)
 	{
-		ret = E_TLIBC_XML_TAG_MISMATCH;
-		goto ERROR_RET;
-	}	
-	
-done:
-	--self->struct_deep;
-	return E_TLIBC_NOERROR;
-ERROR_RET:
+		ret = E_TLIBC_MISMATCH;
+		goto done;
+	}
+
+	--self->struct_deep;	
+done:	
 	return ret;
 }
 
@@ -259,7 +257,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 				--level;
 				break;
 			default:
-				ret = E_TLIBC_XML_SYNTAX_ERROR;
+				ret = E_TLIBC_SYNTAX;
 				goto ERROR_RET;
 		}
 	}while(level != 0);
@@ -291,12 +289,12 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const 
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = E_TLIBC_XML_SYNTAX_ERROR;
+		ret = E_TLIBC_SYNTAX;
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)
 	{
-		ret = E_TLIBC_XML_TAG_MISMATCH;
+		ret = E_TLIBC_MISMATCH;
 		goto ERROR_RET;
 	}
 
@@ -320,12 +318,12 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *super, const ch
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = E_TLIBC_XML_SYNTAX_ERROR;
+		ret = E_TLIBC_SYNTAX;
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)
 	{
-		ret = E_TLIBC_XML_TAG_MISMATCH;
+		ret = E_TLIBC_MISMATCH;
 		goto ERROR_RET;
 	}
 
@@ -356,7 +354,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tdouble(TLIBC_ABSTRACT_READER *super, double *va
 	*val = strtod(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin, NULL);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto ERROR_RET;
 	}
 
@@ -408,7 +406,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val
 	*val = strtoll(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin, NULL, 10);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto ERROR_RET;
 	}
 
@@ -463,7 +461,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *v
 	*val = strtoull(self->scanner_context_stack[self->scanner_context_stack_num - 1].content_begin, NULL, 10);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto ERROR_RET;
 	}
 
@@ -583,4 +581,16 @@ TLIBC_ERROR_CODE tlibc_xml_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str
 	return E_TLIBC_NOERROR;
 ERROR_RET:
 	return ret;
+}
+
+const TLIBC_XML_READER_YYLTYPE* tlibc_xml_current_location(TLIBC_XML_READER *self)
+{
+	if(self->scanner_context_stack_num > 0)
+	{
+		return &self->scanner_context_stack[self->scanner_context_stack_num - 1].yylloc;
+	}
+	else
+	{
+		return NULL;
+	}
 }

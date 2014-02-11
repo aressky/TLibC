@@ -131,7 +131,7 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 		}
 		else if (uMagic!=0x02014b50)
 		{
-			err = E_TLIBC_BADZIPFILE;
+			err = E_TLIBC_BAD_FILE;
 			goto ERROR_RET;
 		}
 	}
@@ -435,10 +435,10 @@ static TLIBC_ERROR_CODE  unzGoToNextFile (tlibc_unzip_s  *self)
     TLIBC_ERROR_CODE err;
 
     if (!self->current_file_ok)
-        return E_TLIBC_END_OF_LIST_OF_FILE;
+        return E_TLIBC_EOF;
     if (self->gi.number_entry != 0xffff)    /* 2^16 files overflow hack */
       if (self->num_file+1==self->gi.number_entry)
-        return E_TLIBC_END_OF_LIST_OF_FILE;
+        return E_TLIBC_EOF;
 
     self->pos_in_central_dir += SIZECENTRALDIRITEM + self->cur_file_info.size_filename +
             self->cur_file_info.size_file_extra + self->cur_file_info.size_file_comment ;
@@ -465,7 +465,7 @@ extern TLIBC_ERROR_CODE  tlibc_unzip_locate (tlibc_unzip_s *self, const char *sz
 
 
     if (strlen(szFileName) >= TLIBC_MAX_PATH_LENGTH)
-        return E_TLIBC_CAN_NOT_OPEN_FILE;
+        return E_TLIBC_OUT_OF_MEMORY;
 
     /* Save the current state */
     num_fileSaved = self->num_file;
@@ -532,7 +532,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		}
         else if (uMagic!=0x04034b50)
 		{
-            err=E_TLIBC_BADZIPFILE;
+            err=E_TLIBC_BAD_FILE;
 			goto ERROR_RET;
 		}
     }
@@ -556,14 +556,14 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 	}
     else if ((err==E_TLIBC_NOERROR) && (compression_method!=s->cur_file_info.compression_method))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
     if ((err==E_TLIBC_NOERROR) && (s->cur_file_info.compression_method!=0) &&
                          (s->cur_file_info.compression_method!=Z_DEFLATED))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -580,7 +580,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 	}
     else if ((err==E_TLIBC_NOERROR) && (crc!=s->cur_file_info.crc) && ((uFlags & 8)==0))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -591,7 +591,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 	}
     else if (uData != 0xFFFFFFFF && (err==E_TLIBC_NOERROR) && (compress_size!=s->cur_file_info.compressed_size) && ((uFlags & 8)==0))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -602,7 +602,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 	}
     else if (uData != 0xFFFFFFFF && (err==E_TLIBC_NOERROR) && (uncompress_size!=s->cur_file_info.uncompressed_size) && ((uFlags & 8)==0))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -613,7 +613,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 	}
     else if ((err==E_TLIBC_NOERROR) && (size_filename!=s->cur_file_info.size_filename))
 	{
-		err=E_TLIBC_BADZIPFILE;
+		err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -654,7 +654,7 @@ static TLIBC_ERROR_CODE  unzOpenCurrentFile3 (tlibc_unzip_s *self, int* method,
 
     if (unz64local_CheckCurrentFileCoherencyHeader(self,&iSizeVar, &offset_local_extrafield,&size_local_extrafield)!=E_TLIBC_NOERROR)
 	{
-        return E_TLIBC_BADZIPFILE;
+        return E_TLIBC_BAD_FILE;
 	}
 
     pfile_in_zip_read_info = &self->pfile_in_zip_read;
@@ -689,7 +689,7 @@ static TLIBC_ERROR_CODE  unzOpenCurrentFile3 (tlibc_unzip_s *self, int* method,
     if ((self->cur_file_info.compression_method!=0) &&
         (self->cur_file_info.compression_method!=Z_DEFLATED))
 	{
-        err=E_TLIBC_BADZIPFILE;
+        err=E_TLIBC_BAD_FILE;
 		goto ERROR_RET;
 	}
 
@@ -763,7 +763,7 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
 	
     if (self->filestream==NULL)
 	{
-        err = E_TLIBC_CAN_NOT_OPEN_FILE;
+        err = E_TLIBC_NOT_FOUND;
 		goto done;
 	}
 
@@ -819,7 +819,7 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
         (number_disk_with_CD!=0) ||
         (number_disk!=0))
 	{
-        err=E_TLIBC_BADZIPFILE;
+        err=E_TLIBC_BAD_FILE;
 		goto free_filestream;
 	}
 
@@ -848,7 +848,7 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
     if ((central_pos<self->offset_central_dir+self->size_central_dir) &&
         (err==E_TLIBC_NOERROR))
 	{
-        err=E_TLIBC_BADZIPFILE;
+        err=E_TLIBC_BAD_FILE;
 		goto free_filestream;
 	}
 

@@ -52,7 +52,7 @@ typedef struct _TLIBC_XML_READER
 	const char *include[TLIBC_XML_MAX_INCLUDE];
 	size_t include_num;
 
-	tuint32 struct_deep;
+	int struct_deep;
 	int ignore_int32_once;
 	int pre_read_uint32_field_once;
 	tuint32 ui32;
@@ -70,8 +70,10 @@ TLIBC_API void tlibc_xml_reader_pop_file(TLIBC_XML_READER *self);
 
 TLIBC_API void tlibc_xml_reader_pop_buff(TLIBC_XML_READER *self);
 
-//获取实体引用表示的字符
 TLIBC_API const char* tlibc_xml_str2c(const char* curr, const char* limit, tchar *ch);
+
+TLIBC_API const TLIBC_XML_READER_YYLTYPE* tlibc_xml_current_location(TLIBC_XML_READER *self);
+
 
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);

@@ -391,7 +391,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *va
 	*val = strtoll(self->curr_cell->val_begin, NULL, 10);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto done;
 	}
 
@@ -444,7 +444,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *
 	*val = strtoull(self->curr_cell->val_begin, NULL, 10);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto done;
 	}
 
@@ -472,7 +472,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tdouble(TLIBC_ABSTRACT_READER *super, double *v
 	*val = strtod(self->curr_cell->val_begin, NULL);
 	if(errno != 0)
 	{
-		ret = E_TLIBC_CONVERT_ERROR;
+		ret = E_TLIBC_ERRNO;
 		goto done;
 	}
 
@@ -550,4 +550,13 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *st
 	str[len] = 0;
 done:
 	return ret;
+}
+
+tint32 tlibc_xlsx_current_location(tlibc_xlsx_reader_t *self)
+{
+	if(self->curr_cell == NULL)
+	{
+		return -1;
+	}
+	return self->curr_cell - self->curr_row;
 }

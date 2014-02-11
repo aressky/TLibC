@@ -88,6 +88,8 @@ TLIBC_API void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self);
 
 TLIBC_API void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
+TLIBC_API tint32 tlibc_xlsx_current_location(tlibc_xlsx_reader_t *self);
+
 
 
 

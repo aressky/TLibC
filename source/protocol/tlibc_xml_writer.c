@@ -18,7 +18,7 @@ TLIBC_ERROR_CODE tlibc_xml_writer_init(TLIBC_XML_WRITER *self, const char *file_
 	self->f = fopen(file_name, "wb");
 	if(self->f == NULL)
 	{
-		ret = E_TLIBC_CAN_NOT_OPEN_FILE;
+		ret = E_TLIBC_NOT_FOUND;
 		goto ERROR_RET;
 	}
 
