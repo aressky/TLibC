@@ -26,8 +26,8 @@ TLIBC_ERROR_CODE tlibc_xml_reader_push_file(TLIBC_XML_READER *self, const char *
 		char fn[TLIBC_MAX_PATH_LENGTH];
 		for(i = 0; i < self->include_num; ++i)
 		{
-			snprintf(fn, TLIBC_MAX_PATH_LENGTH, "%s/%s", self->include[self->include_num], file_name);
-			fin = fopen(file_name, "rb");
+			snprintf(fn, TLIBC_MAX_PATH_LENGTH, "%s/%s", self->include[i], file_name);
+			fin = fopen(fn, "rb");
 			if(fin != NULL)
 			{
 				break;
