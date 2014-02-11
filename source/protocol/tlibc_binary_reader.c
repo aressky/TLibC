@@ -122,7 +122,7 @@ TLIBC_ERROR_CODE tlibc_binary_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16
 	}
 	*val = *(tuint8*)READER_PTR(self);
 	tlibc_little_to_host16(*val);
-	self->offset += sizeof(tuint8);
+	self->offset += sizeof(tuint16);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
