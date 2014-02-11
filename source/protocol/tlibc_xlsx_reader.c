@@ -104,7 +104,6 @@ TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *f
 	tlibc_abstract_reader_init(&self->super);
 
 	self->super.read_vector_begin = tlibc_xlsx_read_vector_begin;
-	self->super.read_vector_end = tlibc_xlsx_read_vector_end;
 	self->super.read_vector_element_begin = tlibc_xlsx_read_vector_element_begin;
 	self->super.read_vector_element_end = tlibc_xlsx_read_vector_element_end;
 	self->super.read_field_begin = tlibc_xlsx_read_field_begin;	
@@ -189,10 +188,11 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *sel
 		goto free_sheet;
 	}
 
-	self->vector_level = 0;
 	self->curr_name_ptr = self->curr_name;
-	self->read_rowsize = FALSE;
+	self->read_vector_size = FALSE;
 	self->skip_a_field = FALSE;
+	self->curr_cell = NULL;
+	self->ignore_int32_once = FALSE;
 
 	for(i = 0; i < self->cell_col_size; ++i)
 	{
@@ -208,6 +208,16 @@ free_sheet:
 	free(self->sheet_buff);
 ERROR_RET:
 	return E_TLIBC_ERROR;
+}
+
+tuint32 tlibc_xlsx_reader_num_rows(tlibc_xlsx_reader_t *self)
+{
+	return self->real_row_size - self->data_real_row_index;
+}
+
+void tlibc_xlsx_reader_row_seek(tlibc_xlsx_reader_t *self, tuint32 offset)
+{
+	self->curr_row = self->data_row + offset * self->cell_col_size;
 }
 
 void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self)
@@ -230,26 +240,23 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 {
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
 	
-	++self->vector_level;
-	if(self->vector_level == 1)
-	{
-		self->skip_a_field = TRUE;
-		self->read_rowsize = TRUE;
-	}
-	return E_TLIBC_NOERROR;
-}
+	self->skip_a_field = TRUE;
+	self->read_vector_size = TRUE;
 
-TLIBC_ERROR_CODE tlibc_xlsx_read_vector_end(TLIBC_ABSTRACT_READER *super)
-{
-	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);	
-	--self->vector_level;
 	return E_TLIBC_NOERROR;
 }
 
 static void tlibc_xlsx_locate(tlibc_xlsx_reader_t *self)
 {
 	tlibc_xlsx_cell_s *cell;
-	tlibc_hash_head_t *head = tlibc_hash_find(&self->name2index, self->curr_name, self->curr_name_ptr - self->curr_name);
+	tlibc_hash_head_t *head;
+
+	self->curr_cell = NULL;
+	if(self->curr_name_ptr <= self->curr_name)
+	{		
+		goto done;
+	}
+	head = tlibc_hash_find(&self->name2index, self->curr_name + 1, self->curr_name_ptr - self->curr_name - 1);
 	if(head == NULL)
 	{
 		goto done;
@@ -264,33 +271,17 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_begin(TLIBC_ABSTRACT_READER *sup
 {
 	int len;
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
-	if(self->vector_level == 1)
+	
+	len = snprintf(self->curr_name_ptr, TLIBC_XLSX_READER_NAME_LENGTH - (self->curr_name_ptr - self->curr_name)
+		, ".%s[%u]", var_name, index);
+
+	if(len < 0)
 	{
-		self->curr_row = self->data_row + index * self->cell_col_size;
+		goto ERROR_RET;
 	}
-	else
-	{
-		if(self->curr_name != self->curr_name_ptr)
-		{
-			if(self->curr_name_ptr - self->curr_name >= TLIBC_XLSX_READER_NAME_LENGTH)
-			{
-				goto ERROR_RET;
-			}
+	self->curr_name_ptr += len;
 
-			*self->curr_name_ptr = '.';
-			++self->curr_name_ptr;
-		}
-		len = snprintf(self->curr_name_ptr, TLIBC_XLSX_READER_NAME_LENGTH - (self->curr_name_ptr - self->curr_name)
-			, "%s[%u]", var_name, index);
-
-		if(len < 0)
-		{
-			goto ERROR_RET;
-		}
-		self->curr_name_ptr += len;
-
-		tlibc_xlsx_locate(self);
-	}
+	tlibc_xlsx_locate(self);
 
 	return E_TLIBC_NOERROR;
 ERROR_RET:
@@ -303,20 +294,13 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_end(TLIBC_ABSTRACT_READER *super
 	int len;
 	char curr_name[TLIBC_XLSX_READER_NAME_LENGTH];
 	
-	if(self->vector_level != 1)
+	len = snprintf(curr_name, TLIBC_XLSX_READER_NAME_LENGTH, ".%s[%u]", var_name, index);
+	if(len < 0)
 	{
-		len = snprintf(curr_name, TLIBC_XLSX_READER_NAME_LENGTH, "%s[%u]", var_name, index);
-		if(len < 0)
-		{
-			goto ERROR_RET;
-		}
-		self->curr_name_ptr -= len;
-		if(self->curr_name != self->curr_name_ptr)
-		{
-			--self->curr_name_ptr;
-		}
-		*self->curr_name_ptr = 0;
+		goto ERROR_RET;
 	}
+	self->curr_name_ptr -= len;
+
 	return E_TLIBC_NOERROR;
 ERROR_RET:
 	return E_TLIBC_ERROR;
@@ -331,17 +315,8 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_field_begin(TLIBC_ABSTRACT_READER *super, const
 		goto done;
 	}
 
-	if(self->curr_name != self->curr_name_ptr)
-	{
-		if(self->curr_name_ptr - self->curr_name >= TLIBC_XLSX_READER_NAME_LENGTH)
-		{
-			goto ERROR_RET;
-		}
-		*self->curr_name_ptr = '.';
-		++self->curr_name_ptr;
-	}
 	len = snprintf(self->curr_name_ptr, TLIBC_XLSX_READER_NAME_LENGTH - (self->curr_name_ptr - self->curr_name)
-		, "%s", var_name);
+		, ".%s", var_name);
 	if(len < 0)
 	{
 		goto ERROR_RET;
@@ -367,22 +342,27 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_field_end(TLIBC_ABSTRACT_READER *super, const c
 		goto done;
 	}
 
-	len = snprintf(curr_name, TLIBC_XLSX_READER_NAME_LENGTH, "%s", var_name);
+	len = snprintf(curr_name, TLIBC_XLSX_READER_NAME_LENGTH, ".%s", var_name);
 	if(len < 0)
 	{
 		goto ERROR_RET;
 	}
 	self->curr_name_ptr -= len;
-	if(self->curr_name != self->curr_name_ptr)
-	{
-		--self->curr_name_ptr;
-	}
-	*self->curr_name_ptr = 0;
 
 done:
 	return E_TLIBC_NOERROR;
 ERROR_RET:
 	return E_TLIBC_ERROR;
+}
+
+TLIBC_ERROR_CODE tlibc_xlsx_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name)
+{
+	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
+	TLIBC_UNUSED(enum_name);
+
+	self->ignore_int32_once = TRUE;
+
+	return E_TLIBC_NOERROR;
 }
 
 TLIBC_ERROR_CODE tlibc_xlsx_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val)
@@ -403,9 +383,18 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *va
 
 TLIBC_ERROR_CODE tlibc_xlsx_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val)
 {
+	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
 	tint64 i64;
-	TLIBC_ERROR_CODE ret = tlibc_xlsx_read_tint64(super, &i64);
+	TLIBC_ERROR_CODE ret;
+	if(self->ignore_int32_once)
+	{
+		self->ignore_int32_once = FALSE;
+		ret = E_TLIBC_IGNORE;
+		goto done;
+	}
+	ret = tlibc_xlsx_read_tint64(super, &i64);
 	*val = (tint32)i64;
+done:
 	return ret;
 }
 
@@ -413,6 +402,11 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *va
 {
 	TLIBC_ERROR_CODE ret;
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
+	if(self->curr_cell == NULL)
+	{
+		ret = E_TLIBC_CONVERT_ERROR;
+		goto ERROR_RET;
+	}
 	errno = 0;
 	*val = strtoll(self->curr_cell->val_begin, NULL, 10);
 	if(errno != 0)
@@ -447,9 +441,9 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tint64 i64;
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
-	if(self->read_rowsize)
+	if(self->read_vector_size)
 	{
-		self->read_rowsize = FALSE;
+		self->read_vector_size = FALSE;
 		*val = self->real_row_size - self->data_real_row_index;
 		goto done;
 	}
@@ -463,6 +457,12 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *
 {
 	TLIBC_ERROR_CODE ret;
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
+	if(self->curr_cell == NULL)
+	{
+		ret = E_TLIBC_CONVERT_ERROR;
+		goto ERROR_RET;
+	}
+
 	errno = 0;
 	*val = strtoull(self->curr_cell->val_begin, NULL, 10);
 	if(errno != 0)
@@ -480,6 +480,12 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tdouble(TLIBC_ABSTRACT_READER *super, double *v
 {
 	TLIBC_ERROR_CODE ret;
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
+	if(self->curr_cell == NULL)
+	{
+		ret = E_TLIBC_CONVERT_ERROR;
+		goto ERROR_RET;
+	}
+
 	errno = 0;
 	*val = strtod(self->curr_cell->val_begin, NULL);
 	if(errno != 0)
@@ -496,22 +502,38 @@ ERROR_RET:
 TLIBC_ERROR_CODE tlibc_xlsx_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
 {
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
-	const char* curr = tlibc_xml_str2c(self->curr_cell->val_begin
+	const char* curr;
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	if(self->curr_cell == NULL)
+	{
+		ret = E_TLIBC_CONVERT_ERROR;
+		goto done;
+	}
+
+	curr = tlibc_xml_str2c(self->curr_cell->val_begin
 		, self->curr_cell->val_end, val);
 	if(curr == NULL)
 	{
 		return E_TLIBC_OUT_OF_MEMORY;
 	}
-	return E_TLIBC_NOERROR;
+done:
+	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_xlsx_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *str, tuint32 str_len)
 {
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
 	tuint32 len = 0;
-	TLIBC_ERROR_CODE ret;
-	const char* curr = self->curr_cell->val_begin;
-	const char* limit = self->curr_cell->val_end;
+	const char* curr;
+	const char* limit;
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	if(self->curr_cell == NULL)
+	{
+		ret = E_TLIBC_CONVERT_ERROR;
+		goto done;
+	}
+	curr = self->curr_cell->val_begin;
+	limit = self->curr_cell->val_end;
 	while(curr < limit)
 	{
 		char c;
@@ -519,7 +541,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *st
 		if(curr == NULL)
 		{
 			ret = E_TLIBC_OUT_OF_MEMORY;
-			goto ERROR_RET;
+			goto done;
 		}
 
 		if(c == '<')
@@ -529,13 +551,11 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_tstring(TLIBC_ABSTRACT_READER *super, tchar *st
 		if(len >= str_len)
 		{
 			ret = E_TLIBC_OUT_OF_MEMORY;
-			goto ERROR_RET;
+			goto done;
 		}
 		str[len++] = c;		
 	}
 	str[len] = 0;
-
-	return E_TLIBC_NOERROR;
-ERROR_RET:
+done:
 	return ret;
 }

@@ -75,10 +75,9 @@ typedef struct _tlibc_xlsx_reader_t
 	char *curr_name_ptr;
 	tlibc_xlsx_cell_s *curr_cell;
 
-	size_t vector_level;
 	int skip_a_field;
-	int read_rowsize;
-
+	int read_vector_size;
+	int ignore_int32_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
 	tlibc_hash_t name2index;
 }tlibc_xlsx_reader_t;
@@ -88,14 +87,18 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, con
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *self, 
 														const char* sheet, tuint32 bindinfo_row, tuint32 data_row);
 
+TLIBC_API tuint32 tlibc_xlsx_reader_num_rows(tlibc_xlsx_reader_t *self);
+
+TLIBC_API void tlibc_xlsx_reader_row_seek(tlibc_xlsx_reader_t *self, tuint32 offset);
+
 TLIBC_API void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self);
 
 TLIBC_API void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_end(TLIBC_ABSTRACT_READER *super);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_begin(TLIBC_ABSTRACT_READER *super, const char* var_name, tuint32 index);
 

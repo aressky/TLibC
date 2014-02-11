@@ -496,11 +496,11 @@ TLIBC_ERROR_CODE tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const
 	tuint32 str_len = 0;
 	TLIBC_ERROR_CODE ret= E_TLIBC_NOERROR;
 
-	for(; self->offset < self->size; ++(self->offset))
+	for(; self->offset < self->size; )
 	{
-		self->addr[self->offset] = str[str_len++];
+		char c = (self->addr[self->offset++] = str[str_len++]);
 
-		if(self->addr[self->offset] == 0)
+		if(c == 0)
 		{
 			goto done;
 		}
