@@ -63,20 +63,14 @@ typedef struct _tlibc_xlsx_reader_t
 	tuint32 cell_row_size;
 	tuint32 cell_col_size;
 	tlibc_xlsx_cell_s *cell_matrix;
-	tuint32 real_row_size;
-
-
 	tlibc_xlsx_cell_s *bindinfo_row;
-	tuint32 data_real_row_index;
-	tlibc_xlsx_cell_s *data_row;
 
 	tlibc_xlsx_cell_s *curr_row;
+	tlibc_xlsx_cell_s *curr_cell;
 	char curr_name[TLIBC_XLSX_READER_NAME_LENGTH];
 	char *curr_name_ptr;
-	tlibc_xlsx_cell_s *curr_cell;
+	
 
-	int skip_a_field;
-	int read_vector_size;
 	int ignore_int32_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
 	tlibc_hash_t name2index;
@@ -84,8 +78,7 @@ typedef struct _tlibc_xlsx_reader_t
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *self, 
-														const char* sheet, tuint32 bindinfo_row, tuint32 data_row);
+TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *self, const char* sheet, tuint32 bindinfo_row);
 
 TLIBC_API tuint32 tlibc_xlsx_reader_num_rows(tlibc_xlsx_reader_t *self);
 
@@ -98,8 +91,6 @@ TLIBC_API void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
 
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_begin(TLIBC_ABSTRACT_READER *super);
-
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_begin(TLIBC_ABSTRACT_READER *super, const char* var_name, tuint32 index);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_end(TLIBC_ABSTRACT_READER *super, const char* var_name, tuint32 index);
@@ -107,6 +98,8 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_end(TLIBC_ABSTRACT_REA
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_field_end(TLIBC_ABSTRACT_READER *super, const char *var_name);
+
+TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name);
 
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_read_tchar(TLIBC_ABSTRACT_READER *super, char *val);
 

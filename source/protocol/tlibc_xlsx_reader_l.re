@@ -32,26 +32,23 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 	}
 }
 
-TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, tuint32 bindinfo_row, tuint32 data_row)
+TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, tuint32 bindinfo_row)
 {
 	tlibc_xlsx_cell_s *cell = NULL;
 	int is_sharedstring = FALSE;
 	tlibc_xlsx_cell_s *current_row = NULL;
 
-	self->cell_matrix = NULL;
 	self->scanner.cursor = self->sheet_buff;
 	self->scanner.limit = self->sheet_buff + self->sheet_buff_size;
 	self->scanner.marker = self->scanner.cursor;
 	self->scanner.state = yycINITIAL;
 	self->cell_matrix = NULL;
-	self->real_row_size = 0;
 	self->bindinfo_row = NULL;
-	self->data_row = NULL;
 
 restart:
 	if(self->scanner.cursor >= self->scanner.limit)
 	{
-		if((self->bindinfo_row == NULL) || (self->data_row == NULL))
+		if(self->bindinfo_row == NULL)
 		{
 			goto ERROR_RET;
 		}
@@ -109,7 +106,12 @@ restart:
 	{
 		goto ERROR_RET;
 	}
-	
+	current_row = self->cell_matrix + (row - self->cell_min_pos.row) * self->cell_col_size;
+	for(i = 0; i < self->cell_col_size; ++i)
+	{
+		current_row[i].empty = TRUE;
+	}
+
 	while(*YYCURSOR != '>')
 	{
 		if(*YYCURSOR == '/')
@@ -119,28 +121,17 @@ restart:
 		++YYCURSOR;
 	}
 	++YYCURSOR;
+	
 	if(is_single)
 	{
 		goto restart;
-	}
-
-	current_row = self->cell_matrix + self->real_row_size * self->cell_col_size;
-	for(i = 0; i < self->cell_col_size; ++i)
-	{
-		current_row[i].empty = TRUE;
 	}
 
 	if(row == bindinfo_row)
 	{
 		self->bindinfo_row = current_row;
 	}
-	else if(row == data_row)
-	{
-		self->data_row = current_row;
-		self->data_real_row_index = self->real_row_size;
-	}
 	BEGIN(IN_ROW);
-	++self->real_row_size;
 	goto restart;
 }
 <IN_ROW>"<c"

@@ -389,7 +389,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val
 	if(self->ignore_int32_once)
 	{
 		self->ignore_int32_once = FALSE;
-		ret = E_TLIBC_IGNORE;
+		ret = E_TLIBC_PLEASE_READ_ENUM_NAME;
 		goto done;
 	}
 	

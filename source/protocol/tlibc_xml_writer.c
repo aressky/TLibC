@@ -228,7 +228,7 @@ TLIBC_ERROR_CODE tlibc_xml_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint
 	if(self->ignore_int32_once)
 	{
 		self->ignore_int32_once = FALSE;
-		ret = E_TLIBC_IGNORE;
+		ret = E_TLIBC_PLEASE_READ_ENUM_NAME;
 		goto done;
 	}
 	v = *val;
