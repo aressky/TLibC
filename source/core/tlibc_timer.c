@@ -125,7 +125,7 @@ static int cascade(tlibc_timer_t *self, tlibc_timer_vec_t *tv, int index)
 
 TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_AGAIN;
+	TLIBC_ERROR_CODE ret = E_TLIBC_WOULD_BLOCK;
 
 	if(self->jiffies <= jiffies)
 	{
