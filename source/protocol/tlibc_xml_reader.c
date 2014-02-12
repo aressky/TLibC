@@ -46,8 +46,8 @@ TLIBC_ERROR_CODE tlibc_xml_reader_push_file(TLIBC_XML_READER *self, const char *
 	start = (char*)malloc(file_size);
 	if(start == NULL)
 	{
-		ret = E_TLIBC_OUT_OF_MEMORY;
-		goto ERROR_RET;
+		ret = E_TLIBC_OUT_OF_MEMORY;		
+		goto free_file;
 	}
 	curr = start;
 	limit = start + file_size;
@@ -68,12 +68,16 @@ TLIBC_ERROR_CODE tlibc_xml_reader_push_file(TLIBC_XML_READER *self, const char *
 	{
 		goto free_buff;
 	}
+	fclose(fin);
+
 	strncpy(self->scanner_context_stack[self->scanner_context_stack_num - 1].yylloc.file_name, file_name, TLIBC_MAX_PATH_LENGTH - 1);
 	self->scanner_context_stack[self->scanner_context_stack_num - 1].filecontent_ptr = start;
-
+	
 	return E_TLIBC_NOERROR;
 free_buff:
 	free(start);
+free_file:
+	fclose(fin);
 ERROR_RET:
 	return ret;
 }
