@@ -144,7 +144,7 @@ ERROR_RET:
 TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *self, const char* sheet, tuint32 bindinfo_row)
 {
 	size_t i ;
-	TLIBC_ERROR_CODE ret;
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	const char *rid;
 	const char *file;
 	char sheet_file[TLIBC_MAX_PATH_LENGTH] = {XL_PREFIX};
@@ -152,10 +152,16 @@ TLIBC_API TLIBC_ERROR_CODE tlibc_xlsx_reader_open_sheet(tlibc_xlsx_reader_t *sel
 	rid = tlibc_xlsx_reader_workbook_search_rid(self, sheet);
 	if(rid == NULL)
 	{
+		ret = E_TLIBC_NOT_FOUND;
 		goto ERROR_RET;
 	}
 
 	file = tlibc_xlsx_reader_workbook_rels_search_file(self, rid);
+	if(file == NULL)
+	{
+		ret = E_TLIBC_NOT_FOUND;
+		goto ERROR_RET;
+	}
 	strncpy(sheet_file + strlen(XL_PREFIX), file, TLIBC_MAX_PATH_LENGTH - strlen(XL_PREFIX) - 1);
 
 	ret = tlibc_unzip_locate(&self->unzip, sheet_file);

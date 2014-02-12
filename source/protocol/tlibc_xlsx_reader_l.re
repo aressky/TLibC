@@ -56,7 +56,7 @@ restart:
 		return E_TLIBC_NOERROR;
 	}
 /*!re2c
-<INITIAL>"<dimension ref=\""
+<INITIAL>"<dimension" (' '|'\t')* "ref=\""
 {
 	tuint32 i;
 	char *size_min = YYCURSOR;
@@ -94,8 +94,8 @@ restart:
 	}
 	goto restart;
 }
-<INITIAL>"<sheetData>"				{ BEGIN(IN_SHEETDATA);goto restart;	}
-<IN_SHEETDATA>"<row r=\""
+<INITIAL>"<sheetdata>"				{ BEGIN(IN_SHEETDATA);goto restart;	}
+<IN_SHEETDATA>"<row" (' '|'\t')* "r=\""
 {
 	const char *r = YYCURSOR;
 	tuint32 row;
@@ -199,8 +199,8 @@ restart:
 <IN_COL>"<v>"						{ cell->val_begin = YYCURSOR; goto restart;}
 <IN_COL>"</v>"						{ cell->val_end = YYCURSOR - 4; *(YYCURSOR - 4)= 0; goto restart;}
 <IN_ROW>"</row>"					{ BEGIN(IN_SHEETDATA); goto restart; }
-<IN_SHEETDATA>"</sheetData>"		{ BEGIN(INITIAL); goto restart;		}
-<INITIAL>"</sheetData>"				{ BEGIN(INITIAL);goto restart;		}
+<IN_SHEETDATA>"</sheetdata>"		{ BEGIN(INITIAL); goto restart;		}
+<INITIAL>"</sheetdata>"				{ BEGIN(INITIAL);goto restart;		}
 <*>[^]								{ goto restart;}
 */
 ERROR_RET:

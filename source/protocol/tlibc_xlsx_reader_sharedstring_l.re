@@ -34,7 +34,7 @@ restart:
 re2c:yyfill:enable   = 0;
 
 <INITIAL>"<sst" {BEGIN(IN_SST_TAG); goto restart;}
-<IN_SST_TAG> "count=\""
+<IN_SST_TAG>"count=\""
 {
 	const char* number_begin = YYCURSOR;
 	tuint32 num;

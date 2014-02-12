@@ -29,7 +29,7 @@ restart:
 /*!re2c
 re2c:yyfill:enable   = 0;
 
-<INITIAL>"<Relationships"	 
+<INITIAL>"<relationships"	 
 {
 	while(*YYCURSOR != '>')
 		++YYCURSOR;
@@ -38,7 +38,7 @@ re2c:yyfill:enable   = 0;
 	BEGIN(IN_RELATIONSHIPS);
 	goto restart;
 }
-<IN_RELATIONSHIPS>"Target=\""
+<IN_RELATIONSHIPS>"target=\""
 {
 	target_begin = YYCURSOR;
 	while(*YYCURSOR != '\"')
@@ -48,7 +48,7 @@ re2c:yyfill:enable   = 0;
 	YYMARKER = YYCURSOR;
 	goto restart;
 }
-<IN_RELATIONSHIPS>"Id=\""
+<IN_RELATIONSHIPS>"id=\""
 {
 	rid_begin = YYCURSOR;
 	while(*YYCURSOR != '\"')
@@ -67,10 +67,7 @@ re2c:yyfill:enable   = 0;
 	rid_begin = NULL;
 	goto restart;
 }
-<INITIAL>"</Relationships>"		 { BEGIN(INITIAL);				}
+<INITIAL>"</relationships>"		 { BEGIN(INITIAL);				}
 <*>[^]							 { goto restart;				}
 */
 }
-
-
-
