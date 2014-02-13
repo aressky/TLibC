@@ -15,8 +15,9 @@ typedef struct _tlibc_mempool_t
 {
 	tuint32 code;
 	size_t unit_size;
-	size_t unit_num;
-	tuint32 free_head;
+	int unit_num;
+	int free_head;
+	int used_head;
 	char data[1];
 }tlibc_mempool_t;
 
@@ -27,6 +28,9 @@ typedef struct _tlibc_mempool_t
 //计算内存池可以容纳多少元素
 #define TLIBC_MEMPOOL_UNIT_NUM(poll_size, unit_size) (poll_size - TLIBC_OFFSET_OF(tlibc_mempool_t, data))\
 	/ (unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data));
+
+#define TLIBC_MEMPOOL_GET_BLOCK(p, idx) ((tlibc_mempool_block_t*)((char*)p->data + \
+	(p->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * (idx)))
 
 #define TLIBC_MEMPOOL_INVALID_INDEX TLIBC_UINT64_MAX
 

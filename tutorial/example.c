@@ -162,7 +162,7 @@ void test_timer()
 	for(;;)
 	{
 		TLIBC_ERROR_CODE ret = tlibc_timer_tick(&timer, get_current_ms() - start_ms);
-		if(ret == E_TLIBC_AGAIN )
+		if(ret == E_TLIBC_WOULD_BLOCK)
 		{
 			++count;
 			if(count > 50)
@@ -178,7 +178,7 @@ typedef struct _unit_t
 	int data;
 }unit_t;
 
-#define MAX_UNIT_NUM 1024
+#define MAX_UNIT_NUM 128
 char mem[TLIBC_MEMPOOL_SIZE(sizeof(unit_t), MAX_UNIT_NUM)];
 
 void test_mempool()
@@ -191,17 +191,30 @@ void test_mempool()
 
 	assert(unit_size == MAX_UNIT_NUM);
 	for(i = 0; i < unit_size; ++i)
-	{		
+	{
+		unit_t *data = NULL;
 		mid = tlibc_mempool_alloc(mp);
 		assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
 		addr = tlibc_mempool_get(mp, mid);
 		assert(addr != NULL);
+		data = (unit_t*)addr;
+		data->data = i;
 		mid_last = mid;
 	}
 	mid = tlibc_mempool_alloc(mp);
 	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
 	addr = tlibc_mempool_get(mp, mid);
 	assert(addr == NULL);
+
+	//遍历所有元素
+	for(i = mp->used_head; i < mp->unit_num; )
+	{
+		tlibc_mempool_block_t *b = TLIBC_MEMPOOL_GET_BLOCK(mp, i);
+		unit_t *data = (unit_t *)&b->data;
+		printf("%d\n", data->data);
+		i = b->next;
+	}
+
 
 	tlibc_mempool_free(mp, mid_last);
 	//重复删除不会出错
@@ -218,6 +231,8 @@ void test_mempool()
 	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
 	addr = tlibc_mempool_get(mp, mid);
 	assert(addr == NULL);
+
+	
 
 	printf("%d\n", unit_size);
 }
@@ -248,9 +263,9 @@ int main()
 
 	//test_timer();
 
-	//test_mempool();
+	test_mempool();
 
-	test_unzip();
+	//test_unzip();
 
 	return 0;
 }
