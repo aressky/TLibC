@@ -34,7 +34,6 @@ int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size
 		b = TLIBC_MEMPOOL_GET_BLOCK(self, i);
 		b->used = FALSE;
 		b->next = i + 1;
-		b->mid = TLIBC_MEMPOOL_INVALID_INDEX;
 	}
 	self->total_used = 0;
 
@@ -46,7 +45,7 @@ ERROR_RET:
 #define MID_BUILD(code, index) (((tuint64)code << 32) | (index & TLIBC_INT32_MAX))
 #define MID_GET_INDEX(mid) (mid & TLIBC_INT32_MAX)
 
-tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self)
+void* tlibc_mempool_alloc(tlibc_mempool_t* self)
 {
 	tlibc_mempool_block_t *b;
 	tuint64 mid;
@@ -57,11 +56,8 @@ tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self)
 		goto ERROR_RET;
 	}
 	
-	do 
-	{
-		++self->code;
-		mid = MID_BUILD(self->code, index);
-	}while(mid == TLIBC_MEMPOOL_INVALID_INDEX);
+	++self->code;
+	mid = MID_BUILD(self->code, index);
 
 	b = TLIBC_MEMPOOL_GET_BLOCK(self, index);
 	if(b->used)
@@ -75,14 +71,15 @@ tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self)
 	self->used_head = index;
 	++self->total_used;
 	
-	return mid;
+	return b->data;
 ERROR_RET:
-	return TLIBC_MEMPOOL_INVALID_INDEX;
+	return NULL;
 }
 
-void tlibc_mempool_free(tlibc_mempool_t* self, tuint64 mid)
+void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr)
 {
 	tlibc_mempool_block_t *b;
+	tuint64 mid = tlibc_mempool_ptr2mid(ptr);
 	int	index = MID_GET_INDEX(mid);
 
 	if(index >= self->unit_num)
@@ -109,7 +106,7 @@ done:
 	return;
 }
 
-void* tlibc_mempool_get_ptr(tlibc_mempool_t* self, tuint64 mid)
+void* tlibc_mempool_mid2ptr(tlibc_mempool_t* self, tuint64 mid)
 {
 	tlibc_mempool_block_t *b = NULL;
 	int	index = MID_GET_INDEX(mid);

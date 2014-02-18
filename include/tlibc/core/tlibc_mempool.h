@@ -33,18 +33,20 @@ typedef struct _tlibc_mempool_t
 #define TLIBC_MEMPOOL_GET_BLOCK(p, idx) ((tlibc_mempool_block_t*)((char*)p->data + \
 	(p->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * (idx)))
 
-#define TLIBC_MEMPOOL_INVALID_INDEX TLIBC_UINT64_MAX
+#define TLIBC_MEMPOOL_GET_BLOCK_DATA(p, idx) (TLIBC_MEMPOOL_GET_BLOCK(p, idx)->data)
+
+#define TLIBC_MEMPOOL_GET_BLOCK_NEXT(p, idx) (TLIBC_MEMPOOL_GET_BLOCK(p, idx)->next)
 
 //如果错误返回-1, 否则返回可以容纳的元素个数
 TLIBC_API int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size);
 
-TLIBC_API tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self);
+TLIBC_API void* tlibc_mempool_alloc(tlibc_mempool_t* self);
 
-TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, tuint64 mid);
+TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr);
 
-TLIBC_API void* tlibc_mempool_get_ptr(tlibc_mempool_t* self, tuint64 mid);
+TLIBC_API void* tlibc_mempool_mid2ptr(tlibc_mempool_t* self, tuint64 mid);
 
-#define tlibc_mempool_get_mid(ptr) (TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)->mid)
+#define tlibc_mempool_ptr2mid(ptr) (TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)->mid)
 
 #endif//_H_TLIBC_MEMPOOL_H
 

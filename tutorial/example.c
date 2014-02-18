@@ -192,48 +192,30 @@ void test_mempool()
 	assert(unit_size == MAX_UNIT_NUM);
 	for(i = 0; i < unit_size; ++i)
 	{
-		unit_t *data = NULL;
-		mid = tlibc_mempool_alloc(mp);
-		assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
-		addr = tlibc_mempool_get_ptr(mp, mid);
-		assert(addr != NULL);
-		assert(tlibc_mempool_get_mid(addr) == mid);
-		data = (unit_t*)addr;
+		unit_t *data = (unit_t*)tlibc_mempool_alloc(mp);
+		tuint64 mid = tlibc_mempool_ptr2mid(data);
+		assert(data != NULL);
 		data->data = i;
 		mid_last = mid;
 	}
-	mid = tlibc_mempool_alloc(mp);
-	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get_ptr(mp, mid);
+	addr = tlibc_mempool_alloc(mp);
 	assert(addr == NULL);
-
+	
 	//遍历所有元素
 	for(i = mp->used_head; i < mp->unit_num; )
 	{
-		tlibc_mempool_block_t *b = TLIBC_MEMPOOL_GET_BLOCK(mp, i);
-		unit_t *data = (unit_t *)&b->data;
+		unit_t *data = (unit_t *)TLIBC_MEMPOOL_GET_BLOCK_DATA(mp, i);
 		printf("%d\n", data->data);
-		i = b->next;
+		i = TLIBC_MEMPOOL_GET_BLOCK_NEXT(mp, i);
 	}
 
 
-	tlibc_mempool_free(mp, mid_last);
-	//重复删除不会出错
-	tlibc_mempool_free(mp, mid_last);
-	mid = tlibc_mempool_alloc(mp);
+	tlibc_mempool_free(mp, tlibc_mempool_mid2ptr(mp, mid_last));
+	addr = tlibc_mempool_alloc(mp);
+	mid = tlibc_mempool_ptr2mid(addr);
 	//mid不重用
 	assert(mid != mid_last);
-	assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get_ptr(mp, mid);
-	assert(addr != NULL);
 
-	tlibc_mempool_free(mp, mid_last + 1);
-	mid = tlibc_mempool_alloc(mp);
-	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get_ptr(mp, mid);
-	assert(addr == NULL);
-
-	
 
 	printf("%d\n", unit_size);
 }
