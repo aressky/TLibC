@@ -16,10 +16,10 @@ typedef struct _tlibc_mempool_t
 	tuint32 code;
 	size_t unit_size;
 	int unit_num;
+	int total_used;
 	int free_head;
 	int used_head;
-	char data[1];
-	int total_used;
+	char data[1];	
 }tlibc_mempool_t;
 
 //计算元素需要多大的内存池
