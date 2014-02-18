@@ -36,6 +36,8 @@ int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size
 		b->next = i + 1;
 		b->code = self->code;
 	}
+	self->total_used = 0;
+
 	return self->unit_num;
 ERROR_RET:
 	return -1;
@@ -72,7 +74,7 @@ tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self)
 	self->free_head = b->next;
 	b->next = self->used_head;
 	self->used_head = index;
-	
+	++self->total_used;
 	
 	return mid;
 ERROR_RET:
@@ -103,6 +105,7 @@ void tlibc_mempool_free(tlibc_mempool_t* self, tuint64 mid)
 	self->used_head = b->next;
 	b->next = self->free_head;
 	self->free_head = index;
+	--self->total_used;
 
 done:
 	return;

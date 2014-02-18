@@ -19,6 +19,7 @@ typedef struct _tlibc_mempool_t
 	int free_head;
 	int used_head;
 	char data[1];
+	int total_used;
 }tlibc_mempool_t;
 
 //计算元素需要多大的内存池
