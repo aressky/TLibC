@@ -195,15 +195,16 @@ void test_mempool()
 		unit_t *data = NULL;
 		mid = tlibc_mempool_alloc(mp);
 		assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
-		addr = tlibc_mempool_get(mp, mid);
+		addr = tlibc_mempool_get_ptr(mp, mid);
 		assert(addr != NULL);
+		assert(tlibc_mempool_get_mid(addr) == mid);
 		data = (unit_t*)addr;
 		data->data = i;
 		mid_last = mid;
 	}
 	mid = tlibc_mempool_alloc(mp);
 	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get(mp, mid);
+	addr = tlibc_mempool_get_ptr(mp, mid);
 	assert(addr == NULL);
 
 	//遍历所有元素
@@ -223,13 +224,13 @@ void test_mempool()
 	//mid不重用
 	assert(mid != mid_last);
 	assert(mid != TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get(mp, mid);
+	addr = tlibc_mempool_get_ptr(mp, mid);
 	assert(addr != NULL);
 
 	tlibc_mempool_free(mp, mid_last + 1);
 	mid = tlibc_mempool_alloc(mp);
 	assert(mid == TLIBC_MEMPOOL_INVALID_INDEX);
-	addr = tlibc_mempool_get(mp, mid);
+	addr = tlibc_mempool_get_ptr(mp, mid);
 	assert(addr == NULL);
 
 	

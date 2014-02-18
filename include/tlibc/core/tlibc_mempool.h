@@ -6,7 +6,7 @@
 typedef struct _tlibc_mempool_block_t
 {
 	int used;
-	tuint32 code;
+	tuint64 mid;
 	int next;
 	char data[1];
 }tlibc_mempool_block_t;
@@ -42,7 +42,9 @@ TLIBC_API tuint64 tlibc_mempool_alloc(tlibc_mempool_t* self);
 
 TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, tuint64 mid);
 
-TLIBC_API void* tlibc_mempool_get(tlibc_mempool_t* self, tuint64 mid);
+TLIBC_API void* tlibc_mempool_get_ptr(tlibc_mempool_t* self, tuint64 mid);
+
+#define tlibc_mempool_get_mid(ptr) (TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)->mid)
 
 #endif//_H_TLIBC_MEMPOOL_H
 
