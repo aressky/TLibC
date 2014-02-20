@@ -2,51 +2,46 @@
 #define _H_TLIBC_MEMPOOL_H
 
 #include "tlibc/platform/tlibc_platform.h"
+#include "tlibc/core/tlibc_list.h"
+#include "tlibc_error_code.h"
 
 typedef struct _tlibc_mempool_block_t
 {
-	int used;
-	tuint64 mid;
-	int next;
+	TLIBC_LIST_HEAD used_list;
+	TLIBC_LIST_HEAD unused_list;
 	char data[1];
 }tlibc_mempool_block_t;
 
 typedef struct _tlibc_mempool_t
 {
-	tuint32 code;
 	size_t unit_size;
-	int unit_num;
-	int total_used;
-	int free_head;
-	int used_head;
+	size_t unit_num;
+
+	TLIBC_LIST_HEAD used_list;
+	size_t used_list_num;
+	TLIBC_LIST_HEAD unused_list;
+
 	char data[1];	
 }tlibc_mempool_t;
 
-//计算元素需要多大的内存池
 #define TLIBC_MEMPOOL_SIZE(unit_size, unit_num) (TLIBC_OFFSET_OF(tlibc_mempool_t, data) + \
 	(unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * unit_num)
 
-//计算内存池可以容纳多少元素
 #define TLIBC_MEMPOOL_UNIT_NUM(poll_size, unit_size) (poll_size - TLIBC_OFFSET_OF(tlibc_mempool_t, data))\
 	/ (unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data));
 
-#define TLIBC_MEMPOOL_GET_BLOCK(p, idx) ((tlibc_mempool_block_t*)((char*)p->data + \
-	(p->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * (idx)))
-
-#define TLIBC_MEMPOOL_GET_BLOCK_DATA(p, idx) (TLIBC_MEMPOOL_GET_BLOCK(p, idx)->data)
-
-#define TLIBC_MEMPOOL_GET_BLOCK_NEXT(p, idx) (TLIBC_MEMPOOL_GET_BLOCK(p, idx)->next)
-
-//如果错误返回-1, 否则返回可以容纳的元素个数
-TLIBC_API int tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size);
+TLIBC_API TLIBC_ERROR_CODE tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size);
 
 TLIBC_API void* tlibc_mempool_alloc(tlibc_mempool_t* self);
 
 TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr);
 
-TLIBC_API void* tlibc_mempool_mid2ptr(tlibc_mempool_t* self, tuint64 mid);
+#define tlibc_mempool_id2block(self, id) (((char*)self->data + (self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * id))
 
-#define tlibc_mempool_ptr2mid(ptr) (TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)->mid)
+#define tlibc_mempool_block2id(self, block) (((char*)block - self->data) / sizeof(tlibc_mempool_block_t))
+
+#define tlibc_mempool_id2ptr(self, id) ((void*)((tlibc_mempool_block_t*)tlibc_mempool_id2block(self, id))->data)
+
+#define tlibc_mempool_ptr2id(self, ptr) (tlibc_mempool_block2id(self, TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)))
 
 #endif//_H_TLIBC_MEMPOOL_H
-

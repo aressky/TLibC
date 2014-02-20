@@ -184,40 +184,70 @@ char mem[TLIBC_MEMPOOL_SIZE(sizeof(unit_t), MAX_UNIT_NUM)];
 void test_mempool()
 {
 	tlibc_mempool_t *mp = (tlibc_mempool_t*)mem;
-	int unit_size = tlibc_mempool_init(mp, sizeof(mem), sizeof(unit_t));
-	tuint64 mid, mid_last;
-	void *addr;
-	int i;
+	TLIBC_ERROR_CODE ret;
+	size_t i, j;
+	unit_t *data_list[MAX_UNIT_NUM];
+	size_t data_list_num = 0;
+	int total;
+	TLIBC_LIST_HEAD *iter;
 
-	assert(unit_size == MAX_UNIT_NUM);
-	for(i = 0; i < unit_size; ++i)
+	ret = tlibc_mempool_init(mp, sizeof(mem), sizeof(unit_t));
+	assert(ret == E_TLIBC_NOERROR);
+
+
+	for(i = 0; i < mp->unit_num; ++i)
 	{
-		unit_t *data = (unit_t*)tlibc_mempool_alloc(mp);
-		tuint64 mid = tlibc_mempool_ptr2mid(data);
-		assert(data != NULL);
-		data->data = i;
-		mid_last = mid;
+		if(rand() % 100 < 70)
+		{
+			data_list[data_list_num] = (unit_t*)tlibc_mempool_alloc(mp);
+			data_list[data_list_num]->data = i;
+			++data_list_num;
+		}
+		else if(data_list_num > 0)
+		{
+			int pos = rand() % data_list_num;
+			tlibc_mempool_free(mp, data_list[pos]);
+			for(j = pos; j < data_list_num; ++j)
+			{
+				data_list[j] = data_list[j + 1];
+			}
+			--data_list_num;
+		}		
 	}
-	addr = tlibc_mempool_alloc(mp);
-	assert(addr == NULL);
 	
+	total = 0;
 	//遍历所有元素
-	for(i = mp->used_head; i < mp->unit_num; )
+	for(iter = mp->used_list.next; iter != &mp->used_list; iter = iter->next)
 	{
-		unit_t *data = (unit_t *)TLIBC_MEMPOOL_GET_BLOCK_DATA(mp, i);
-		printf("%d\n", data->data);
-		i = TLIBC_MEMPOOL_GET_BLOCK_NEXT(mp, i);
+		tlibc_mempool_block_t *b = TLIBC_CONTAINER_OF(iter, tlibc_mempool_block_t, used_list);
+		unit_t *unit = (unit_t*)b->data;
+
+		int block_id = tlibc_mempool_block2id(mp, b);
+		tlibc_mempool_block_t *block = (tlibc_mempool_block_t*)tlibc_mempool_id2block(mp, block_id);
+		unit_t *data = tlibc_mempool_id2ptr(mp, block_id);
+		int data_id = tlibc_mempool_ptr2id(mp, data);
+
+		if(data_id != block_id)
+		{
+			assert(0);
+		}
+
+		if(block != b)
+		{
+			assert(0);
+		}
+
+		if(data != unit)
+		{
+			assert(0);
+		}
+		
+
+
+		printf("%d\n", unit->data);
+		++total;
 	}
-
-
-	tlibc_mempool_free(mp, tlibc_mempool_mid2ptr(mp, mid_last));
-	addr = tlibc_mempool_alloc(mp);
-	mid = tlibc_mempool_ptr2mid(addr);
-	//mid不重用
-	assert(mid != mid_last);
-
-
-	printf("%d\n", unit_size);
+	assert(total == data_list_num);
 }
 
 void test_unzip()
