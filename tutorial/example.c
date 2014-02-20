@@ -248,6 +248,7 @@ void test_mempool()
 		++total;
 	}
 	assert(total == data_list_num);
+	assert(total == mp->used_list_num);
 }
 
 void test_unzip()

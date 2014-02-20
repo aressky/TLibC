@@ -7,7 +7,7 @@
 TLIBC_ERROR_CODE tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	int i;
+	size_t i;
 	if(pool_size < TLIBC_OFFSET_OF(tlibc_mempool_t, data))
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -57,4 +57,5 @@ void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr)
 
 	tlibc_list_del(&b->used_list);
 	tlibc_list_add(&b->unused_list, &self->unused_list);
+	--self->used_list_num;
 }
