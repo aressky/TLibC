@@ -59,3 +59,48 @@ void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr)
 	tlibc_list_add(&b->unused_list, &self->unused_list);
 	--self->used_list_num;
 }
+
+tlibc_mempool_block_t* tlibc_mempool_id2block(tlibc_mempool_t *self, size_t id)
+{
+	size_t block_size = self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data);
+	if(id < self->unit_num)
+	{
+		return (tlibc_mempool_block_t*)(self->data + block_size * id);
+	}
+	else
+	{
+		return NULL;
+	}	
+}
+
+size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr)
+{
+	size_t block_size = self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data);
+	char *cptr = (char*)ptr;
+	size_t offset = cptr - self->data;
+	/*
+	if((offset % block_size) != 0)
+	{
+		return self->unit_num;
+	}
+	*/
+	return offset / block_size;
+}
+
+TLIBC_API void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id)
+{
+	tlibc_mempool_block_t *b = tlibc_mempool_id2block(self, id);
+	if(b == NULL)
+	{
+		return NULL;
+	}
+	else
+	{
+		return b->data;
+	}
+}
+
+TLIBC_API size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr)
+{
+	return tlibc_mempool_block2id(self, TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data));
+}

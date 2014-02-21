@@ -36,12 +36,13 @@ TLIBC_API void* tlibc_mempool_alloc(tlibc_mempool_t* self);
 
 TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr);
 
-#define tlibc_mempool_id2block(self, id) (((char*)self->data + (self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * id))
 
-#define tlibc_mempool_block2id(self, block) (((char*)block - self->data) / sizeof(tlibc_mempool_block_t))
+TLIBC_API tlibc_mempool_block_t* tlibc_mempool_id2block(tlibc_mempool_t *self, size_t id);
 
-#define tlibc_mempool_id2ptr(self, id) ((void*)((tlibc_mempool_block_t*)tlibc_mempool_id2block(self, id))->data)
+TLIBC_API size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr);
 
-#define tlibc_mempool_ptr2id(self, ptr) (tlibc_mempool_block2id(self, TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data)))
+TLIBC_API void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id);
+
+TLIBC_API size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr);
 
 #endif//_H_TLIBC_MEMPOOL_H
