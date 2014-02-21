@@ -2,7 +2,7 @@
 #include "tlibc/core/tlibc_timer.h"
 #include "tlibc/core/tlibc_mempool.h"
 #include "tlibc/core/tlibc_unzip.h"
-
+#include "tlibc/core/tlibc_util.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -224,7 +224,7 @@ void test_mempool()
 
 		int block_id = tlibc_mempool_block2id(mp, b);
 		tlibc_mempool_block_t *block = (tlibc_mempool_block_t*)tlibc_mempool_id2block(mp, block_id);
-		unit_t *data = tlibc_mempool_id2ptr(mp, block_id);
+		unit_t *data = (unit_t*)tlibc_mempool_id2ptr(mp, block_id);
 		int data_id = tlibc_mempool_ptr2id(mp, data);
 
 		if(data_id != block_id)
@@ -273,6 +273,11 @@ void test_unzip()
 
 int main()
 {
+	size_t t = 0x12345678;
+	tlibc_size_to_little(t);
+	tlibc_little_to_size(t);
+	assert(t == 0x12345678);
+
 	//test_hash();
 
 	//test_timer();

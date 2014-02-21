@@ -1,10 +1,6 @@
 #ifndef _H_TLIBC_PLATFORM_WINDOWS
 #define _H_TLIBC_PLATFORM_WINDOWS
 
-#ifndef _WIN32
-#error "This is a Windows header only"
-#endif
-
 #include <stddef.h>
 //如果不包含stdlib.h strtoll会出错
 #include <stdlib.h>
@@ -19,6 +15,15 @@
 #define PRIi64 "I64d"
 
 #define tlibc_mkdir(path, mode) mkdir(path)
+
+#ifdef _WIN32
+#define TLIBC_WORDSIZE 32
+#elif _WIN64
+#define TLIBC_WORDSIZE 64
+#else
+#error "unknow wordsize"
+#endif
+
 
 //屏蔽广告
 #pragma warning (disable: 4996)

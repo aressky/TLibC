@@ -3,7 +3,7 @@
 
 #include "tlibc/platform/tlibc_platform.h"
 
-
+#include <stdint.h>
 
 #define TLIBC_MAX_VARIANT_DECODE_LENGTH 10
 
@@ -39,6 +39,8 @@
 	#define tlibc_host16_to_little(x)
 	#define tlibc_host32_to_little(x)
 	#define tlibc_host64_to_little(x)
+	#define tlibc_size_to_little(x)
+	#define tlibc_little_to_size(x)
 #endif
 
 #if TLIBC_BYTE_ORDER == TLIBC_BIG_ENDIAN
@@ -48,6 +50,17 @@
 	#define tlibc_host16_to_little(x) (x = tlibc_swap16(x))
 	#define tlibc_host32_to_little(x) (x = tlibc_swap32(x))
 	#define tlibc_host64_to_little(x) (x = tlibc_swap64(x))
+
+	#if TLIBC_WORDSIZE == 32
+		#define tlibc_size_to_little(x) tlibc_host32_to_little(x)
+		#define tlibc_little_to_size(x) tlibc_little_to_host32(x)
+	#endif
+
+	#if TLIBC_WORDSIZE == 64
+		#define tlibc_size_to_little(x) tlibc_host64_to_little(x)
+		#define tlibc_little_to_size(x) tlibc_little_to_host64(x)
+	#endif
+
 #endif
 
 
