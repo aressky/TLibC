@@ -78,16 +78,10 @@ size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr)
 	size_t block_size = self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data);
 	char *cptr = (char*)ptr;
 	size_t offset = cptr - self->data;
-	/*
-	if((offset % block_size) != 0)
-	{
-		return self->unit_num;
-	}
-	*/
 	return offset / block_size;
 }
 
-TLIBC_API void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id)
+void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id)
 {
 	tlibc_mempool_block_t *b = tlibc_mempool_id2block(self, id);
 	if(b == NULL)
@@ -100,7 +94,7 @@ TLIBC_API void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id)
 	}
 }
 
-TLIBC_API size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr)
+size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr)
 {
 	return tlibc_mempool_block2id(self, TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data));
 }
