@@ -102,8 +102,7 @@ void test_hash()
 typedef struct _timer_data_t
 {
 	tlibc_timer_entry_t timer_entry;
-
-	int data;
+	int data;	
 }timer_data_t;
 
 timer_data_t timer_db;
@@ -176,44 +175,47 @@ void test_timer()
 typedef struct _unit_t
 {
 	int data;
+	tlibc_mempool_entry_t entry;	
 }unit_t;
 
 #define MAX_UNIT_NUM 128
-char mem[TLIBC_MEMPOOL_SIZE(sizeof(unit_t), MAX_UNIT_NUM)];
+unit_t mem[MAX_UNIT_NUM];
 
 void test_mempool()
 {
-	tlibc_mempool_t *mp = (tlibc_mempool_t*)mem;
-	TLIBC_ERROR_CODE ret;
+	tlibc_mempool_t mp;
 	size_t i, j;
 	unit_t *data_list[MAX_UNIT_NUM];
 	size_t data_list_num = 0;
 	int total;
 	TLIBC_LIST_HEAD *iter;
 
-	ret = tlibc_mempool_init(mp, sizeof(mem), sizeof(unit_t));
-	assert(ret == E_TLIBC_NOERROR);
+	tlibc_mempool_init(&mp, unit_t, entry, (char*)mem, sizeof(unit_t), MAX_UNIT_NUM);
 
+	data_list_num = 0;
 
-	for(i = 0; i < mp->unit_num; ++i)
+	for(i = 0; i < MAX_UNIT_NUM; ++i)
 	{
 		if(rand() % 100 < 70)
 		{
-			data_list[data_list_num] = (unit_t*)tlibc_mempool_alloc(mp);
+			assert(!tlibc_mempool_empty(&mp));
+			assert(!tlibc_mempool_over(&mp));
+			tlibc_mempool_alloc(&mp, unit_t, entry, data_list[data_list_num]);
+			assert(data_list[data_list_num] != NULL);
 			data_list[data_list_num]->data = i;
 			++data_list_num;
 		}
 		else if(data_list_num > 0)
 		{
 			int pos = rand() % data_list_num;
-			size_t id = tlibc_mempool_ptr2id(mp, data_list[pos]);
+			size_t id = tlibc_mempool_ptr2id(&mp, data_list[pos]);
 			unit_t *addr = NULL;
-			addr = (unit_t*)tlibc_mempool_id2ptr(mp, id);
+			addr = (unit_t*)tlibc_mempool_id2ptr(&mp, id);
 			assert(addr == data_list[pos]);
 
-			tlibc_mempool_free(mp, data_list[pos]);
-			addr = (unit_t*)tlibc_mempool_id2ptr(mp, id);
-			assert(addr == NULL);
+			tlibc_mempool_free(&mp, unit_t, entry, data_list[pos]);
+			addr = (unit_t*)tlibc_mempool_id2ptr(&mp, id);
+			assert(!tlibc_mempool_ptr_test(addr, entry, addr->entry.sn));
 
 			for(j = pos; j < data_list_num; ++j)
 			{
@@ -225,38 +227,33 @@ void test_mempool()
 	
 	total = 0;
 	//遍历所有元素
-	for(iter = mp->used_list.next; iter != &mp->used_list; iter = iter->next)
+	for(iter = mp.mempool_entry.used_list.next; iter != &mp.mempool_entry.used_list; iter = iter->next)
 	{
-		tlibc_mempool_block_t *b = TLIBC_CONTAINER_OF(iter, tlibc_mempool_block_t, used_list);
-		unit_t *unit = (unit_t*)b->data;
+		unit_t *unit, *data;
+		size_t data_id, id;
 
-		int block_id = tlibc_mempool_block2id(mp, b);
-		tlibc_mempool_block_t *block = (tlibc_mempool_block_t*)tlibc_mempool_id2block(mp, block_id);
-		unit_t *data = (unit_t*)tlibc_mempool_id2ptr(mp, block_id);
-		int data_id = tlibc_mempool_ptr2id(mp, data);
+		unit = TLIBC_CONTAINER_OF(iter, unit_t, entry.used_list);
+		assert(tlibc_mempool_ptr_test(unit, entry, unit->entry.sn));
+		id = tlibc_mempool_ptr2id(&mp, unit);
+		assert(tlibc_mempool_id_test(&mp, id));
+		data = (unit_t*)tlibc_mempool_id2ptr(&mp, id);
+		data_id = tlibc_mempool_ptr2id(&mp, data);
 
-		if(data_id != block_id)
+		if(data_id != id)
 		{
 			assert(0);
 		}
 
-		if(block != b)
+		if(unit != data)
 		{
 			assert(0);
 		}
-
-		if(data != unit)
-		{
-			assert(0);
-		}
-		
-
 
 		printf("%d\n", unit->data);
 		++total;
 	}
 	assert(total == data_list_num);
-	assert(total == mp->used_list_num);
+	assert(total == mp.used_list_num);
 }
 
 void test_unzip()

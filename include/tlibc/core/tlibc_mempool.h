@@ -4,48 +4,73 @@
 #include "tlibc/platform/tlibc_platform.h"
 #include "tlibc/core/tlibc_list.h"
 #include "tlibc_error_code.h"
-
-typedef struct _tlibc_mempool_block_t
+typedef struct _tlibc_mempool_entry_t
 {
-	TLIBC_LIST_HEAD used_list;
-	TLIBC_LIST_HEAD unused_list;
-	char data[1];
-}tlibc_mempool_block_t;
+	tuint64          sn;
+	TLIBC_LIST_HEAD  unused_list;
+	TLIBC_LIST_HEAD  used_list;
+}tlibc_mempool_entry_t;
 
 typedef struct _tlibc_mempool_t
 {
-	size_t unit_size;
-	size_t unit_num;
-
-	TLIBC_LIST_HEAD used_list;
-	size_t used_list_num;
-	TLIBC_LIST_HEAD unused_list;
-
-	char data[1];	
+	char                        *pool;
+	tuint64                     sn;
+	size_t                      unit_size;
+	size_t                      unit_num;
+	tlibc_mempool_entry_t       mempool_entry;
+	size_t                      unused_list_num;
+	size_t                      used_list_num;
 }tlibc_mempool_t;
 
-#define TLIBC_MEMPOOL_SIZE(unit_size, unit_num) (TLIBC_OFFSET_OF(tlibc_mempool_t, data) + \
-	(unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data)) * unit_num)
+#define tlibc_mempool_invalid_id UINT64_MAX
 
-#define TLIBC_MEMPOOL_UNIT_NUM(poll_size, unit_size) (poll_size - TLIBC_OFFSET_OF(tlibc_mempool_t, data))\
-	/ (unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data));
 
-#define TLIBC_MEMPOOL_BLOCK_SIZE(self) (self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data))
+#define tlibc_mempool_id_test(self, id) (id < (self)->unit_num)
+#define tlibc_mempool_id2ptr(self, id) ((self)->pool + (self)->unit_size * id)
+#define tlibc_mempool_ptr_test(ptr, entry, sno) (((ptr)->entry.sn != tlibc_mempool_invalid_id) && ((ptr)->entry.sn == sno))
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, size_t unit_size);
+#define tlibc_mempool_ptr2id(self, ptr) (((char*)ptr - (self)->pool) / (self)->unit_size)
 
-TLIBC_API void* tlibc_mempool_alloc(tlibc_mempool_t* self);
+#define tlibc_mempool_init(self, type, entry, p, us, un)\
+{\
+	size_t i;\
+	(self)->sn = 0;\
+	(self)->pool = (p);\
+	(self)->unit_size = (us);\
+	(self)->unit_num = (un);\
+	tlibc_list_init(&(self)->mempool_entry.unused_list);\
+	tlibc_list_init(&(self)->mempool_entry.used_list);\
+	(self)->used_list_num = 0;\
+	for(i = 0; i < (self)->unit_num; ++i)\
+{\
+	type *unit = (type*)tlibc_mempool_id2ptr(self, i);\
+	tlibc_list_add_tail(&unit->entry.unused_list, &(self)->mempool_entry.unused_list);\
+	unit->entry.sn = tlibc_mempool_invalid_id;\
+}\
+	(self)->unused_list_num = (self)->unit_num;\
+}
 
-TLIBC_API void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr);
+#define tlibc_mempool_empty(self) tlibc_list_empty(&(self)->mempool_entry.unused_list)
+#define tlibc_mempool_over(self) ((self)->sn == tlibc_mempool_invalid_id)
+#define tlibc_mempool_alloc(self, type, entry, unit)\
+{\
+	(unit) = TLIBC_CONTAINER_OF((self)->mempool_entry.unused_list.next, type, entry.unused_list);\
+	tlibc_list_del(&(unit)->entry.unused_list);\
+	--(self)->unused_list_num;\
+	tlibc_list_add(&(unit)->entry.used_list, &(self)->mempool_entry.used_list);\
+	++(self)->used_list_num;\
+	(unit)->entry.sn = (self)->sn;\
+	++(self)->sn;\
+}
 
-//id2block有很基本的错误检查， id是可能重复使用的， 所以需要外部包装guid来确保内存不会被误用。
-TLIBC_API tlibc_mempool_block_t* tlibc_mempool_id2block(tlibc_mempool_t *self, size_t id);
+#define tlibc_mempool_free(self, type, entry, unit)\
+{\
+	tlibc_list_del(&(unit)->entry.used_list);\
+	--(self)->used_list_num;\
+	tlibc_list_add(&(unit)->entry.unused_list, &(self)->mempool_entry.unused_list);\
+	++(self)->unused_list_num;\
+	(unit)->entry.sn = tlibc_mempool_invalid_id;\
+}
 
-//block2id并没有做错误的检查， 因为使用指针直接访问的情况下都是很需要效率的。
-TLIBC_API size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr);
-
-TLIBC_API void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id);
-
-TLIBC_API size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr);
 
 #endif//_H_TLIBC_MEMPOOL_H
