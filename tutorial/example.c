@@ -206,7 +206,15 @@ void test_mempool()
 		else if(data_list_num > 0)
 		{
 			int pos = rand() % data_list_num;
+			size_t id = tlibc_mempool_ptr2id(mp, data_list[pos]);
+			unit_t *addr = NULL;
+			addr = (unit_t*)tlibc_mempool_id2ptr(mp, id);
+			assert(addr == data_list[pos]);
+
 			tlibc_mempool_free(mp, data_list[pos]);
+			addr = (unit_t*)tlibc_mempool_id2ptr(mp, id);
+			assert(addr == NULL);
+
 			for(j = pos; j < data_list_num; ++j)
 			{
 				data_list[j] = data_list[j + 1];

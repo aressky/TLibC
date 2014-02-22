@@ -21,9 +21,11 @@ TLIBC_ERROR_CODE tlibc_mempool_init(tlibc_mempool_t* self, size_t pool_size, siz
 
 	for(i = 0; i < self->unit_num; ++i)
 	{
-		tlibc_mempool_block_t *b = (tlibc_mempool_block_t*)tlibc_mempool_id2block(self, i);
-		tlibc_list_add_tail(&b->unused_list, &self->unused_list)
+		tlibc_mempool_block_t *b = (tlibc_mempool_block_t*)(self->data + TLIBC_MEMPOOL_BLOCK_SIZE(self) * i);
 		tlibc_list_init(&b->used_list);
+		tlibc_list_init(&b->unused_list);
+
+		tlibc_list_add_tail(&b->unused_list, &self->unused_list)		
 	}
 	self->used_list_num = 0;
 
@@ -43,6 +45,9 @@ void* tlibc_mempool_alloc(tlibc_mempool_t* self)
 
 	tlibc_list_del(&b->unused_list);
 
+	//这里做一个分配的标记
+	tlibc_list_init(&b->unused_list);
+
 	tlibc_list_add_tail(&b->used_list, &self->used_list);
 	++self->used_list_num;
 	
@@ -56,22 +61,39 @@ void tlibc_mempool_free(tlibc_mempool_t* self, void* ptr)
 	tlibc_mempool_block_t *b = TLIBC_CONTAINER_OF(ptr, tlibc_mempool_block_t, data);
 
 	tlibc_list_del(&b->used_list);
+	//这里做一个释放的标记
+	tlibc_list_init(&b->used_list);
+
 	tlibc_list_add(&b->unused_list, &self->unused_list);
 	--self->used_list_num;
 }
 
 tlibc_mempool_block_t* tlibc_mempool_id2block(tlibc_mempool_t *self, size_t id)
 {
-	size_t block_size = self->unit_size + TLIBC_OFFSET_OF(tlibc_mempool_block_t, data);
-	if(id < self->unit_num)
+	tlibc_mempool_block_t *ret = NULL;	
+	if(id >= self->unit_num)
 	{
-		return (tlibc_mempool_block_t*)(self->data + block_size * id);
+		goto REUTRN_NULL;
 	}
-	else
+	ret = (tlibc_mempool_block_t*)(self->data + TLIBC_MEMPOOL_BLOCK_SIZE(self) * id);
+
+	//如果已经被释放掉了， 那么就返回空
+	if(tlibc_list_empty(&ret->used_list))
 	{
-		return NULL;
-	}	
+		goto REUTRN_NULL;
+	}
+
+	//如果还没被分配， 那么返回空
+	if(!tlibc_list_empty(&ret->unused_list))
+	{
+		goto REUTRN_NULL;
+	}
+
+	return ret;
+REUTRN_NULL:
+	return NULL;
 }
+
 
 size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr)
 {
@@ -83,15 +105,15 @@ size_t tlibc_mempool_block2id(tlibc_mempool_t *self, void *ptr)
 
 void* tlibc_mempool_id2ptr(tlibc_mempool_t *self, size_t id)
 {
-	tlibc_mempool_block_t *b = tlibc_mempool_id2block(self, id);
-	if(b == NULL)
+	tlibc_mempool_block_t *ret = tlibc_mempool_id2block(self, id);
+	if(ret == NULL)
 	{
-		return NULL;
+		goto RETURN_NULL;
 	}
-	else
-	{
-		return b->data;
-	}
+
+	return ret->data;
+RETURN_NULL:
+	return NULL;
 }
 
 size_t tlibc_mempool_ptr2id(tlibc_mempool_t *self, void *ptr)
