@@ -1,6 +1,8 @@
 #ifndef _H_TLIBC_PLATFORM_COMMON
 #define _H_TLIBC_PLATFORM_COMMON
 
+#include <stdint.h>
+
 #ifndef NULL
 #define NULL				0
 #endif
@@ -64,14 +66,14 @@
 
 
 
-typedef signed char tint8;
-typedef signed short int tint16;
-typedef signed int tint32;
-typedef signed long long tint64;
-typedef unsigned char tuint8;
-typedef unsigned short int tuint16;
-typedef unsigned int tuint32;
-typedef unsigned long long tuint64;
+typedef int8_t tint8;
+typedef int16_t tint16;
+typedef int32_t tint32;
+typedef int64_t tint64;
+typedef uint8_t tuint8;
+typedef uint16_t tuint16;
+typedef uint32_t tuint32;
+typedef uint64_t tuint64;
 typedef char tchar;
 typedef double tdouble;
 typedef char* tstring;

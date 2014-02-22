@@ -240,7 +240,7 @@ done:
 TLIBC_ERROR_CODE tlibc_xml_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	fprintf(self->f, "%lld", *val);
+	fprintf(self->f, "%"PRIi64, *val);
 	self->need_tab = FALSE;
 	return E_TLIBC_NOERROR;
 }
@@ -275,7 +275,7 @@ done:
 TLIBC_ERROR_CODE tlibc_xml_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
-	fprintf(self->f, "%llu", *val);
+	fprintf(self->f, "%"PRIu64, *val);
 	self->need_tab = FALSE;
 	return E_TLIBC_NOERROR;
 }
