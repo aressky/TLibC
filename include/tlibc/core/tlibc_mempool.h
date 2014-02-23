@@ -29,7 +29,7 @@ typedef struct _tlibc_mempool_t
 #define tlibc_mempool_id2ptr(self, id) ((self)->pool + (self)->unit_size * id)
 #define tlibc_mempool_ptr_test(ptr, entry, sno) (((ptr)->entry.sn != tlibc_mempool_invalid_id) && ((ptr)->entry.sn == sno))
 
-#define tlibc_mempool_ptr2id(self, ptr) (((char*)ptr - (self)->pool) / (self)->unit_size)
+#define tlibc_mempool_ptr2id(self, ptr) ((size_t)((char*)ptr - (self)->pool) / (self)->unit_size)
 
 #define tlibc_mempool_init(self, type, entry, p, us, un)\
 {\
