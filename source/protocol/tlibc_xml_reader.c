@@ -454,6 +454,10 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t 
 	ret = tlibc_xml_read_uint64_t(super, &ui64);
 		
 	*val = (uint16_t)ui64;
+	if(*val != ui64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
 	return ret;
 }
 
