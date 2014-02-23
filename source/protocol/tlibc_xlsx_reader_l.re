@@ -33,7 +33,7 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 	}
 }
 
-TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, tuint32 bindinfo_row)
+TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, uint32_t bindinfo_row)
 {
 	tlibc_xlsx_cell_s *cell = NULL;
 	int is_sharedstring = FALSE;
@@ -58,7 +58,7 @@ restart:
 /*!re2c
 <INITIAL>"<dimension" (' '|'\t')* "ref=\""
 {
-	tuint32 i;
+	uint32_t i;
 	char *size_min = YYCURSOR;
 	char *size_max = NULL;
 
@@ -98,7 +98,7 @@ restart:
 <IN_SHEETDATA>"<row" (' '|'\t')* "r=\""
 {
 	const char *r = YYCURSOR;
-	tuint32 row;
+	uint32_t row;
 	int is_single = FALSE;
 	while(*YYCURSOR != '"')
 	{
@@ -183,7 +183,7 @@ restart:
 {
 	if(is_sharedstring)
 	{
-		tuint32 string_index;
+		uint32_t string_index;
 		errno = 0;
 		string_index = strtoul(cell->val_begin, NULL, 10);
 		if(errno != 0)

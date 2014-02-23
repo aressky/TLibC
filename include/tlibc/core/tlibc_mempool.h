@@ -6,7 +6,7 @@
 #include "tlibc_error_code.h"
 typedef struct _tlibc_mempool_entry_t
 {
-	tuint64          sn;
+	uint64_t          sn;
 	TLIBC_LIST_HEAD  unused_list;
 	TLIBC_LIST_HEAD  used_list;
 }tlibc_mempool_entry_t;
@@ -14,7 +14,7 @@ typedef struct _tlibc_mempool_entry_t
 typedef struct _tlibc_mempool_t
 {
 	char                        *pool;
-	tuint64                     sn;
+	uint64_t                     sn;
 	size_t                      unit_size;
 	size_t                      unit_num;
 	tlibc_mempool_entry_t       mempool_entry;

@@ -46,8 +46,8 @@ void tlibc_timer_pop(tlibc_timer_entry_t *self)
 
 void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer)
 {
-	tuint64 expires = timer->expires;
-	tuint64 idx;
+	uint64_t expires = timer->expires;
+	uint64_t idx;
 	TLIBC_LIST_HEAD *vec;
 	int i;
 	

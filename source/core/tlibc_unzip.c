@@ -16,7 +16,7 @@
 #define SIZECENTRALDIRITEM (0x2e)
 #define SIZEZIPLOCALHEADER (0x1e)
 
-static TLIBC_ERROR_CODE read_uint16(FILE* filestream, uint16_t *p)
+static TLIBC_ERROR_CODE read_uint16_t(FILE* filestream, uint16_t *p)
 {
 	if(fread(p, sizeof(int16_t), 1, filestream) != 1)
 	{
@@ -29,7 +29,7 @@ ERROR_RET:
 	return E_TLIBC_ERROR;
 }
 
-static TLIBC_ERROR_CODE read_uint32(FILE* filestream, uint32_t *p)
+static TLIBC_ERROR_CODE read_uint32_t(FILE* filestream, uint32_t *p)
 {
 	if(fread(p, sizeof(int32_t), 1, filestream) != 1)
 	{
@@ -124,7 +124,7 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 	/* we check the magic */
 	if (err==E_TLIBC_NOERROR)
 	{
-		if (read_uint32(self->filestream,&uMagic) != E_TLIBC_NOERROR)
+		if (read_uint32_t(self->filestream,&uMagic) != E_TLIBC_NOERROR)
 		{
 			err = E_TLIBC_ERROR;
 			goto ERROR_RET;
@@ -136,55 +136,55 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 		}
 	}
 
-	if (read_uint16(self->filestream,&file_info.version) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.version) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
-	if (read_uint16(self->filestream,&file_info.version_needed) != E_TLIBC_NOERROR)
-	{
-		err=E_TLIBC_ERROR;
-		goto ERROR_RET;
-	}
-
-
-	if (read_uint16(self->filestream,&file_info.flag) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.version_needed) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.compression_method) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.flag) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.mod_file_time) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.compression_method) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.mod_file_date) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.mod_file_time) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint32(self->filestream,&file_info.crc) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.mod_file_date) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint32(self->filestream,&file_info.compressed_size) != E_TLIBC_NOERROR)
+	if (read_uint32_t(self->filestream,&file_info.crc) != E_TLIBC_NOERROR)
+	{
+		err=E_TLIBC_ERROR;
+		goto ERROR_RET;
+	}
+
+
+	if (read_uint32_t(self->filestream,&file_info.compressed_size) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -192,49 +192,49 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 
 
 
-	if (read_uint32(self->filestream,&file_info.uncompressed_size) != E_TLIBC_NOERROR)
+	if (read_uint32_t(self->filestream,&file_info.uncompressed_size) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.size_filename) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.size_filename) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.size_file_extra) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.size_file_extra) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.size_file_comment) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.size_file_comment) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.disk_num_start) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.disk_num_start) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint16(self->filestream,&file_info.internal_fa) != E_TLIBC_NOERROR)
+	if (read_uint16_t(self->filestream,&file_info.internal_fa) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
 
-	if (read_uint32(self->filestream,&file_info.external_fa) != E_TLIBC_NOERROR)
+	if (read_uint32_t(self->filestream,&file_info.external_fa) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -242,7 +242,7 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 
 
 	// relative offset of local header
-	if (read_uint32(self->filestream,&file_info_internal.offset_curfile) != E_TLIBC_NOERROR)
+	if (read_uint32_t(self->filestream,&file_info_internal.offset_curfile) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -335,14 +335,14 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 			uint16_t headerId;
 			uint16_t dataSize;
 
-			if (read_uint16(self->filestream,&headerId) != E_TLIBC_NOERROR)
+			if (read_uint16_t(self->filestream,&headerId) != E_TLIBC_NOERROR)
 			{
 				err=E_TLIBC_ERROR;
 				goto ERROR_RET;
 			}
 
 
-			if (read_uint16(self->filestream,&dataSize) != E_TLIBC_NOERROR)
+			if (read_uint16_t(self->filestream,&dataSize) != E_TLIBC_NOERROR)
 			{
 				err=E_TLIBC_ERROR;
 				goto ERROR_RET;
@@ -525,7 +525,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 
     if (err==E_TLIBC_NOERROR)
     {
-        if (read_uint32(s->filestream,&uMagic) != E_TLIBC_NOERROR)
+        if (read_uint32_t(s->filestream,&uMagic) != E_TLIBC_NOERROR)
 		{
             err=E_TLIBC_ERROR;
 			goto ERROR_RET;		
@@ -537,19 +537,19 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		}
     }
 
-    if (read_uint16(s->filestream,&version_needed) != E_TLIBC_NOERROR)
+    if (read_uint16_t(s->filestream,&version_needed) != E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
   
-	if (read_uint16(s->filestream,&uFlags) != E_TLIBC_NOERROR)
+	if (read_uint16_t(s->filestream,&uFlags) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
-    if (read_uint16(s->filestream,&compression_method) != E_TLIBC_NOERROR)
+    if (read_uint16_t(s->filestream,&compression_method) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -567,13 +567,13 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		goto ERROR_RET;
 	}
 
-    if (read_uint32(s->filestream,&uData) != E_TLIBC_NOERROR) /* date/time */
+    if (read_uint32_t(s->filestream,&uData) != E_TLIBC_NOERROR) /* date/time */
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
 	}
 
-    if (read_uint32(s->filestream,&crc) != E_TLIBC_NOERROR) /* crc */
+    if (read_uint32_t(s->filestream,&crc) != E_TLIBC_NOERROR) /* crc */
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -584,7 +584,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		goto ERROR_RET;
 	}
 
-    if (read_uint32(s->filestream,&compress_size) != E_TLIBC_NOERROR) /* size compr */
+    if (read_uint32_t(s->filestream,&compress_size) != E_TLIBC_NOERROR) /* size compr */
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -595,7 +595,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		goto ERROR_RET;
 	}
 
-    if (read_uint32(s->filestream,&uncompress_size) != E_TLIBC_NOERROR) /* size uncompr */
+    if (read_uint32_t(s->filestream,&uncompress_size) != E_TLIBC_NOERROR) /* size uncompr */
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -606,7 +606,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 		goto ERROR_RET;
 	}
 
-    if (read_uint16(s->filestream,&size_filename) != E_TLIBC_NOERROR)
+    if (read_uint16_t(s->filestream,&size_filename) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -619,7 +619,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
 
     *piSizeVar += (uInt)size_filename;
 
-    if (read_uint16(s->filestream,&size_extra_field) != E_TLIBC_NOERROR)
+    if (read_uint16_t(s->filestream,&size_extra_field) != E_TLIBC_NOERROR)
 	{
 		err=E_TLIBC_ERROR;
 		goto ERROR_RET;
@@ -781,35 +781,35 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
 	}
 	
     /* the signature, already checked */
-    if (read_uint32(self->filestream,&flag)!=E_TLIBC_NOERROR)
+    if (read_uint32_t(self->filestream,&flag)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
 	}
 
     /* number of this disk */
-    if (read_uint16(self->filestream,&number_disk)!=E_TLIBC_NOERROR)
+    if (read_uint16_t(self->filestream,&number_disk)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
 	}
 
     /* number of the disk with the start of the central directory */
-    if (read_uint16(self->filestream,&number_disk_with_CD)!=E_TLIBC_NOERROR)
+    if (read_uint16_t(self->filestream,&number_disk_with_CD)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
 	}
 
     /* total number of entries in the central dir on this disk */
-    if (read_uint16(self->filestream,&self->gi.number_entry)!=E_TLIBC_NOERROR)
+    if (read_uint16_t(self->filestream,&self->gi.number_entry)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
 	}
 
     /* total number of entries in the central dir */
-    if (read_uint16(self->filestream,&number_entry_CD)!=E_TLIBC_NOERROR)
+    if (read_uint16_t(self->filestream,&number_entry_CD)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
@@ -824,7 +824,7 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
 	}
 
     /* size of the central directory */
-    if (read_uint32(self->filestream,&self->size_central_dir)!=E_TLIBC_NOERROR)
+    if (read_uint32_t(self->filestream,&self->size_central_dir)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
@@ -832,14 +832,14 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
 
     /* offset of start of central directory with respect to the
         starting disk number */
-    if (read_uint32(self->filestream,&self->offset_central_dir)!=E_TLIBC_NOERROR)
+    if (read_uint32_t(self->filestream,&self->offset_central_dir)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
 	}
 
     /* zipfile comment length */
-    if (read_uint16(self->filestream,&self->gi.size_comment)!=E_TLIBC_NOERROR)
+    if (read_uint16_t(self->filestream,&self->gi.size_comment)!=E_TLIBC_NOERROR)
 	{
         err=E_TLIBC_ERROR;
 		goto free_filestream;
@@ -874,7 +874,7 @@ TLIBC_ERROR_CODE tlibc_unzip_open_current_file (tlibc_unzip_s *self)
     return unzOpenCurrentFile3(self, NULL, NULL, 0);
 }
 
-TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, tuint32 *len)
+TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len)
 {
     TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
     uInt iRead = 0;

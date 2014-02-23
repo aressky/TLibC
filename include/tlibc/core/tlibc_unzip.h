@@ -90,7 +90,7 @@ TLIBC_ERROR_CODE tlibc_unzip_locate(tlibc_unzip_s *self, const char *szFileName)
 
 TLIBC_ERROR_CODE tlibc_unzip_open_current_file(tlibc_unzip_s *self);
 
-TLIBC_ERROR_CODE tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, tuint32 *len);
+TLIBC_ERROR_CODE tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len);
 
 TLIBC_ERROR_CODE tlibc_unzip_close_current_file(tlibc_unzip_s *self);
 

@@ -37,7 +37,7 @@ re2c:yyfill:enable   = 0;
 <IN_SST_TAG>"count=\""
 {
 	const char* number_begin = YYCURSOR;
-	tuint32 num;
+	uint32_t num;
 	while(*YYCURSOR != '"')
 		++YYCURSOR;
 	*YYCURSOR = 0;

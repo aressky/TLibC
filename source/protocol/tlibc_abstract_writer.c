@@ -16,17 +16,17 @@ void tlibc_abstract_writer_init(TLIBC_ABSTRACT_WRITER *self)
 	self->write_vector_element_begin = NULL;
 	self->write_vector_element_end = NULL;
 
-	self->write_tint8 = NULL;
-	self->write_tint16 = NULL;
-	self->write_tint32 = NULL;
-	self->write_tint64 = NULL;
-	self->write_tuint8 = NULL;
-	self->write_tuint16 = NULL;
-	self->write_tuint32 = NULL;
-	self->write_tuint64 = NULL;
-	self->write_tchar = NULL;
-	self->write_tdouble = NULL;
-	self->write_tstring = NULL;
+	self->write_int8_t = NULL;
+	self->write_int16_t = NULL;
+	self->write_int32_t = NULL;
+	self->write_int64_t = NULL;
+	self->write_uint8_t = NULL;
+	self->write_uint16_t = NULL;
+	self->write_uint32_t = NULL;
+	self->write_uint64_t = NULL;
+	self->write_char = NULL;
+	self->write_double = NULL;
+	self->write_string = NULL;
 
 }
 
@@ -112,7 +112,7 @@ TLIBC_ERROR_CODE tlibc_write_field_begin(TLIBC_ABSTRACT_WRITER *self, const char
 	return self->write_field_begin(self, var_name);
 }
 
-TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, const char *var_name, tuint32 index)
+TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index)
 {
 	if(self->write_vector_element_begin == NULL)
 	{
@@ -121,7 +121,7 @@ TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, c
 	return self->write_vector_element_begin(self, var_name, index);
 }
 
-TLIBC_ERROR_CODE tlibc_write_vector_element_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name, tuint32 index)
+TLIBC_ERROR_CODE tlibc_write_vector_element_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index)
 {
 	if(self->write_vector_element_end == NULL)
 	{
@@ -139,101 +139,101 @@ TLIBC_ERROR_CODE tlibc_write_field_end(TLIBC_ABSTRACT_WRITER *self, const char *
 	return self->write_field_end(self, var_name);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tint8(TLIBC_ABSTRACT_WRITER *self, const tint8 *val)
+TLIBC_ERROR_CODE tlibc_write_int8_t(TLIBC_ABSTRACT_WRITER *self, const int8_t *val)
 {
-	if(self->write_tint8 == NULL)
+	if(self->write_int8_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tint8(self, val);
+	return self->write_int8_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tint16(TLIBC_ABSTRACT_WRITER *self, const tint16 *val)
+TLIBC_ERROR_CODE tlibc_write_int16_t(TLIBC_ABSTRACT_WRITER *self, const int16_t *val)
 {
-	if(self->write_tint16 == NULL)
+	if(self->write_int16_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tint16(self, val);
+	return self->write_int16_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tint32(TLIBC_ABSTRACT_WRITER *self, const tint32 *val)
+TLIBC_ERROR_CODE tlibc_write_int32_t(TLIBC_ABSTRACT_WRITER *self, const int32_t *val)
 {
-	if(self->write_tint32 == NULL)
+	if(self->write_int32_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tint32(self, val);
+	return self->write_int32_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tint64(TLIBC_ABSTRACT_WRITER *self, const tint64 *val)
+TLIBC_ERROR_CODE tlibc_write_int64_t(TLIBC_ABSTRACT_WRITER *self, const int64_t *val)
 {
-	if(self->write_tint64 == NULL)
+	if(self->write_int64_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tint64(self, val);
+	return self->write_int64_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tuint8(TLIBC_ABSTRACT_WRITER *self, const tuint8 *val)
+TLIBC_ERROR_CODE tlibc_write_uint8_t(TLIBC_ABSTRACT_WRITER *self, const uint8_t *val)
 {
-	if(self->write_tuint8 == NULL)
+	if(self->write_uint8_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tuint8(self, val);
+	return self->write_uint8_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tuint16(TLIBC_ABSTRACT_WRITER *self, const tuint16 *val)
+TLIBC_ERROR_CODE tlibc_write_uint16_t(TLIBC_ABSTRACT_WRITER *self, const uint16_t *val)
 {
-	if(self->write_tuint16 == NULL)
+	if(self->write_uint16_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tuint16(self, val);
+	return self->write_uint16_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tuint32(TLIBC_ABSTRACT_WRITER *self, const tuint32 *val)
+TLIBC_ERROR_CODE tlibc_write_uint32_t(TLIBC_ABSTRACT_WRITER *self, const uint32_t *val)
 {
-	if(self->write_tuint32 == NULL)
+	if(self->write_uint32_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tuint32(self, val);
+	return self->write_uint32_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tuint64(TLIBC_ABSTRACT_WRITER *self, const tuint64 *val)
+TLIBC_ERROR_CODE tlibc_write_uint64_t(TLIBC_ABSTRACT_WRITER *self, const uint64_t *val)
 {
-	if(self->write_tuint64 == NULL)
+	if(self->write_uint64_t == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tuint64(self, val);
+	return self->write_uint64_t(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tchar(TLIBC_ABSTRACT_WRITER *self, const tchar *val)
+TLIBC_ERROR_CODE tlibc_write_char(TLIBC_ABSTRACT_WRITER *self, const char *val)
 {
-	if(self->write_tchar == NULL)
+	if(self->write_char == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tchar(self, val);
+	return self->write_char(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tdouble(TLIBC_ABSTRACT_WRITER *self, const tdouble *val)
+TLIBC_ERROR_CODE tlibc_write_double(TLIBC_ABSTRACT_WRITER *self, const double *val)
 {
-	if(self->write_tdouble == NULL)
+	if(self->write_double == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tdouble(self, val);
+	return self->write_double(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_tstring(TLIBC_ABSTRACT_WRITER *self, const tchar* str)
+TLIBC_ERROR_CODE tlibc_write_string(TLIBC_ABSTRACT_WRITER *self, const char* str)
 {
-	if(self->write_tstring == NULL)
+	if(self->write_string == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_tstring(self, str);
+	return self->write_string(self, str);
 }

@@ -9,32 +9,32 @@ typedef struct _TLIBC_COMPACT_WRITER
 	TLIBC_ABSTRACT_WRITER super;
 
 	char *addr;
-	tuint32 size;
-	tuint32 offset;
+	uint32_t size;
+	uint32_t offset;
 }TLIBC_COMPACT_WRITER;
 
-TLIBC_API void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, char *addr, tuint32 size);
+ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, char *addr, uint32_t size);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tint8(TLIBC_ABSTRACT_WRITER *super, const tint8 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_int8_t(TLIBC_ABSTRACT_WRITER *super, const int8_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tint16(TLIBC_ABSTRACT_WRITER *super, const tint16 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_int16_t(TLIBC_ABSTRACT_WRITER *super, const int16_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tint32(TLIBC_ABSTRACT_WRITER *super, const tint32 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int32_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tint64(TLIBC_ABSTRACT_WRITER *super, const tint64 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int64_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tuint8(TLIBC_ABSTRACT_WRITER *super, const tuint8 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_uint8_t(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tuint16(TLIBC_ABSTRACT_WRITER *super, const tuint16 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_uint16_t(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tuint32(TLIBC_ABSTRACT_WRITER *super, const tuint32 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tuint64(TLIBC_ABSTRACT_WRITER *super, const tuint64 *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_uint64_t(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tchar(TLIBC_ABSTRACT_WRITER *super, const char *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tdouble(TLIBC_ABSTRACT_WRITER *super, const double *val);
+ TLIBC_ERROR_CODE tlibc_compact_write_double(TLIBC_ABSTRACT_WRITER *super, const double *val);
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_compact_write_tstring(TLIBC_ABSTRACT_WRITER *super, const tchar* str);
+ TLIBC_ERROR_CODE tlibc_compact_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str);
 
 #endif

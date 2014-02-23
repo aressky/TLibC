@@ -65,13 +65,13 @@
 
 
 
-#define tlibc_zigzag_encode16(n) ((tuint16)(((tint16)n << 1) ^ ((tint16)n >> 15)))
-#define tlibc_zigzag_encode32(n) ((tuint32)(((tint32)n << 1) ^ ((tint32)n >> 31)))
-#define tlibc_zigzag_encode64(n) ((tuint64)(((tint64)n << 1) ^ ((tint64)n >> 63)))
+#define tlibc_zigzag_encode16(n) ((uint16_t)(((uint16_t)n << 1) ^ ((uint16_t)n >> 15)))
+#define tlibc_zigzag_encode32(n) ((uint32_t)(((uint32_t)n << 1) ^ ((uint32_t)n >> 31)))
+#define tlibc_zigzag_encode64(n) ((uint64_t)(((uint64_t)n << 1) ^ ((uint64_t)n >> 63)))
 
-#define tlibc_zigzag_decode16(n) ((tint16)((n >> 1) ^ -(tint16)(n & 1)))
-#define tlibc_zigzag_decode32(n) ((tint32)((n >> 1) ^ -(tint32)(n & 1)))
-#define tlibc_zigzag_decode64(n) ((tint64)((n >> 1) ^ -(tint64)(n & 1)))
+#define tlibc_zigzag_decode16(n) ((int16_t)((n >> 1) ^ -(int16_t)(n & 1)))
+#define tlibc_zigzag_decode32(n) ((int32_t)((n >> 1) ^ -(int32_t)(n & 1)))
+#define tlibc_zigzag_decode64(n) ((int64_t)((n >> 1) ^ -(int64_t)(n & 1)))
 
 #endif//_H_TLIBC_UTIL
 

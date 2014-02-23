@@ -1,8 +1,6 @@
 #ifndef _H_TLIBC_PLATFORM_COMMON
 #define _H_TLIBC_PLATFORM_COMMON
 
-#include <stdint.h>
-
 #ifndef NULL
 #define NULL				0
 #endif
@@ -33,23 +31,16 @@
 #define TLIBC_FILE_SEPARATOR '/'
 
 
-
-#if (defined (SHARED_EXPORTS))
-#define TLIBC_API __declspec(dllexport)
-#else
-#define TLIBC_API extern
-#endif
-
-#define TLIBC_UINT64_MAX ((((tuint64)0xffffffffUL) << 32) | 0xffffffffUL)
-#define TLIBC_UINT32_MAX ((tuint32)0xffffffffUL)
-#define TLIBC_UINT16_MAX ((tuint16)0xffffUL)
+#define TLIBC_UINT64_MAX ((((uint64_t)0xffffffffUL) << 32) | 0xffffffffUL)
+#define TLIBC_UINT32_MAX ((uint32_t)0xffffffffUL)
+#define TLIBC_UINT16_MAX ((uint16_t)0xffffUL)
 #define TLIBC_UINT8_MAX  255
 
-#define TLIBC_INT64_MAX  ((((tint64) 0x7fffffffL) << 32) | 0xffffffffL)
+#define TLIBC_INT64_MAX  ((((int64_t) 0x7fffffffL) << 32) | 0xffffffffL)
 #define TLIBC_INT64_MIN  ((-TLIBC_INT64_MAX) - 1)
-#define TLIBC_INT32_MAX  ((tint32) 0x7fffffffL)
+#define TLIBC_INT32_MAX  ((int32_t) 0x7fffffffL)
 #define TLIBC_INT32_MIN  ((-TLIBC_INT32_MAX) - 1)
-#define TLIBC_INT16_MAX  ((tint16) 0x7fffL)
+#define TLIBC_INT16_MAX  ((int16_t) 0x7fffL)
 #define TLIBC_INT16_MIN  ((-TLIBC_INT16_MAX) - 1)
 #define TLIBC_INT8_MAX   127
 #define TLIBC_INT8_MIN   ((-TLIBC_INT8_MAX) - 1)
@@ -63,20 +54,6 @@
 #define TLIBC_OFFSET_OF(type, member) ((size_t) &((type *)0)->member)
 
 #define TLIBC_CONTAINER_OF(ptr, type, member) ((type *)((size_t)ptr - TLIBC_OFFSET_OF(type, member)))
-
-
-
-typedef int8_t tint8;
-typedef int16_t tint16;
-typedef int32_t tint32;
-typedef int64_t tint64;
-typedef uint8_t tuint8;
-typedef uint16_t tuint16;
-typedef uint32_t tuint32;
-typedef uint64_t tuint64;
-typedef char tchar;
-typedef double tdouble;
-typedef char* tstring;
 
 #define TLIBC_MAX_PATH_LENGTH 1024
 

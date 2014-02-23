@@ -8,6 +8,7 @@
 #include <string.h>
 #include <time.h>
 #include <assert.h>
+#include <stdint.h>
 
 #define HASH_KEY_LENGTH 128
 typedef struct _test_hash_data_t
@@ -146,9 +147,9 @@ void timer_callback(const tlibc_timer_entry_t* header)
 time_t start_ms;
 void test_timer()
 {	
-	tuint32 i = 0;
-	tuint32 count = 0;
-	tuint64 start_ms = get_current_ms();
+	uint32_t i = 0;
+	uint32_t count = 0;
+	uint64_t start_ms = get_current_ms();
 
 	tlibc_timer_init(&timer);
 	timer_db.data = 123456;
@@ -158,7 +159,7 @@ void test_timer()
 	
 	for(;;)
 	{
-		tuint64 current_ms = get_current_ms() - start_ms;
+		uint64_t current_ms = get_current_ms() - start_ms;
 		int busy = FALSE;
 		while(tlibc_timer_jiffies(&timer) <= current_ms)
 		{

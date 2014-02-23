@@ -8,21 +8,21 @@
 #include <assert.h>
 
 
-void tlibc_binary_reader_init(TLIBC_BINARY_READER *self, const char *addr, tuint32 size)
+void tlibc_binary_reader_init(TLIBC_BINARY_READER *self, const char *addr, uint32_t size)
 {
 	tlibc_abstract_reader_init(&self->super);
 
-	self->super.read_tchar = tlibc_binary_read_tchar;
-	self->super.read_tdouble = tlibc_binary_read_tdouble;
-	self->super.read_tint8 = tlibc_binary_read_tint8;
-	self->super.read_tint16 = tlibc_binary_read_tint16;
-	self->super.read_tint32 = tlibc_binary_read_tint32;
-	self->super.read_tint64 = tlibc_binary_read_tint64;
-	self->super.read_tuint8 = tlibc_binary_read_tuint8;
-	self->super.read_tuint16 = tlibc_binary_read_tuint16;
-	self->super.read_tuint32 = tlibc_binary_read_tuint32;
-	self->super.read_tuint64 = tlibc_binary_read_tuint64;
-	self->super.read_tstring = tlibc_binary_read_tstring;
+	self->super.read_char = tlibc_binary_read_char;
+	self->super.read_double = tlibc_binary_read_double;
+	self->super.read_int8_t = tlibc_binary_read_int8_t;
+	self->super.read_int16_t = tlibc_binary_read_int16_t;
+	self->super.read_int32_t = tlibc_binary_read_int32_t;
+	self->super.read_int64_t = tlibc_binary_read_int64_t;
+	self->super.read_uint8_t = tlibc_binary_read_uint8_t;
+	self->super.read_uint16_t = tlibc_binary_read_uint16_t;
+	self->super.read_uint32_t = tlibc_binary_read_uint32_t;
+	self->super.read_uint64_t = tlibc_binary_read_uint64_t;
+	self->super.read_string = tlibc_binary_read_string;
 
 
 
@@ -35,133 +35,133 @@ void tlibc_binary_reader_init(TLIBC_BINARY_READER *self, const char *addr, tuint
 #define READER_PTR(self) (self->addr + self->offset)
 
 
-TLIBC_ERROR_CODE tlibc_binary_read_tint8(TLIBC_ABSTRACT_READER *super, tint8 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tint8))
+	if(READER_CAPACITY(self) < sizeof(int8_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tint8*)READER_PTR(self);
-	self->offset += sizeof(tint8);
+	*val = *(int8_t*)READER_PTR(self);
+	self->offset += sizeof(int8_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tint16(TLIBC_ABSTRACT_READER *super, tint16 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tint16))
+	if(READER_CAPACITY(self) < sizeof(int16_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tint16*)READER_PTR(self);
+	*val = *(int16_t*)READER_PTR(self);
 	tlibc_little_to_host16(*val);
-	self->offset += sizeof(tint16);
+	self->offset += sizeof(int16_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tint32(TLIBC_ABSTRACT_READER *super, tint32 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tint32))
+	if(READER_CAPACITY(self) < sizeof(int32_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tint32*)READER_PTR(self);
+	*val = *(int32_t*)READER_PTR(self);
 	tlibc_little_to_host32(*val);
-	self->offset += sizeof(tint32);
+	self->offset += sizeof(int32_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tint64(TLIBC_ABSTRACT_READER *super, tint64 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_int64_t(TLIBC_ABSTRACT_READER *super, int64_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tint64))
+	if(READER_CAPACITY(self) < sizeof(int64_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tint64*)READER_PTR(self);
+	*val = *(int64_t*)READER_PTR(self);
 	tlibc_little_to_host64(*val)
-	self->offset += sizeof(tint64);
+	self->offset += sizeof(int64_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tuint8(TLIBC_ABSTRACT_READER *super, tuint8 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tuint8))
+	if(READER_CAPACITY(self) < sizeof(uint8_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tuint8*)READER_PTR(self);
-	self->offset += sizeof(tuint8);
+	*val = *(uint8_t*)READER_PTR(self);
+	self->offset += sizeof(uint8_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tuint16(TLIBC_ABSTRACT_READER *super, tuint16 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tuint8))
+	if(READER_CAPACITY(self) < sizeof(uint8_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tuint8*)READER_PTR(self);
+	*val = *(uint8_t*)READER_PTR(self);
 	tlibc_little_to_host16(*val);
-	self->offset += sizeof(tuint16);
+	self->offset += sizeof(uint16_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tuint32(TLIBC_ABSTRACT_READER *super, tuint32 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tuint32))
+	if(READER_CAPACITY(self) < sizeof(uint32_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tuint32*)READER_PTR(self);
+	*val = *(uint32_t*)READER_PTR(self);
 	tlibc_little_to_host32(*val);
-	self->offset += sizeof(tuint32);
+	self->offset += sizeof(uint32_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tuint64(TLIBC_ABSTRACT_READER *super, tuint64 *val)
+TLIBC_ERROR_CODE tlibc_binary_read_uint64_t(TLIBC_ABSTRACT_READER *super, uint64_t *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	if(READER_CAPACITY(self) < sizeof(tuint64))
+	if(READER_CAPACITY(self) < sizeof(uint64_t))
 	{
 		goto not_enough_bytebuff_size;
 	}
-	*val = *(tuint64*)READER_PTR(self);
+	*val = *(uint64_t*)READER_PTR(self);
 	tlibc_little_to_host64(*val);
-	self->offset += sizeof(tuint64);
+	self->offset += sizeof(uint64_t);
 
 	return E_TLIBC_NOERROR;
 not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_read_tchar(TLIBC_ABSTRACT_READER *super, char *val)
+TLIBC_ERROR_CODE tlibc_binary_read_char(TLIBC_ABSTRACT_READER *super, char *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
 	if(READER_CAPACITY(self) < sizeof(char))
@@ -177,7 +177,7 @@ not_enough_bytebuff_size:
 }
 
 
-TLIBC_ERROR_CODE tlibc_binary_read_tdouble(TLIBC_ABSTRACT_READER *super, double *val)
+TLIBC_ERROR_CODE tlibc_binary_read_double(TLIBC_ABSTRACT_READER *super, double *val)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
 	if(READER_CAPACITY(self) < sizeof(double))
@@ -193,10 +193,10 @@ not_enough_bytebuff_size:
 }
 
 
-TLIBC_ERROR_CODE tlibc_binary_read_tstring(TLIBC_ABSTRACT_READER *super, tchar* str, tuint32 str_length)
+TLIBC_ERROR_CODE tlibc_binary_read_string(TLIBC_ABSTRACT_READER *super, char* str, uint32_t str_length)
 {
 	TLIBC_BINARY_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_READER, super);
-	tuint32 str_len = 0;
+	uint32_t str_len = 0;
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 
 	for(; self->offset < self->size; ++(self->offset))
