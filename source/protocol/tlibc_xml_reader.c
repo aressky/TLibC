@@ -372,6 +372,10 @@ TLIBC_ERROR_CODE tlibc_xml_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val
 	int64_t i64;
 	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64_t(super, &i64);
 	*val = (int8_t)i64;
+	if(*val != i64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
 	return ret;
 }
 
@@ -380,6 +384,10 @@ TLIBC_ERROR_CODE tlibc_xml_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *v
 	int64_t i64;
 	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64_t(super, &i64);
 	*val = (int16_t)i64;
+	if(*val != i64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
 	return ret;
 }
 
@@ -397,6 +405,10 @@ TLIBC_ERROR_CODE tlibc_xml_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *v
 	
 	ret = tlibc_xml_read_int64_t(super, &i64);
 	*val = (int32_t)i64;
+	if(*val != i64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
 done:
 	return ret;
 }
@@ -424,6 +436,25 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *v
 	uint64_t ui64;
 	TLIBC_ERROR_CODE ret = tlibc_xml_read_uint64_t(super, &ui64);
 	*val = (uint8_t)ui64;
+	if(*val != ui64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
+	return ret;
+}
+
+TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val)
+{	
+	uint64_t ui64;
+	TLIBC_ERROR_CODE ret;
+
+	ret = tlibc_xml_read_uint64_t(super, &ui64);
+
+	*val = (uint16_t)ui64;
+	if(*val != ui64)
+	{
+		return E_TLIBC_INTEGER_OVERFLOW;
+	}
 	return ret;
 }
 
@@ -442,22 +473,11 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t 
 	{
 		ret = tlibc_xml_read_uint64_t(super, &ui64);
 		*val = (uint32_t)ui64;
+		if(*val != ui64)
+		{
+			return E_TLIBC_INTEGER_OVERFLOW;
+		}
 	}	
-	return ret;
-}
-
-TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val)
-{	
-	uint64_t ui64;
-	TLIBC_ERROR_CODE ret;
-	
-	ret = tlibc_xml_read_uint64_t(super, &ui64);
-		
-	*val = (uint16_t)ui64;
-	if(*val != ui64)
-	{
-		return E_TLIBC_INTEGER_OVERFLOW;
-	}
 	return ret;
 }
 
