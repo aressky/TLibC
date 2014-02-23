@@ -58,7 +58,8 @@ TLIBC_API void tlibc_timer_pop(tlibc_timer_entry_t *timer);
 
 void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer);
 
+#define tlibc_timer_jiffies(self) ((self)->jiffies)
 
-TLIBC_API TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies);
+TLIBC_API TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self);
 
 #endif//_H_TLIBC_TIMER_H

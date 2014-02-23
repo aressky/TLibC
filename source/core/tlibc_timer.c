@@ -123,36 +123,36 @@ static int cascade(tlibc_timer_t *self, tlibc_timer_vec_t *tv, int index)
 	return index;
 }
 
-TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self, tuint64 jiffies)
+TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_WOULD_BLOCK;
+	TLIBC_ERROR_CODE ret;
 
-	if(self->jiffies <= jiffies)
+	int index = self->jiffies & TLIBC_TVR_MASK;
+	TLIBC_LIST_HEAD *tv_old;
+	if (!index &&
+		(!cascade(self, &self->tv2, INDEX(0))) &&
+		(!cascade(self, &self->tv3, INDEX(1))) &&
+		!cascade(self, &self->tv4, INDEX(2)))
 	{
-		int index = self->jiffies & TLIBC_TVR_MASK;
-		TLIBC_LIST_HEAD *tv_old;
+		cascade(self, &self->tv5, INDEX(3));
+	}
+	++self->jiffies;
 
-		if (!index &&
-			(!cascade(self, &self->tv2, INDEX(0))) &&
-			(!cascade(self, &self->tv3, INDEX(1))) &&
-			!cascade(self, &self->tv4, INDEX(2)))
-		{
-			cascade(self, &self->tv5, INDEX(3));
-		}
-		++self->jiffies;
-
-		tv_old = self->tv1.vec + index;
-		if(!tlibc_list_empty(tv_old))
-		{
-			ret = E_TLIBC_NOERROR;
-		}
-		while(!tlibc_list_empty(tv_old))
-		{
-			tlibc_timer_entry_t *timer = TLIBC_CONTAINER_OF(tv_old->next, tlibc_timer_entry_t, entry);			
-			tlibc_list_del(tv_old->next);
-			timer->callback(timer);
-		}
- 	}
+	tv_old = self->tv1.vec + index;
+	if(tlibc_list_empty(tv_old))
+	{
+		ret = E_TLIBC_WOULD_BLOCK;
+	}
+	else
+	{
+		ret = E_TLIBC_NOERROR;
+	}
+	while(!tlibc_list_empty(tv_old))
+	{
+		tlibc_timer_entry_t *timer = TLIBC_CONTAINER_OF(tv_old->next, tlibc_timer_entry_t, entry);			
+		tlibc_list_del(tv_old->next);
+		timer->callback(timer);
+	}
 
 	return ret;
 }

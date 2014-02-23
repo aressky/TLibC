@@ -9,7 +9,6 @@
 #include <time.h>
 #include <assert.h>
 
-
 #define HASH_KEY_LENGTH 128
 typedef struct _test_hash_data_t
 {
@@ -154,19 +153,31 @@ void test_timer()
 	tlibc_timer_init(&timer, 0);
 	timer_db.data = 123456;
 
-	TIMER_ENTRY_BUILD(&timer_db.timer_entry, timer.jiffies + TIMER_INTERVAL_MS, timer_callback);
-	
-
+	TIMER_ENTRY_BUILD(&timer_db.timer_entry, tlibc_timer_jiffies(&timer), timer_callback);	
+	tlibc_timer_push(&timer, &timer_db.timer_entry);
 	
 	for(;;)
 	{
-		TLIBC_ERROR_CODE ret = tlibc_timer_tick(&timer, get_current_ms() - start_ms);
-		if(ret == E_TLIBC_WOULD_BLOCK)
+		tuint64 current_ms = get_current_ms() - start_ms;
+		int busy = FALSE;
+		while(tlibc_timer_jiffies(&timer) <= current_ms)
+		{
+			if(tlibc_timer_tick(&timer) == E_TLIBC_NOERROR)
+			{
+				busy = TRUE;
+			}
+		}
+		
+		if(busy)
+		{
+			count = 0;
+		}
+		else
 		{
 			++count;
 			if(count > 50)
 			{
-				Sleep(0);
+				Sleep(1000);
 			}
 		}
 	}
@@ -285,9 +296,9 @@ int main()
 
 	//test_hash();
 
-	//test_timer();
+	test_timer();
 
-	test_mempool();
+	//test_mempool();
 
 	//test_unzip();
 
