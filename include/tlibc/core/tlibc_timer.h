@@ -50,7 +50,7 @@ typedef struct _tlibc_timer_t
 }tlibc_timer_t;
 
 
-void tlibc_timer_init(tlibc_timer_t *base, tuint64 jiffies);
+void tlibc_timer_init(tlibc_timer_t *base);
 
 
 TLIBC_API void tlibc_timer_pop(tlibc_timer_entry_t *timer);

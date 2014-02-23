@@ -5,11 +5,11 @@
 
 #include <assert.h>
 
-void tlibc_timer_init(tlibc_timer_t *self, tuint64 jiffies)
+void tlibc_timer_init(tlibc_timer_t *self)
 {
 	int i;
 
-	self->jiffies = jiffies;
+	self->jiffies = 0;
 
 	for(i = 0;i < TLIBC_TVR_SIZE; ++i)
 	{
