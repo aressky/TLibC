@@ -33,6 +33,7 @@ typedef struct _tlibc_mempool_t
 
 #define tlibc_mempool_init(self, type, entry, p, us, un)\
 {\
+	size_t i;\
 	(self)->sn = 0;\
 	(self)->pool = (p);\
 	(self)->unit_size = (us);\
@@ -40,12 +41,12 @@ typedef struct _tlibc_mempool_t
 	tlibc_list_init(&(self)->mempool_entry.unused_list);\
 	tlibc_list_init(&(self)->mempool_entry.used_list);\
 	(self)->used_list_num = 0;\
-	for((self)->unit_num = 0; (self)->unit_num < (un); ++(self)->unit_num)\
-{\
-	type *unit = (type*)tlibc_mempool_id2ptr(self, (self)->unit_num);\
+	for(i = 0; i < (self)->unit_num; ++i)\
+	{\
+	type *unit = (type*)tlibc_mempool_id2ptr(self, i);\
 	tlibc_list_add_tail(&unit->entry.unused_list, &(self)->mempool_entry.unused_list);\
 	unit->entry.sn = tlibc_mempool_invalid_id;\
-}\
+	}\
 	(self)->unused_list_num = (self)->unit_num;\
 }
 
