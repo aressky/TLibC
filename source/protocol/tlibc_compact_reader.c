@@ -474,6 +474,7 @@ TLIBC_ERROR_CODE tlibc_compact_read_string(TLIBC_ABSTRACT_READER *super, char* s
 			goto done;
 		}
 	}
+
 	ret = E_TLIBC_OUT_OF_MEMORY;
 done:
 	return ret;

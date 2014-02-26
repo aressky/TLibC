@@ -199,20 +199,22 @@ TLIBC_ERROR_CODE tlibc_binary_read_string(TLIBC_ABSTRACT_READER *super, char* st
 	uint32_t str_len = 0;
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 
-	for(; self->offset < self->size; ++(self->offset))
+	for(; self->offset < self->size; )
 	{
+		char c;
 		if(str_len >= str_length)
 		{
 			ret = E_TLIBC_OUT_OF_MEMORY;
 			goto done;
 		}
-		str[str_len++] = self->addr[self->offset];
+		c = (str[str_len++] = self->addr[self->offset++]);
 
-		if(self->addr[self->offset] == 0)
+		if(c == 0)
 		{
 			goto done;
 		}
 	}
+
 	ret = E_TLIBC_OUT_OF_MEMORY;
 done:
 	return ret;
