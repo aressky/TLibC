@@ -33,6 +33,7 @@ typedef struct _tlibc_mysql_reader_t
 	tlibc_mysql_field_t		field_vec[TLIBC_MYSQL_FIELD_VEC_NUM];
 	MYSQL_ROW				row;
 	const unsigned long		*length_vec;
+	int						read_enum_name_once;
 }tlibc_mysql_reader_t;
 
 void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysql_field_vec, uint32_t mysql_field_vec_num);
@@ -44,6 +45,8 @@ void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, MYSQL_ROW row
  TLIBC_ERROR_CODE tlibc_mysql_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
  TLIBC_ERROR_CODE tlibc_mysql_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
+
+ TLIBC_ERROR_CODE tlibc_mysql_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name);
 
  TLIBC_ERROR_CODE tlibc_mysql_read_char(TLIBC_ABSTRACT_READER *super, char *val);
 

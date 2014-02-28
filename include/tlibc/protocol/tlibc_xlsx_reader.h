@@ -69,7 +69,7 @@ typedef struct _tlibc_xlsx_reader_t
 	tlibc_xlsx_cell_s *curr_cell;	
 	
 
-	int ignore_int32_once;
+	int read_enum_name_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
 	tlibc_hash_t name2index;
 }tlibc_xlsx_reader_t;

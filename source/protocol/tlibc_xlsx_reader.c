@@ -216,7 +216,7 @@ void tlibc_xlsx_reader_row_seek(tlibc_xlsx_reader_t *self, uint32_t offset)
 {
 	self->super.name_ptr = self->super.name;
 	self->curr_cell = NULL;
-	self->ignore_int32_once = FALSE;
+	self->read_enum_name_once = FALSE;
 	self->curr_row = self->cell_matrix + (offset - self->cell_min_pos.row) * self->cell_col_size;
 }
 
@@ -280,7 +280,7 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_enum_begin(TLIBC_ABSTRACT_READER *super, const 
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
 	TLIBC_UNUSED(enum_name);
 
-	self->ignore_int32_once = TRUE;
+	self->read_enum_name_once = TRUE;
 
 	return E_TLIBC_NOERROR;
 }
@@ -314,9 +314,9 @@ TLIBC_ERROR_CODE tlibc_xlsx_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *va
 	tlibc_xlsx_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xlsx_reader_t, super);
 	int64_t i64;
 	TLIBC_ERROR_CODE ret;
-	if(self->ignore_int32_once)
+	if(self->read_enum_name_once)
 	{
-		self->ignore_int32_once = FALSE;
+		self->read_enum_name_once = FALSE;
 		ret = E_TLIBC_PLEASE_READ_ENUM_NAME;
 		goto done;
 	}

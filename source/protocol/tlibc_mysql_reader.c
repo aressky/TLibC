@@ -19,6 +19,7 @@ void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysq
 
 	self->super.read_field_begin = tlibc_mysql_read_field_begin;
 	self->super.read_vector_element_begin = tlibc_mysql_read_vector_element_begin;
+	self->super.read_enum_begin = tlibc_mysql_read_enum_begin;
 
 	self->super.read_int8 = tlibc_mysql_read_int8;
 	self->super.read_int16 = tlibc_mysql_read_int16;
@@ -34,6 +35,9 @@ void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysq
 	self->super.read_string = tlibc_mysql_read_string;
 	self->super.read_char = tlibc_mysql_read_char;
 
+	
+
+	self->read_enum_name_once = FALSE;
 	self->super.enable_name = TRUE;
 	self->mysql_field_vec = mysql_field_vec;
 	self->mysql_field_vec_num = mysql_field_vec_num;
@@ -101,6 +105,16 @@ TLIBC_ERROR_CODE tlibc_mysql_read_vector_element_begin(TLIBC_ABSTRACT_READER *se
 	return tlibc_mysql_read_field_begin(self, var_name);
 }
 
+TLIBC_ERROR_CODE tlibc_mysql_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name)
+{
+	tlibc_mysql_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_mysql_reader_t, super);
+	TLIBC_UNUSED(enum_name);
+
+	self->read_enum_name_once = TRUE;
+
+	return E_TLIBC_NOERROR;
+}
+
 TLIBC_ERROR_CODE tlibc_mysql_read_double(TLIBC_ABSTRACT_READER *super, double *val)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
@@ -149,14 +163,27 @@ TLIBC_ERROR_CODE tlibc_mysql_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *v
 }
 
 TLIBC_ERROR_CODE tlibc_mysql_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val)
-{
+{	
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	tlibc_mysql_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_mysql_reader_t, super);
 	int64_t i64;
-	TLIBC_ERROR_CODE ret = tlibc_mysql_read_int64(super, &i64);
+
+	if(self->read_enum_name_once)
+	{
+		self->read_enum_name_once = FALSE;
+		ret = E_TLIBC_PLEASE_READ_ENUM_NAME;
+		goto done;
+	}
+
+	ret = tlibc_mysql_read_int64(super, &i64);
 	*val = (int32_t)i64;
 	if(*val != i64)
 	{
 		return E_TLIBC_INTEGER_OVERFLOW;
 	}
+
+	return E_TLIBC_NOERROR;
+done:
 	return ret;
 }
 
