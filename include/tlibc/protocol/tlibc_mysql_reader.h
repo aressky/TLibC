@@ -9,10 +9,10 @@
 
 #include "tlibc/core/tlibc_hash.h"
 
-typedef struct _tlibc_xlsx_cell_s
+typedef struct _tlibc_mysql_field_t
 {
 	tlibc_hash_head_t		name2field;
-	const MYSQL_FIELD		*field;
+	const MYSQL_FIELD		*myfield;
 }tlibc_mysql_field_t;
 
 #define TLIBC_MYSQL_FIELD_VEC_NUM 65536
@@ -22,6 +22,9 @@ typedef struct _tlibc_mysql_reader_t
 	TLIBC_ABSTRACT_READER	super;
 	const MYSQL_FIELD		*mysql_field_vec;
 	uint32_t				mysql_field_vec_num;
+	const MYSQL_FIELD		*cur_myfield;
+	char*					cur_col;
+	unsigned long			cur_col_length;
 
 	tlibc_hash_bucket_t		hash_bucket[TLIBC_MYSQL_HASH_BUCKET];
 	tlibc_hash_t			name2field;
@@ -38,23 +41,9 @@ void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, MYSQL_ROW row
 										  , const unsigned long *length_vec);
 
 
- TLIBC_ERROR_CODE tlibc_mysql_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
-
- TLIBC_ERROR_CODE tlibc_mysql_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
-
- TLIBC_ERROR_CODE tlibc_mysql_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
-
- TLIBC_ERROR_CODE tlibc_mysql_read_vector_begin(TLIBC_ABSTRACT_READER *self);
-
- TLIBC_ERROR_CODE tlibc_mysql_read_vector_end(TLIBC_ABSTRACT_READER *self);
-
  TLIBC_ERROR_CODE tlibc_mysql_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
 
- TLIBC_ERROR_CODE tlibc_mysql_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
-
  TLIBC_ERROR_CODE tlibc_mysql_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
-
- TLIBC_ERROR_CODE tlibc_mysql_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
 
  TLIBC_ERROR_CODE tlibc_mysql_read_char(TLIBC_ABSTRACT_READER *super, char *val);
 

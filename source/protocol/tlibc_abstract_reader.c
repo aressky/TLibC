@@ -7,6 +7,8 @@
 void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 {
 	self->enable_name = FALSE;
+	self->name[0] = 0;
+	self->name_ptr = self->name;
 
 	self->read_struct_begin = NULL;
 	self->read_struct_end = NULL;
@@ -115,7 +117,7 @@ TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char 
 	if(self->enable_name)
 	{
 		int len = snprintf(self->name_ptr, TLIBC_READER_NAME_LENGTH - (self->name_ptr - self->name)
-			, ".%s", var_name);
+				, ".%s", var_name);
 
 		if(len < 0)
 		{
@@ -134,12 +136,19 @@ TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char 
 
 TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name)
 {
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+
+	if(self->read_field_end != NULL)
+	{
+		ret = self->read_field_end(self, var_name);
+	}
+
 	if(self->enable_name)
 	{	
-		int len;
 		char curr_name[TLIBC_READER_NAME_LENGTH];	
+		int len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH - (self->name_ptr - self->name)
+				, ".%s", var_name);
 
-		len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH, ".%s", var_name);
 		if(len < 0)
 		{
 			return E_TLIBC_ERROR;
@@ -147,11 +156,7 @@ TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *v
 		self->name_ptr -= len;
 	}
 
-	if(self->read_field_end == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_field_end(self, var_name);
+	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index)
@@ -159,7 +164,8 @@ TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, co
 	if(self->enable_name)
 	{
 		int len = snprintf(self->name_ptr, TLIBC_READER_NAME_LENGTH - (self->name_ptr - self->name)
-			, ".%s[%u]", var_name, index);
+				, ".%s[%u]", var_name, index);
+
 		if(len < 0)
 		{
 			return E_TLIBC_ERROR;
@@ -176,24 +182,25 @@ TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, co
 
 TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index)
 {
-	if(self->enable_name)
-	{
-		int len;
-		char curr_name[TLIBC_READER_NAME_LENGTH];
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 
-		len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH, ".%s[%u]", var_name, index);
+	if(self->read_vector_element_end != NULL)
+	{
+		ret = self->read_vector_element_end(self, var_name, index);
+	}	
+
+	if(self->enable_name)
+	{		
+		char curr_name[TLIBC_READER_NAME_LENGTH];
+		int len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH, ".%s[%u]", var_name, index);
+		
 		if(len < 0)
 		{
 			return E_TLIBC_ERROR;
 		}
 		self->name_ptr -= len;
 	}
-
-	if(self->read_vector_element_end == NULL)
-	{
-		return E_TLIBC_NOERROR;
-	}
-	return self->read_vector_element_end(self, var_name, index);
+	return ret;
 }
 
 TLIBC_ERROR_CODE tlibc_read_int8(TLIBC_ABSTRACT_READER *self, int8_t *val)

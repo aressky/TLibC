@@ -242,7 +242,7 @@ static void tlibc_xlsx_locate(tlibc_xlsx_reader_t *self)
 
 	self->curr_cell = NULL;
 	if(self->super.name_ptr <= self->super.name)
-	{		
+	{
 		goto done;
 	}
 	head = tlibc_hash_find(&self->name2index, self->super.name + 1, self->super.name_ptr - self->super.name - 1);

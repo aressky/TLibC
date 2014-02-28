@@ -4,7 +4,7 @@ find_package(ZLIB REQUIRED)
 
 FILE(GLOB FILE_LIST *.h *.c)
 
-SET(CMAKE_MODULE_PATH "$ENV{TLIBC_HOME}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
+SET(CMAKE_MODULE_PATH "${Example_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
 
 find_package(TLibC REQUIRED)
 
