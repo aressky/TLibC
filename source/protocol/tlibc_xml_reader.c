@@ -133,21 +133,21 @@ void tlibc_xml_reader_init(TLIBC_XML_READER *self)
 	self->super.read_vector_element_begin = tlibc_xml_read_vector_element_begin;
 	self->super.read_vector_element_end = tlibc_xml_read_vector_element_end;
 
-	self->super.read_int8_t = tlibc_xml_read_int8_t;
-	self->super.read_int16_t = tlibc_xml_read_int16_t;
-	self->super.read_int32_t = tlibc_xml_read_int32_t;
-	self->super.read_int64_t = tlibc_xml_read_int64_t;
+	self->super.read_int8 = tlibc_xml_read_int8;
+	self->super.read_int16 = tlibc_xml_read_int16;
+	self->super.read_int32 = tlibc_xml_read_int32;
+	self->super.read_int64 = tlibc_xml_read_int64;
 
-	self->super.read_uint8_t = tlibc_xml_read_uint8_t;
-	self->super.read_uint16_t = tlibc_xml_read_uint16_t;
-	self->super.read_uint32_t = tlibc_xml_read_uint32_t;
-	self->super.read_uint64_t = tlibc_xml_read_uint64_t;
+	self->super.read_uint8 = tlibc_xml_read_uint8;
+	self->super.read_uint16 = tlibc_xml_read_uint16;
+	self->super.read_uint32 = tlibc_xml_read_uint32;
+	self->super.read_uint64 = tlibc_xml_read_uint64;
 
 	self->super.read_double = tlibc_xml_read_double;
 	self->super.read_string = tlibc_xml_read_string;
 	self->super.read_char = tlibc_xml_read_char;
 
-	self->pre_read_uint32_t_field_once = FALSE;
+	self->pre_read_uint32_field_once = FALSE;
 	self->ignore_int32_once = FALSE;
 	self->scanner_context_stack_num = 0;
 	self->include_num = 0;
@@ -267,7 +267,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_vector_begin(TLIBC_ABSTRACT_READER *super)
 	}while(level != 0);
 
 	ret = tlibc_xml_read_field_begin(super, "vector");
-	self->pre_read_uint32_t_field_once = TRUE;
+	self->pre_read_uint32_field_once = TRUE;
 	self->ui32 = count;
 
 	return ret;
@@ -286,7 +286,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const 
 	TLIBC_ERROR_CODE ret;
 	TLIBC_XML_READER_TOKEN token;	
 
-	if(self->pre_read_uint32_t_field_once)
+	if(self->pre_read_uint32_field_once)
 	{
 		goto done;
 	}
@@ -314,9 +314,9 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *super, const ch
 	TLIBC_ERROR_CODE ret;
 	TLIBC_XML_READER_TOKEN token;
 
-	if(self->pre_read_uint32_t_field_once)
+	if(self->pre_read_uint32_field_once)
 	{
-		self->pre_read_uint32_t_field_once = FALSE;
+		self->pre_read_uint32_field_once = FALSE;
 		goto done;
 	}
 	token = tlibc_xml_reader_get_token(self);
@@ -367,10 +367,10 @@ ERROR_RET:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val)
 {
 	int64_t i64;
-	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64_t(super, &i64);
+	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64(super, &i64);
 	*val = (int8_t)i64;
 	if(*val != i64)
 	{
@@ -379,10 +379,10 @@ TLIBC_ERROR_CODE tlibc_xml_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val)
 {
 	int64_t i64;
-	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64_t(super, &i64);
+	TLIBC_ERROR_CODE ret = tlibc_xml_read_int64(super, &i64);
 	*val = (int16_t)i64;
 	if(*val != i64)
 	{
@@ -391,7 +391,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *v
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val)
 {
 	int64_t i64;
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
@@ -403,7 +403,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *v
 		goto done;
 	}
 	
-	ret = tlibc_xml_read_int64_t(super, &i64);
+	ret = tlibc_xml_read_int64(super, &i64);
 	*val = (int32_t)i64;
 	if(*val != i64)
 	{
@@ -413,7 +413,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_int64_t(TLIBC_ABSTRACT_READER *super, int64_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
@@ -431,10 +431,10 @@ ERROR_RET:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val)
 {
 	uint64_t ui64;
-	TLIBC_ERROR_CODE ret = tlibc_xml_read_uint64_t(super, &ui64);
+	TLIBC_ERROR_CODE ret = tlibc_xml_read_uint64(super, &ui64);
 	*val = (uint8_t)ui64;
 	if(*val != ui64)
 	{
@@ -443,12 +443,12 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *v
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val)
 {	
 	uint64_t ui64;
 	TLIBC_ERROR_CODE ret;
 
-	ret = tlibc_xml_read_uint64_t(super, &ui64);
+	ret = tlibc_xml_read_uint64(super, &ui64);
 
 	*val = (uint16_t)ui64;
 	if(*val != ui64)
@@ -458,20 +458,20 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t 
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val)
 {
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);
 	uint64_t ui64;
 	TLIBC_ERROR_CODE ret;
 
-	if(self->pre_read_uint32_t_field_once)
+	if(self->pre_read_uint32_field_once)
 	{
 		*val = self->ui32;
 		ret = E_TLIBC_NOERROR;
 	}
 	else
 	{
-		ret = tlibc_xml_read_uint64_t(super, &ui64);
+		ret = tlibc_xml_read_uint64(super, &ui64);
 		*val = (uint32_t)ui64;
 		if(*val != ui64)
 		{
@@ -481,7 +481,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t 
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_read_uint64_t(TLIBC_ABSTRACT_READER *super, uint64_t *val)
+TLIBC_ERROR_CODE tlibc_xml_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	TLIBC_XML_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_READER, super);

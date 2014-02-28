@@ -303,14 +303,14 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, char *addr, uint32_t 
 
 	self->super.write_char = tlibc_compact_write_char;
 	self->super.write_double = tlibc_compact_write_double;
-	self->super.write_int8_t = tlibc_compact_write_int8_t;
-	self->super.write_int16_t = tlibc_compact_write_int16_t;
-	self->super.write_int32_t = tlibc_compact_write_int32_t;
-	self->super.write_int64_t = tlibc_compact_write_int64_t;
-	self->super.write_uint8_t = tlibc_compact_write_uint8_t;
-	self->super.write_uint16_t = tlibc_compact_write_uint16_t;
-	self->super.write_uint32_t = tlibc_compact_write_uint32_t;
-	self->super.write_uint64_t = tlibc_compact_write_uint64_t;
+	self->super.write_int8 = tlibc_compact_write_int8;
+	self->super.write_int16 = tlibc_compact_write_int16;
+	self->super.write_int32 = tlibc_compact_write_int32;
+	self->super.write_int64 = tlibc_compact_write_int64;
+	self->super.write_uint8 = tlibc_compact_write_uint8;
+	self->super.write_uint16 = tlibc_compact_write_uint16;
+	self->super.write_uint32 = tlibc_compact_write_uint32;
+	self->super.write_uint64 = tlibc_compact_write_uint64;
 	self->super.write_string = tlibc_compact_write_string;
 
 	self->addr = addr;
@@ -321,7 +321,7 @@ void tlibc_compact_writer_init(TLIBC_COMPACT_WRITER *self, char *addr, uint32_t 
 #define COMPACT_WRITER_CAPACITY(self) (self->size - self->offset)
 #define COMPACT_WRITER_PTR(self) (self->addr + self->offset)
 
-TLIBC_ERROR_CODE tlibc_compact_write_int8_t(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(int8_t))
@@ -336,7 +336,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_int16_t(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_int16(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -354,7 +354,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_int32(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -372,7 +372,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_int64(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -391,7 +391,7 @@ done:
 }
 
 
-TLIBC_ERROR_CODE tlibc_compact_write_uint8_t(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	if(COMPACT_WRITER_CAPACITY(self) < sizeof(uint8_t))
@@ -406,7 +406,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_uint16_t(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -424,7 +424,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);
@@ -442,7 +442,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_write_uint64_t(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
+TLIBC_ERROR_CODE tlibc_compact_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
 {
 	TLIBC_COMPACT_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_WRITER, super);
 	uint32_t buff_size = COMPACT_WRITER_CAPACITY(self);

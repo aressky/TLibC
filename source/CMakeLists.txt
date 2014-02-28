@@ -1,6 +1,7 @@
 PROJECT(TLibC)
 
 find_package(ZLIB REQUIRED)
+find_package(MySQL REQUIRED)
 
 set(GEN_PATH ${TLibC_BINARY_DIR}/gen)
 execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory ${GEN_PATH})
@@ -60,6 +61,7 @@ INCLUDE_DIRECTORIES(
 	${INCLUDE}
 	${GEN_PATH}
 	${ZLIB_INCLUDE_DIRS}
+	${MYSQL_INCLUDE_DIR}
 	.
 	)
 

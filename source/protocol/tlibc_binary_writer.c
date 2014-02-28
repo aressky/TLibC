@@ -14,14 +14,14 @@ void tlibc_binary_writer_init(TLIBC_BINARY_WRITER *self, char *addr, uint32_t si
 
 	self->super.write_char = tlibc_binary_write_char;
 	self->super.write_double = tlibc_binary_write_double;
-	self->super.write_int8_t = tlibc_binary_write_int8_t;
-	self->super.write_int16_t = tlibc_binary_write_int16_t;
-	self->super.write_int32_t = tlibc_binary_write_int32_t;
-	self->super.write_int64_t = tlibc_binary_write_int64_t;
-	self->super.write_uint8_t = tlibc_binary_write_uint8_t;
-	self->super.write_uint16_t = tlibc_binary_write_uint16_t;
-	self->super.write_uint32_t = tlibc_binary_write_uint32_t;
-	self->super.write_uint64_t = tlibc_binary_write_uint64_t;
+	self->super.write_int8 = tlibc_binary_write_int8;
+	self->super.write_int16 = tlibc_binary_write_int16;
+	self->super.write_int32 = tlibc_binary_write_int32;
+	self->super.write_int64 = tlibc_binary_write_int64;
+	self->super.write_uint8 = tlibc_binary_write_uint8;
+	self->super.write_uint16 = tlibc_binary_write_uint16;
+	self->super.write_uint32 = tlibc_binary_write_uint32;
+	self->super.write_uint64 = tlibc_binary_write_uint64;
 	self->super.write_string = tlibc_binary_write_string;
 
 	self->addr = addr;
@@ -32,7 +32,7 @@ void tlibc_binary_writer_init(TLIBC_BINARY_WRITER *self, char *addr, uint32_t si
 #define WRITER_CAPACITY(self) (self->size - self->offset)
 #define WRITER_PTR(self) (self->addr + self->offset)
 
-TLIBC_ERROR_CODE tlibc_binary_write_int8_t(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(int8_t))
@@ -47,7 +47,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_int16_t(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_int16(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(int16_t))
@@ -63,7 +63,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_int32(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(int32_t))
@@ -79,7 +79,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_int64(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(int64_t))
@@ -96,7 +96,7 @@ not_enough_bytebuff_size:
 }
 
 
-TLIBC_ERROR_CODE tlibc_binary_write_uint8_t(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(uint8_t))
@@ -111,7 +111,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_uint16_t(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(uint16_t))
@@ -127,7 +127,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(uint32_t))
@@ -143,7 +143,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_uint64_t(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
+TLIBC_ERROR_CODE tlibc_binary_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	if(WRITER_CAPACITY(self) < sizeof(uint64_t))

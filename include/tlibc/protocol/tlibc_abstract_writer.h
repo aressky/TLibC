@@ -21,14 +21,14 @@ struct _TLIBC_ABSTRACT_WRITER
 	TLIBC_ERROR_CODE (*write_vector_element_begin)(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index);
 	TLIBC_ERROR_CODE (*write_vector_element_end)(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index);
 
-	TLIBC_ERROR_CODE (*write_int8_t)(TLIBC_ABSTRACT_WRITER *self, const int8_t *val);
-	TLIBC_ERROR_CODE (*write_int16_t)(TLIBC_ABSTRACT_WRITER *self, const int16_t *val);
-	TLIBC_ERROR_CODE (*write_int32_t)(TLIBC_ABSTRACT_WRITER *self, const int32_t *val);
-	TLIBC_ERROR_CODE (*write_int64_t)(TLIBC_ABSTRACT_WRITER *self, const int64_t *val);
-	TLIBC_ERROR_CODE (*write_uint8_t)(TLIBC_ABSTRACT_WRITER *self, const uint8_t *val);
-	TLIBC_ERROR_CODE (*write_uint16_t)(TLIBC_ABSTRACT_WRITER *self, const uint16_t *val);
-	TLIBC_ERROR_CODE (*write_uint32_t)(TLIBC_ABSTRACT_WRITER *self, const uint32_t *val);
-	TLIBC_ERROR_CODE (*write_uint64_t)(TLIBC_ABSTRACT_WRITER *self, const uint64_t *val);
+	TLIBC_ERROR_CODE (*write_int8)(TLIBC_ABSTRACT_WRITER *self, const int8_t *val);
+	TLIBC_ERROR_CODE (*write_int16)(TLIBC_ABSTRACT_WRITER *self, const int16_t *val);
+	TLIBC_ERROR_CODE (*write_int32)(TLIBC_ABSTRACT_WRITER *self, const int32_t *val);
+	TLIBC_ERROR_CODE (*write_int64)(TLIBC_ABSTRACT_WRITER *self, const int64_t *val);
+	TLIBC_ERROR_CODE (*write_uint8)(TLIBC_ABSTRACT_WRITER *self, const uint8_t *val);
+	TLIBC_ERROR_CODE (*write_uint16)(TLIBC_ABSTRACT_WRITER *self, const uint16_t *val);
+	TLIBC_ERROR_CODE (*write_uint32)(TLIBC_ABSTRACT_WRITER *self, const uint32_t *val);
+	TLIBC_ERROR_CODE (*write_uint64)(TLIBC_ABSTRACT_WRITER *self, const uint64_t *val);
 	TLIBC_ERROR_CODE (*write_char)(TLIBC_ABSTRACT_WRITER *self, const char *val);	
 	TLIBC_ERROR_CODE (*write_double)(TLIBC_ABSTRACT_WRITER *self, const double *val);
 	TLIBC_ERROR_CODE (*write_string)(TLIBC_ABSTRACT_WRITER *self, const char* str);
@@ -49,14 +49,14 @@ struct _TLIBC_ABSTRACT_WRITER
  TLIBC_ERROR_CODE tlibc_write_vector_element_begin(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index);
  TLIBC_ERROR_CODE tlibc_write_vector_element_end(TLIBC_ABSTRACT_WRITER *self, const char *var_name, uint32_t index);
 
- TLIBC_ERROR_CODE tlibc_write_int8_t(TLIBC_ABSTRACT_WRITER *self, const int8_t *val);
- TLIBC_ERROR_CODE tlibc_write_int16_t(TLIBC_ABSTRACT_WRITER *self, const int16_t *val);
- TLIBC_ERROR_CODE tlibc_write_int32_t(TLIBC_ABSTRACT_WRITER *self, const int32_t *val);
- TLIBC_ERROR_CODE tlibc_write_int64_t(TLIBC_ABSTRACT_WRITER *self, const int64_t *val);
- TLIBC_ERROR_CODE tlibc_write_uint8_t(TLIBC_ABSTRACT_WRITER *self, const uint8_t *val);
- TLIBC_ERROR_CODE tlibc_write_uint16_t(TLIBC_ABSTRACT_WRITER *self, const uint16_t *val);
- TLIBC_ERROR_CODE tlibc_write_uint32_t(TLIBC_ABSTRACT_WRITER *self, const uint32_t *val);
- TLIBC_ERROR_CODE tlibc_write_uint64_t(TLIBC_ABSTRACT_WRITER *self, const uint64_t *val);
+ TLIBC_ERROR_CODE tlibc_write_int8(TLIBC_ABSTRACT_WRITER *self, const int8_t *val);
+ TLIBC_ERROR_CODE tlibc_write_int16(TLIBC_ABSTRACT_WRITER *self, const int16_t *val);
+ TLIBC_ERROR_CODE tlibc_write_int32(TLIBC_ABSTRACT_WRITER *self, const int32_t *val);
+ TLIBC_ERROR_CODE tlibc_write_int64(TLIBC_ABSTRACT_WRITER *self, const int64_t *val);
+ TLIBC_ERROR_CODE tlibc_write_uint8(TLIBC_ABSTRACT_WRITER *self, const uint8_t *val);
+ TLIBC_ERROR_CODE tlibc_write_uint16(TLIBC_ABSTRACT_WRITER *self, const uint16_t *val);
+ TLIBC_ERROR_CODE tlibc_write_uint32(TLIBC_ABSTRACT_WRITER *self, const uint32_t *val);
+ TLIBC_ERROR_CODE tlibc_write_uint64(TLIBC_ABSTRACT_WRITER *self, const uint64_t *val);
  TLIBC_ERROR_CODE tlibc_write_char(TLIBC_ABSTRACT_WRITER *self, const char *val);	
  TLIBC_ERROR_CODE tlibc_write_double(TLIBC_ABSTRACT_WRITER *self, const double *val);
  TLIBC_ERROR_CODE tlibc_write_string(TLIBC_ABSTRACT_WRITER *self, const char *str);

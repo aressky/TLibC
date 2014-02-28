@@ -54,7 +54,7 @@ typedef struct _TLIBC_XML_READER
 
 	int struct_deep;
 	int ignore_int32_once;
-	int pre_read_uint32_t_field_once;
+	int pre_read_uint32_field_once;
 	uint32_t ui32;
 }TLIBC_XML_READER;
 
@@ -98,21 +98,21 @@ typedef struct _TLIBC_XML_READER
 
  TLIBC_ERROR_CODE tlibc_xml_read_double(TLIBC_ABSTRACT_READER *super, double *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_int64_t(TLIBC_ABSTRACT_READER *super, int64_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val);
 
- TLIBC_ERROR_CODE tlibc_xml_read_uint64_t(TLIBC_ABSTRACT_READER *super, uint64_t *val);
+ TLIBC_ERROR_CODE tlibc_xml_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val);
 
  TLIBC_ERROR_CODE tlibc_xml_read_string(TLIBC_ABSTRACT_READER *super, char *str, uint32_t str_len);
 

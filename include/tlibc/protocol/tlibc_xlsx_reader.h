@@ -33,7 +33,7 @@ typedef struct _tlibc_xlsx_cell_s
 }tlibc_xlsx_cell_s;
 
 #define TLIBC_XLSX_HASH_BUCKET 65536
-#define TLIBC_XLSX_READER_NAME_LENGTH 65536
+
 typedef struct _tlibc_xlsx_reader_t
 {
 	TLIBC_ABSTRACT_READER super;
@@ -66,9 +66,7 @@ typedef struct _tlibc_xlsx_reader_t
 	tlibc_xlsx_cell_s *bindinfo_row;
 
 	tlibc_xlsx_cell_s *curr_row;
-	tlibc_xlsx_cell_s *curr_cell;
-	char curr_name[TLIBC_XLSX_READER_NAME_LENGTH];
-	char *curr_name_ptr;
+	tlibc_xlsx_cell_s *curr_cell;	
 	
 
 	int ignore_int32_once;
@@ -95,11 +93,7 @@ typedef struct _tlibc_xlsx_reader_t
 
  TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_begin(TLIBC_ABSTRACT_READER *super, const char* var_name, uint32_t index);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_vector_element_end(TLIBC_ABSTRACT_READER *super, const char* var_name, uint32_t index);
-
  TLIBC_ERROR_CODE tlibc_xlsx_read_field_begin(TLIBC_ABSTRACT_READER *super, const char *var_name);
-
- TLIBC_ERROR_CODE tlibc_xlsx_read_field_end(TLIBC_ABSTRACT_READER *super, const char *var_name);
 
  TLIBC_ERROR_CODE tlibc_xlsx_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name);
 
@@ -107,21 +101,21 @@ typedef struct _tlibc_xlsx_reader_t
 
  TLIBC_ERROR_CODE tlibc_xlsx_read_double(TLIBC_ABSTRACT_READER *super, double *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_int64_t(TLIBC_ABSTRACT_READER *super, int64_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val);
 
- TLIBC_ERROR_CODE tlibc_xlsx_read_uint64_t(TLIBC_ABSTRACT_READER *super, uint64_t *val);
+ TLIBC_ERROR_CODE tlibc_xlsx_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val);
 
  TLIBC_ERROR_CODE tlibc_xlsx_read_string(TLIBC_ABSTRACT_READER *super, char *str, uint32_t str_len);
 

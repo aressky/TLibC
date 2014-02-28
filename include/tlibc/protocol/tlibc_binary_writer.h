@@ -15,21 +15,21 @@ typedef struct _TLIBC_BINARY_WRITER
 
  void tlibc_binary_writer_init(TLIBC_BINARY_WRITER *self, char *addr, uint32_t size);
 
- TLIBC_ERROR_CODE tlibc_binary_write_int8_t(TLIBC_ABSTRACT_WRITER *super, const int8_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_int16_t(TLIBC_ABSTRACT_WRITER *super, const int16_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_int16(TLIBC_ABSTRACT_WRITER *super, const int16_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int32_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_int32(TLIBC_ABSTRACT_WRITER *super, const int32_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int64_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_int64(TLIBC_ABSTRACT_WRITER *super, const int64_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_uint8_t(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_uint16_t(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_uint64_t(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val);
+ TLIBC_ERROR_CODE tlibc_binary_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val);
 
  TLIBC_ERROR_CODE tlibc_binary_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val);
 

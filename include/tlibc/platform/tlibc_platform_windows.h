@@ -4,15 +4,13 @@
 #include <stddef.h>
 //如果不包含stdlib.h strtoll会出错
 #include <stdlib.h>
+#include <stdio.h>
 #include <direct.h>
 
 #define strtoll(begin_ptr, end_ptr, radix) _strtoi64(begin_ptr, end_ptr, radix)
 #define strtoull(begin_ptr, end_ptr, radix) _strtoui64(begin_ptr, end_ptr, radix)
 #define snprintf _snprintf
 #define snwprintf _snwprintf
-
-#define PRIu64 "I64u"
-#define PRIi64 "I64d"
 
 #define tlibc_mkdir(path, mode) mkdir(path)
 
@@ -23,6 +21,11 @@
 #else
 #error "unknow wordsize"
 #endif
+
+
+#define PRIi64 "lli"
+#define PRIu64 "llu"
+#define PRIx64 "llx"
 
 
 //屏蔽广告

@@ -36,15 +36,15 @@ TLIBC_ERROR_CODE tlibc_xml_writer_init(TLIBC_XML_WRITER *self, const char *file_
 	self->super.write_vector_element_begin = tlibc_xml_write_vector_element_begin;
 	self->super.write_vector_element_end = tlibc_xml_write_vector_element_end;
 	
-	self->super.write_int8_t = tlibc_xml_write_int8_t;
-	self->super.write_int16_t = tlibc_xml_write_int16_t;
-	self->super.write_int32_t = tlibc_xml_write_int32_t;
-	self->super.write_int64_t = tlibc_xml_write_int64_t;
+	self->super.write_int8 = tlibc_xml_write_int8;
+	self->super.write_int16 = tlibc_xml_write_int16;
+	self->super.write_int32 = tlibc_xml_write_int32;
+	self->super.write_int64 = tlibc_xml_write_int64;
 
-	self->super.write_uint8_t = tlibc_xml_write_uint8_t;
-	self->super.write_uint16_t = tlibc_xml_write_uint16_t;
-	self->super.write_uint32_t = tlibc_xml_write_uint32_t;
-	self->super.write_uint64_t = tlibc_xml_write_uint64_t;
+	self->super.write_uint8 = tlibc_xml_write_uint8;
+	self->super.write_uint16 = tlibc_xml_write_uint16;
+	self->super.write_uint32 = tlibc_xml_write_uint32;
+	self->super.write_uint64 = tlibc_xml_write_uint64;
 
 
 	self->super.write_double = tlibc_xml_write_double;
@@ -208,19 +208,19 @@ TLIBC_ERROR_CODE tlibc_xml_write_double(TLIBC_ABSTRACT_WRITER *super, const doub
 	return E_TLIBC_NOERROR;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_int8_t(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
 {
 	int64_t v = *val;
-	return tlibc_xml_write_int64_t(super, &v);
+	return tlibc_xml_write_int64(super, &v);
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_int16_t(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_int16(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
 {
 	int64_t v = *val;
-	return tlibc_xml_write_int64_t(super, &v);
+	return tlibc_xml_write_int64(super, &v);
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_int32(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
 {
 	int64_t v;
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
@@ -232,12 +232,12 @@ TLIBC_ERROR_CODE tlibc_xml_write_int32_t(TLIBC_ABSTRACT_WRITER *super, const int
 		goto done;
 	}
 	v = *val;
-	ret = tlibc_xml_write_int64_t(super, &v);
+	ret = tlibc_xml_write_int64(super, &v);
 done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_int64(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	fprintf(self->f, "%"PRIi64, *val);
@@ -246,20 +246,20 @@ TLIBC_ERROR_CODE tlibc_xml_write_int64_t(TLIBC_ABSTRACT_WRITER *super, const int
 }
 
 
-TLIBC_ERROR_CODE tlibc_xml_write_uint8_t(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
 {
 	uint64_t v = *val;
-	return tlibc_xml_write_uint64_t(super, &v);
+	return tlibc_xml_write_uint64(super, &v);
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_uint16_t(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
 {
 	uint64_t v = *val;
 	
-	return tlibc_xml_write_uint64_t(super, &v);
+	return tlibc_xml_write_uint64(super, &v);
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
 {
 	uint64_t v = *val;
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
@@ -267,12 +267,12 @@ TLIBC_ERROR_CODE tlibc_xml_write_uint32_t(TLIBC_ABSTRACT_WRITER *super, const ui
 	{
 		goto done;
 	}
-	return tlibc_xml_write_uint64_t(super, &v);
+	return tlibc_xml_write_uint64(super, &v);
 done:
 	return E_TLIBC_NOERROR;
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_uint64_t(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
+TLIBC_ERROR_CODE tlibc_xml_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	fprintf(self->f, "%"PRIu64, *val);

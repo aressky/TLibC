@@ -274,14 +274,14 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const char *addr, uin
 
 	self->super.read_char = tlibc_compact_read_char;
 	self->super.read_double = tlibc_compact_read_double;
-	self->super.read_int8_t = tlibc_compact_read_int8_t;
-	self->super.read_int16_t = tlibc_compact_read_int16_t;
-	self->super.read_int32_t = tlibc_compact_read_int32_t;
-	self->super.read_int64_t = tlibc_compact_read_int64_t;
-	self->super.read_uint8_t = tlibc_compact_read_uint8_t;
-	self->super.read_uint16_t = tlibc_compact_read_uint16_t;
-	self->super.read_uint32_t = tlibc_compact_read_uint32_t;
-	self->super.read_uint64_t = tlibc_compact_read_uint64_t;
+	self->super.read_int8 = tlibc_compact_read_int8;
+	self->super.read_int16 = tlibc_compact_read_int16;
+	self->super.read_int32 = tlibc_compact_read_int32;
+	self->super.read_int64 = tlibc_compact_read_int64;
+	self->super.read_uint8 = tlibc_compact_read_uint8;
+	self->super.read_uint16 = tlibc_compact_read_uint16;
+	self->super.read_uint32 = tlibc_compact_read_uint32;
+	self->super.read_uint64 = tlibc_compact_read_uint64;
 	self->super.read_string = tlibc_compact_read_string;
 
 
@@ -295,7 +295,7 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const char *addr, uin
 #define COMPACT_READER_PTR(self) (self->addr + self->offset)
 
 
-TLIBC_ERROR_CODE tlibc_compact_read_int8_t(TLIBC_ABSTRACT_READER *super, int8_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(int8_t))
@@ -310,7 +310,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int16_t(TLIBC_ABSTRACT_READER *super, int16_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint16_t res;
@@ -327,7 +327,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int32_t(TLIBC_ABSTRACT_READER *super, int32_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint32_t res;
@@ -344,7 +344,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int64_t(TLIBC_ABSTRACT_READER *super, int64_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint64_t res;
@@ -361,7 +361,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint8_t(TLIBC_ABSTRACT_READER *super, uint8_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(uint8_t))
@@ -376,7 +376,7 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint16_t(TLIBC_ABSTRACT_READER *super, uint16_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
@@ -391,7 +391,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint32_t(TLIBC_ABSTRACT_READER *super, uint32_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
@@ -406,7 +406,7 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint64_t(TLIBC_ABSTRACT_READER *super, uint64_t *val)
+TLIBC_ERROR_CODE tlibc_compact_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val)
 {
 	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
