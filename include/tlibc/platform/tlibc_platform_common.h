@@ -1,6 +1,8 @@
 #ifndef _H_TLIBC_PLATFORM_COMMON
 #define _H_TLIBC_PLATFORM_COMMON
 
+#include <stdint.h>
+
 #ifndef NULL
 #define NULL				0
 #endif
@@ -57,5 +59,38 @@
 #define TLIBC_CONTAINER_OF(ptr, type, member) ((type *)((size_t)ptr - TLIBC_OFFSET_OF(type, member)))
 
 #define TLIBC_MAX_PATH_LENGTH 1024
+
+
+
+typedef enum _tlibc_bind_type_e
+{
+	e_tlibc_bind_int8 = 0,
+	e_tlibc_bind_int16 = 1,
+	e_tlibc_bind_int32 = 2,
+	e_tlibc_bind_int64 = 3,
+
+	e_tlibc_bind_uint8 = 4,
+	e_tlibc_bind_uint16 = 5,
+	e_tlibc_bind_uint32 = 6,
+	e_tlibc_bind_uint64 = 7,
+
+	e_tlibc_bind_double = 8,
+	e_tlibc_bind_char = 9,
+	e_tlibc_bind_string = 10,
+}tlibc_bind_type_e;
+
+typedef struct _tlibc_bind_const_s
+{
+	tlibc_bind_type_e type;
+	const char *buff;
+	uint32_t buff_size;//只有string类型用到了这一项
+}tlibc_bind_const_s;
+
+typedef struct _tlibc_bind_s
+{
+	tlibc_bind_type_e type;
+	char *buff;
+	uint32_t buff_size;//只有string类型用到了这一项
+}tlibc_bind_s;
 
 #endif
