@@ -10,8 +10,7 @@
 #include <errno.h>
 
 
-
-void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysql_field_vec, uint32_t mysql_field_vec_num)
+void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const char **fields, uint32_t fields_num)
 {
 	size_t i;
 
@@ -39,23 +38,20 @@ void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysq
 
 	self->read_enum_name_once = FALSE;
 	self->super.enable_name = TRUE;
-	self->mysql_field_vec = mysql_field_vec;
-	self->mysql_field_vec_num = mysql_field_vec_num;
+	self->fields_num = fields_num;
 	tlibc_hash_init(&self->name2field, self->hash_bucket, TLIBC_MYSQL_HASH_BUCKET);
-	for(i = 0; i < self->mysql_field_vec_num; ++i)
+	for(i = 0; i < fields_num; ++i)
 	{
-		self->field_vec[i].myfield = &self->mysql_field_vec[i];
-		tlibc_hash_insert(&self->name2field, self->mysql_field_vec[i].name, self->mysql_field_vec[i].name_length
-			, &self->field_vec[i].name2field);
+		self->fields[i].index = i;
+		tlibc_hash_insert(&self->name2field, fields[i], strlen(fields[i])
+			, &self->fields[i].name2field);
 	}
-	self->cur_myfield = NULL;
 }
-
-void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, MYSQL_ROW row
-										  , const unsigned long *length_vec)
-{
+void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, const char * const*row, const size_t *lengths)
+{	
 	self->row = row;
-	self->length_vec = length_vec;
+	self->lengths = lengths;
+
 	self->super.name[0] = 0;
 	self->super.name_ptr = self->super.name;
 }
@@ -65,9 +61,7 @@ TLIBC_ERROR_CODE tlibc_mysql_read_field_begin(TLIBC_ABSTRACT_READER *super, cons
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_mysql_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_mysql_reader_t, super);
 	const tlibc_hash_head_t* h = NULL;
-	tlibc_mysql_field_t *field = NULL;
-	size_t				idx;
-
+	tlibc_mysql_field_name_t *field = NULL;
 
 	if(super->name_ptr <= super->name)
 	{
@@ -79,21 +73,13 @@ TLIBC_ERROR_CODE tlibc_mysql_read_field_begin(TLIBC_ABSTRACT_READER *super, cons
 	if(h == NULL)
 	{
 		ret = E_TLIBC_IGNORE;
-		self->cur_myfield = NULL;
+		self->cur_col = NULL;
 		goto done;
 	}
-	field = TLIBC_CONTAINER_OF(h, tlibc_mysql_field_t, name2field);
+	field = TLIBC_CONTAINER_OF(h, tlibc_mysql_field_name_t, name2field);
 
-	self->cur_myfield = field->myfield;
-	idx = field - self->field_vec;
-	if(idx >= self->mysql_field_vec_num)
-	{
-		ret = E_TLIBC_OUT_OF_MEMORY;
-		goto done;
-	}
-
-	self->cur_col = self->row[field - self->field_vec];
-	self->cur_col_length = self->length_vec[field - self->field_vec];
+	self->cur_col_size = self->lengths[field->index];
+	self->cur_col = self->row[field->index];
 	
 done:
 	return ret;
@@ -119,12 +105,6 @@ TLIBC_ERROR_CODE tlibc_mysql_read_double(TLIBC_ABSTRACT_READER *super, double *v
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_mysql_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_mysql_reader_t, super);
-
-	if(self->cur_col == NULL)
-	{
-		ret = E_TLIBC_NOT_FOUND;
-		goto done;
-	}
 
 	errno = 0;
 	*val = strtod(self->cur_col, NULL);
@@ -277,11 +257,6 @@ TLIBC_ERROR_CODE tlibc_mysql_read_char(TLIBC_ABSTRACT_READER *super, char *val)
 		goto done;
 	}
 
-	if(self->cur_col_length <= 0)
-	{
-		ret = E_TLIBC_OUT_OF_MEMORY;
-		goto done;
-	}
 	*val = *self->cur_col;
 	return E_TLIBC_NOERROR;
 done:
@@ -298,13 +273,14 @@ TLIBC_ERROR_CODE tlibc_mysql_read_string(TLIBC_ABSTRACT_READER *super, char *str
 		goto done;
 	}
 
-	if(self->cur_col_length >= str_len)
+	if(self->cur_col_size >= str_len)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
 		goto done;
 	}
-	memcpy(str, self->cur_col, self->cur_col_length);
-	str[self->cur_col_length] = 0;
+
+	memcpy(str, self->cur_col, self->cur_col_size);
+	str[self->cur_col_size] = 0;
 	return E_TLIBC_NOERROR;
 done:
 	return ret;

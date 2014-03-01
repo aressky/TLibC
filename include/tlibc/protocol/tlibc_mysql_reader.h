@@ -1,8 +1,6 @@
 #ifndef _H_TLIBC_MYSQL_READER
 #define _H_TLIBC_MYSQL_READER
 
-#include "mysql.h"
-
 #include "tlibc/platform/tlibc_platform.h"
 #include "tlibc/protocol/tlibc_abstract_reader.h"
 #include "tlibc/core/tlibc_error_code.h"
@@ -12,34 +10,34 @@
 typedef struct _tlibc_mysql_field_t
 {
 	tlibc_hash_head_t		name2field;
-	const MYSQL_FIELD		*myfield;
-}tlibc_mysql_field_t;
+	size_t					index;
+}tlibc_mysql_field_name_t;
 
 #define TLIBC_MYSQL_FIELD_VEC_NUM 65536
 #define TLIBC_MYSQL_HASH_BUCKET 65536
 typedef struct _tlibc_mysql_reader_t
 {
-	TLIBC_ABSTRACT_READER	super;
-	const MYSQL_FIELD		*mysql_field_vec;
-	uint32_t				mysql_field_vec_num;
-	const MYSQL_FIELD		*cur_myfield;
-	char*					cur_col;
-	unsigned long			cur_col_length;
+	TLIBC_ABSTRACT_READER		super;
+	
+	const char					*cur_col;
+	size_t						cur_col_size;
 
-	tlibc_hash_bucket_t		hash_bucket[TLIBC_MYSQL_HASH_BUCKET];
-	tlibc_hash_t			name2field;
+	tlibc_mysql_field_name_t	fields[TLIBC_MYSQL_FIELD_VEC_NUM];
+	uint32_t					fields_num;
+	
 
+	tlibc_hash_bucket_t			hash_bucket[TLIBC_MYSQL_HASH_BUCKET];
+	tlibc_hash_t				name2field;
 
-	tlibc_mysql_field_t		field_vec[TLIBC_MYSQL_FIELD_VEC_NUM];
-	MYSQL_ROW				row;
-	const unsigned long		*length_vec;
-	int						read_enum_name_once;
+	const char * const*			row;
+	const size_t				*lengths;
+
+	int							read_enum_name_once;
 }tlibc_mysql_reader_t;
 
-void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const MYSQL_FIELD *mysql_field_vec, uint32_t mysql_field_vec_num);
+void tlibc_mysql_reader_init(tlibc_mysql_reader_t *self, const char **fields, uint32_t fields_num);
 
-void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, MYSQL_ROW row
-										  , const unsigned long *length_vec);
+void tlibc_mysql_reader_fetch(tlibc_mysql_reader_t *self, const char * const* row, const size_t *lengths);
 
 
  TLIBC_ERROR_CODE tlibc_mysql_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);

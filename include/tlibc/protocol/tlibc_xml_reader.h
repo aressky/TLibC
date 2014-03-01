@@ -5,8 +5,6 @@
 #include "tlibc/protocol/tlibc_abstract_reader.h"
 #include "tlibc/core/tlibc_error_code.h"
 
-#include "tlibc/tdata/tdata_types.h"
-
 typedef struct _TLIBC_XML_READER_YYLTYPE
 {
 	char file_name[TLIBC_MAX_PATH_LENGTH];
@@ -34,7 +32,7 @@ struct _TLIBC_XML_READER_SCANNER_CONTEXT
 
 	TLIBC_XML_READER_YYLTYPE yylloc;
 
-	char tag_name[TDATA_MAX_LENGTH_OF_IDENTIFIER];
+	char tag_name[TLIBC_MAX_LENGTH_OF_IDENTIFIER];
 	const char *content_begin;
 
 	void *filecontent_ptr;

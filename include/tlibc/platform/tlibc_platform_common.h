@@ -49,6 +49,7 @@
 #define TLIBC_LITTLE_ENDIAN (0x34)
 #define TLIBC_BIG_ENDIAN (0x12)
 
+#define TLIBC_MAX_LENGTH_OF_IDENTIFIER 255
 
 
 #define TLIBC_OFFSET_OF(type, member) ((size_t) &((type *)0)->member)

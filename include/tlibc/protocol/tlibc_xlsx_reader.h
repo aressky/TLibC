@@ -5,7 +5,6 @@
 #include "tlibc/protocol/tlibc_abstract_reader.h"
 #include "tlibc/core/tlibc_error_code.h"
 #include "tlibc/core/tlibc_unzip.h"
-#include "tlibc/tdata/tdata_types.h"
 #include "tlibc/core/tlibc_hash.h"
 
 typedef struct _tlibc_xlsx_reader_scanner_t
