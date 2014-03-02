@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 
-void tlibc_bind_writer_init(tlibc_bind_writer_t *self, tlibc_bind_const_s *bind_vec, uint32_t bind_vec_num)
+void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num)
 {
 	tlibc_abstract_writer_init(&self->super);
 
@@ -54,8 +54,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_int8;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_TINY;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -73,8 +73,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_int16(TLIBC_ABSTRACT_WRITER *super, const int1
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_int16;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_SHORT;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -98,8 +98,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_int32(TLIBC_ABSTRACT_WRITER *super, const int3
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_int32;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_LONG;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -117,8 +117,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_int64(TLIBC_ABSTRACT_WRITER *super, const int6
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_int64;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_LONGLONG;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -137,8 +137,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_uint8;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_TINY;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -156,8 +156,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uin
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_uint16;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_SHORT;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -175,8 +175,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uin
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_uint32;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_LONG;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -194,8 +194,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uin
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_uint64;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_LONGLONG;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -203,24 +203,6 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val)
-{
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
-	if(self->idx >= self->bind_vec_num)
-	{
-		ret = E_TLIBC_OUT_OF_MEMORY;
-		goto done;
-	}
-
-	self->bind_vec[self->idx].type = e_tlibc_bind_char;
-	self->bind_vec[self->idx].buff = (const char*)val;
-	++(self->idx);
-
-	return E_TLIBC_NOERROR;
-done:
-	return ret;
-}
 
 TLIBC_ERROR_CODE tlibc_bind_write_double(TLIBC_ABSTRACT_WRITER *super, const double *val)
 {
@@ -232,8 +214,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_double(TLIBC_ABSTRACT_WRITER *super, const dou
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_double;
-	self->bind_vec[self->idx].buff = (const char*)val;
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_DOUBLE;
+	self->bind_vec[self->idx].buffer = (void*)val;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -241,7 +223,16 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str)
+TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val)
+{
+	char _val[2];
+	_val[0] = *val;
+	_val[1] = 0;
+	return tlibc_bind_write_string(super, _val, 1);
+}
+
+
+TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
@@ -251,9 +242,18 @@ TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const cha
 		goto done;
 	}
 
-	self->bind_vec[self->idx].type = e_tlibc_bind_string;
-	self->bind_vec[self->idx].buff = (const char*)str;
-	self->bind_vec[self->idx].buff_size = strlen(str);
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_STRING;
+	self->bind_vec[self->idx].buffer = (void*)str;
+	self->bind_vec[self->idx].buffer_length = str_length;
+	if(self->bind_vec[self->idx].length)
+	{
+		*self->bind_vec[self->idx].length = strlen(str);
+	}
+	else
+	{
+		self->bind_vec[self->idx].length_value = strlen(str);
+	}
+
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;

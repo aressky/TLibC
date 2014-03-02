@@ -35,6 +35,6 @@ typedef struct _TLIBC_BINARY_WRITER
 
  TLIBC_ERROR_CODE tlibc_binary_write_double(TLIBC_ABSTRACT_WRITER *super, const double *val);
 
- TLIBC_ERROR_CODE tlibc_binary_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str);
+ TLIBC_ERROR_CODE tlibc_binary_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length);
 
 #endif

@@ -10,7 +10,7 @@
 #include <errno.h>
 
 
-void tlibc_bind_reader_init(tlibc_bind_reader_t *self, tlibc_bind_s *bind_vec, uint32_t bind_vec_num)
+void tlibc_bind_reader_init(tlibc_bind_reader_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num)
 {
 	tlibc_abstract_reader_init(&self->super);
 
@@ -56,13 +56,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val)
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_int8)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_TINY)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(int8_t*)self->bind_vec[self->idx].buff;
+	*val = *(int8_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -80,13 +80,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *va
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_int16)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_SHORT)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(int16_t*)self->bind_vec[self->idx].buff;
+	*val = *(int16_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -111,13 +111,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *va
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_int32)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_LONG)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(int32_t*)self->bind_vec[self->idx].buff;
+	*val = *(int32_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -135,13 +135,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *va
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_int64)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_LONGLONG)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(int64_t*)self->bind_vec[self->idx].buff;
+	*val = *(int64_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -159,13 +159,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *va
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_uint8)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_TINY)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(uint8_t*)self->bind_vec[self->idx].buff;
+	*val = *(uint8_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -183,13 +183,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_uint16)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_SHORT)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(uint16_t*)self->bind_vec[self->idx].buff;
+	*val = *(uint16_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -207,13 +207,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_uint32)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_LONG)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(uint32_t*)self->bind_vec[self->idx].buff;
+	*val = *(uint32_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -231,13 +231,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_uint64)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_LONGLONG)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(uint64_t*)self->bind_vec[self->idx].buff;
+	*val = *(uint64_t*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -256,13 +256,13 @@ TLIBC_ERROR_CODE tlibc_bind_read_double(TLIBC_ABSTRACT_READER *super, double *va
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_double)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_DOUBLE)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
 
-	*val = *(double*)self->bind_vec[self->idx].buff;
+	*val = *(double*)self->bind_vec[self->idx].buffer;
 	++(self->idx);
 
 	return E_TLIBC_NOERROR;
@@ -272,50 +272,42 @@ done:
 
 TLIBC_ERROR_CODE tlibc_bind_read_char(TLIBC_ABSTRACT_READER *super, char *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_reader_t, super);
-	if(self->idx >= self->bind_vec_num)
-	{
-		ret = E_TLIBC_OUT_OF_MEMORY;
-		goto done;
-	}
-
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_char)
-	{
-		ret = E_TLIBC_MISMATCH;
-		goto done;
-	}
-
-	*val = *(char*)self->bind_vec[self->idx].buff;
-	++(self->idx);
-
-	return E_TLIBC_NOERROR;
-done:
-	return ret;
+	return tlibc_bind_read_string(super, val , 1);
 }
 
 TLIBC_ERROR_CODE tlibc_bind_read_string(TLIBC_ABSTRACT_READER *super, char *str, uint32_t str_len)
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_bind_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_reader_t, super);
+	size_t len;
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
 		goto done;
 	}
 
-	if(self->bind_vec[self->idx].type != e_tlibc_bind_string)
+	if(self->bind_vec[self->idx].buffer_type != MYSQL_TYPE_STRING)
 	{
 		ret = E_TLIBC_MISMATCH;
 		goto done;
 	}
-	if(self->bind_vec[self->idx].buff_size <= str_len)
+
+	if(self->bind_vec[self->idx].length)
+	{
+		len = *self->bind_vec[self->idx].length;
+	}
+	else
+	{
+		len = self->bind_vec[self->idx].length_value;
+	}
+
+	if(len + 1 <= str_len)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
 		goto done;
 	}
-	memcpy(str, self->bind_vec[self->idx].buff, self->bind_vec[self->idx].buff_size);
-	str[self->bind_vec[self->idx].buff_size] = 0;
+	memcpy(str, self->bind_vec[self->idx].buffer, len);
+	str[len] = 0;
 
 	return E_TLIBC_NOERROR;
 done:

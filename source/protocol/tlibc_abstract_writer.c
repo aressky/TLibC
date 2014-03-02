@@ -229,11 +229,11 @@ TLIBC_ERROR_CODE tlibc_write_double(TLIBC_ABSTRACT_WRITER *self, const double *v
 	return self->write_double(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_write_string(TLIBC_ABSTRACT_WRITER *self, const char* str)
+TLIBC_ERROR_CODE tlibc_write_string(TLIBC_ABSTRACT_WRITER *self, const char* str, uint32_t str_length)
 {
 	if(self->write_string == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_string(self, str);
+	return self->write_string(self, str, str_length);
 }

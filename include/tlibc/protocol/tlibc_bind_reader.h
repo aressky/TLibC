@@ -5,16 +5,17 @@
 #include "tlibc/protocol/tlibc_abstract_reader.h"
 #include "tlibc/core/tlibc_error_code.h"
 
+#include "mysql.h"
 typedef struct _tlibc_bind_reader_t
 {
 	TLIBC_ABSTRACT_READER		super;
-	tlibc_bind_s				*bind_vec;
+	MYSQL_BIND					*bind_vec;
 	uint32_t					bind_vec_num;
 	uint32_t					idx;
 	int							read_enum_name;
 }tlibc_bind_reader_t;
 
-void tlibc_bind_reader_init(tlibc_bind_reader_t *self, tlibc_bind_s *bind_vec, uint32_t bind_vec_num);
+void tlibc_bind_reader_init(tlibc_bind_reader_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num);
 
 TLIBC_ERROR_CODE tlibc_bind_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name);
 

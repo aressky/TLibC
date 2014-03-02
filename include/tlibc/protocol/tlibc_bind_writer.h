@@ -8,16 +8,19 @@
 #include <stdio.h>
 #include <stdint.h>
 
+
+#include "mysql.h"
+
 typedef struct _tlibc_bind_writer_t
 {
 	TLIBC_ABSTRACT_WRITER super;
-	tlibc_bind_const_s *bind_vec;
+	MYSQL_BIND *bind_vec;
 	uint32_t bind_vec_num;
 	uint32_t idx;
 	int read_enum_name;
 }tlibc_bind_writer_t;
 
-void tlibc_bind_writer_init(tlibc_bind_writer_t *self, tlibc_bind_const_s *bind_vec, uint32_t bind_vec_num);
+void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num);
 
 TLIBC_ERROR_CODE tlibc_bind_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const char *enum_name);
 
@@ -41,6 +44,6 @@ TLIBC_ERROR_CODE tlibc_bind_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const
 
  TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val);
 
- TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str);
+ TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length);
 
 #endif

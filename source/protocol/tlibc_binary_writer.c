@@ -190,11 +190,12 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_binary_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str)
+TLIBC_ERROR_CODE tlibc_binary_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length)
 {
 	TLIBC_BINARY_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_BINARY_WRITER, super);
 	uint32_t str_len = 0;
 	TLIBC_ERROR_CODE ret= E_TLIBC_NOERROR;
+	TLIBC_UNUSED(str_length);
 
 	for(; self->offset < self->size; )
 	{

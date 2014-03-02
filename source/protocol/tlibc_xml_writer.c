@@ -306,10 +306,12 @@ static void write_char(FILE* fout, char c)
 	}
 }
 
-TLIBC_ERROR_CODE tlibc_xml_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str)
+TLIBC_ERROR_CODE tlibc_xml_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length)
 {
 	TLIBC_XML_WRITER *self = TLIBC_CONTAINER_OF(super, TLIBC_XML_WRITER, super);
 	const char *i;
+	TLIBC_UNUSED(str_length);
+
 	self->need_tab = FALSE;
 	for(i = str; *i ; ++i)
 	{
