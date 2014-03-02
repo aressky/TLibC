@@ -228,7 +228,7 @@ TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char 
 	char _val[2];
 	_val[0] = *val;
 	_val[1] = 0;
-	return tlibc_bind_write_string(super, _val, 1);
+	return tlibc_bind_write_string(super, _val, sizeof(_val));
 }
 
 
@@ -236,6 +236,8 @@ TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const cha
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	TLIBC_UNUSED(str_length);
+
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -244,15 +246,7 @@ TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const cha
 
 	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_STRING;
 	self->bind_vec[self->idx].buffer = (void*)str;
-	self->bind_vec[self->idx].buffer_length = str_length;
-	if(self->bind_vec[self->idx].length)
-	{
-		*self->bind_vec[self->idx].length = strlen(str);
-	}
-	else
-	{
-		self->bind_vec[self->idx].length_value = strlen(str);
-	}
+	self->bind_vec[self->idx].buffer_length = strlen(str);;
 
 	++(self->idx);
 
