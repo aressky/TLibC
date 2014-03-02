@@ -12,12 +12,9 @@ typedef struct _tlibc_bind_reader_t
 	MYSQL_BIND					*bind_vec;
 	uint32_t					bind_vec_num;
 	uint32_t					idx;
-	int							read_enum_name;
 }tlibc_bind_reader_t;
 
 void tlibc_bind_reader_init(tlibc_bind_reader_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num);
-
-TLIBC_ERROR_CODE tlibc_bind_read_enum_begin(TLIBC_ABSTRACT_READER *super, const char *enum_name);
 
  TLIBC_ERROR_CODE tlibc_bind_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val);
 

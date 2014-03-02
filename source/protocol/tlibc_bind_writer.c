@@ -13,8 +13,6 @@ void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uin
 {
 	tlibc_abstract_writer_init(&self->super);
 
-	self->super.write_enum_begin = tlibc_bind_write_enum_begin;
-
 	self->super.write_int8 = tlibc_bind_write_int8;
 	self->super.write_int16 = tlibc_bind_write_int16;
 	self->super.write_int32 = tlibc_bind_write_int32;
@@ -31,17 +29,6 @@ void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uin
 	self->bind_vec = bind_vec;
 	self->bind_vec_num = bind_vec_num;
 	self->idx = 0;
-	self->read_enum_name = FALSE;
-}
-
-TLIBC_ERROR_CODE tlibc_bind_write_enum_begin(TLIBC_ABSTRACT_WRITER *super, const char *enum_name)
-{
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
-	TLIBC_UNUSED(enum_name);
-
-	self->read_enum_name = TRUE;
-
-	return E_TLIBC_NOERROR;
 }
 
 TLIBC_ERROR_CODE tlibc_bind_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
@@ -86,11 +73,6 @@ TLIBC_ERROR_CODE tlibc_bind_write_int32(TLIBC_ABSTRACT_WRITER *super, const int3
 {
 	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
 	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
-	if(self->read_enum_name)
-	{
-		ret = E_TLIBC_PLEASE_READ_ENUM_NAME;
-		goto done;
-	}
 
 	if(self->idx >= self->bind_vec_num)
 	{
@@ -225,10 +207,24 @@ done:
 
 TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val)
 {
-	char _val[2];
-	_val[0] = *val;
-	_val[1] = 0;
-	return tlibc_bind_write_string(super, _val, sizeof(_val));
+	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+
+	if(self->idx >= self->bind_vec_num)
+	{
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
+	}
+
+	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_STRING;
+	self->bind_vec[self->idx].buffer = (void*)val;
+	self->bind_vec[self->idx].buffer_length = 1;
+
+	++(self->idx);
+
+	return E_TLIBC_NOERROR;
+done:
+	return ret;
 }
 
 
@@ -246,7 +242,7 @@ TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const cha
 
 	self->bind_vec[self->idx].buffer_type = MYSQL_TYPE_STRING;
 	self->bind_vec[self->idx].buffer = (void*)str;
-	self->bind_vec[self->idx].buffer_length = strlen(str);;
+	self->bind_vec[self->idx].buffer_length = str_length;
 
 	++(self->idx);
 
