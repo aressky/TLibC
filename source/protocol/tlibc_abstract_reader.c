@@ -3,6 +3,7 @@
 #include "tlibc/core/tlibc_error_code.h"
 
 #include <stdint.h>
+#include <stdio.h>
 
 void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 {
