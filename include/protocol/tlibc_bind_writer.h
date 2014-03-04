@@ -1,9 +1,9 @@
 #ifndef _H_TLIBC_BIND_WRITER
 #define _H_TLIBC_BIND_WRITER
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/protocol/tlibc_abstract_writer.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "platform/tlibc_platform.h"
+#include "protocol/tlibc_abstract_writer.h"
+#include "core/tlibc_error_code.h"
 
 #include <stdio.h>
 #include <stdint.h>

@@ -1,7 +1,7 @@
 #ifndef _H_TLIBC_UTIL
 #define _H_TLIBC_UTIL
 
-#include "tlibc/platform/tlibc_platform.h"
+#include "platform/tlibc_platform.h"
 
 #include <stdint.h>
 

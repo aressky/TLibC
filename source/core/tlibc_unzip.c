@@ -1,7 +1,7 @@
-#include "tlibc/core/tlibc_unzip.h"
+#include "core/tlibc_unzip.h"
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/core/tlibc_util.h"
+#include "platform/tlibc_platform.h"
+#include "core/tlibc_util.h"
 
 #include "zlib.h"
 

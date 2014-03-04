@@ -1,8 +1,8 @@
 #ifndef _H_TLIBC_MEMPOOL_H
 #define _H_TLIBC_MEMPOOL_H
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/core/tlibc_list.h"
+#include "platform/tlibc_platform.h"
+#include "core/tlibc_list.h"
 #include "tlibc_error_code.h"
 typedef struct _tlibc_mempool_entry_t
 {

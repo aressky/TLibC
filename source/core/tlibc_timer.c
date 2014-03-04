@@ -1,7 +1,7 @@
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/core/tlibc_timer.h"
-#include "tlibc/core/tlibc_list.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "platform/tlibc_platform.h"
+#include "core/tlibc_timer.h"
+#include "core/tlibc_list.h"
+#include "core/tlibc_error_code.h"
 
 #include <assert.h>
 

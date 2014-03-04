@@ -1,11 +1,11 @@
 #ifndef _H_TLIBC_XLSX_READER
 #define _H_TLIBC_XLSX_READER
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/protocol/tlibc_abstract_reader.h"
-#include "tlibc/core/tlibc_error_code.h"
-#include "tlibc/core/tlibc_unzip.h"
-#include "tlibc/core/tlibc_hash.h"
+#include "platform/tlibc_platform.h"
+#include "protocol/tlibc_abstract_reader.h"
+#include "core/tlibc_error_code.h"
+#include "core/tlibc_unzip.h"
+#include "core/tlibc_hash.h"
 
 typedef struct _tlibc_xlsx_reader_scanner_t
 {

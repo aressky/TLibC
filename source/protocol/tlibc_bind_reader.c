@@ -1,7 +1,7 @@
-#include "tlibc/protocol/tlibc_bind_reader.h"
-#include "tlibc/core/tlibc_util.h"
-#include "tlibc/protocol/tlibc_abstract_reader.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "protocol/tlibc_bind_reader.h"
+#include "core/tlibc_util.h"
+#include "protocol/tlibc_abstract_reader.h"
+#include "core/tlibc_error_code.h"
 
 
 #include <string.h>

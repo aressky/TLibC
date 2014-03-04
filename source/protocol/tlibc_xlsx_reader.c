@@ -1,8 +1,8 @@
-#include "tlibc/protocol/tlibc_xlsx_reader.h"
-#include "tlibc/core/tlibc_util.h"
-#include "tlibc/protocol/tlibc_abstract_reader.h"
-#include "tlibc/core/tlibc_error_code.h"
-#include "tlibc/protocol/tlibc_xml_reader.h"
+#include "protocol/tlibc_xlsx_reader.h"
+#include "core/tlibc_util.h"
+#include "protocol/tlibc_abstract_reader.h"
+#include "core/tlibc_error_code.h"
+#include "protocol/tlibc_xml_reader.h"
 
 #include <string.h>
 #include <assert.h>

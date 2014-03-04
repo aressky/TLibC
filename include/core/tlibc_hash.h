@@ -1,9 +1,9 @@
 #ifndef _H_TLIBC_HASH
 #define _H_TLIBC_HASH
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/core/tlibc_list.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "platform/tlibc_platform.h"
+#include "core/tlibc_list.h"
+#include "core/tlibc_error_code.h"
 #include <stdint.h>
 typedef struct _tlibc_hash_head_t tlibc_hash_head_t;
 struct _tlibc_hash_head_t

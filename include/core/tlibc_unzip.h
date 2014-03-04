@@ -1,7 +1,7 @@
 #ifndef _H_TLIBC_UNZIP_H
 #define _H_TLIBC_UNZIP_H
 
-#include "tlibc/core/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
 
 #include "zlib.h"
 #include <stdint.h>

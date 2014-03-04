@@ -1,6 +1,6 @@
-#include "tlibc/protocol/tlibc_abstract_reader.h"
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "protocol/tlibc_abstract_reader.h"
+#include "platform/tlibc_platform.h"
+#include "core/tlibc_error_code.h"
 
 #include <stdint.h>
 #include <stdio.h>

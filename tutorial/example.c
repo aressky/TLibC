@@ -1,8 +1,8 @@
-#include "tlibc/core/tlibc_hash.h"
-#include "tlibc/core/tlibc_timer.h"
-#include "tlibc/core/tlibc_mempool.h"
-#include "tlibc/core/tlibc_unzip.h"
-#include "tlibc/core/tlibc_util.h"
+#include "core/tlibc_hash.h"
+#include "core/tlibc_timer.h"
+#include "core/tlibc_mempool.h"
+#include "core/tlibc_unzip.h"
+#include "core/tlibc_util.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -178,7 +178,11 @@ void test_timer()
 			++count;
 			if(count > 50)
 			{
+#ifdef _WIN32
 				Sleep(1000);
+#else
+				sleep(1);
+#endif
 			}
 		}
 	}

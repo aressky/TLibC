@@ -2,7 +2,7 @@
 #define _H_TLIBC_ABSTRACT_READR
 
 #include <stdint.h>
-#include "tlibc/core/tlibc_error_code.h"
+#include "core/tlibc_error_code.h"
 
 #define TLIBC_READER_NAME_LENGTH 65536
 

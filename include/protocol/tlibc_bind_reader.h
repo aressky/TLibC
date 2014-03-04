@@ -1,9 +1,9 @@
 #ifndef _H_TLIBC_BIND_READER
 #define _H_TLIBC_BIND_READER
 
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/protocol/tlibc_abstract_reader.h"
-#include "tlibc/core/tlibc_error_code.h"
+#include "platform/tlibc_platform.h"
+#include "protocol/tlibc_abstract_reader.h"
+#include "core/tlibc_error_code.h"
 
 #include "mysql.h"
 typedef struct _tlibc_bind_reader_t

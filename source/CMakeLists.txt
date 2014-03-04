@@ -1,9 +1,9 @@
 set(GEN_PATH ${SOURCE}/gen)
 
-FILE(GLOB_RECURSE PLATFORM_FILE_LIST ${INCLUDE}/tlibc/platform/*.h ${SOURCE}/platform/*.c)
+FILE(GLOB_RECURSE PLATFORM_FILE_LIST ${INCLUDE}/platform/*.h ${SOURCE}/platform/*.c)
 source_group("platform" FILES ${PLATFORM_FILE_LIST})
 
-FILE(GLOB_RECURSE CORE_FILE_LIST ${INCLUDE}/tlibc/core/*.h ${SOURCE}/core/*.c ${SOURCE}/core/*.h)
+FILE(GLOB_RECURSE CORE_FILE_LIST ${INCLUDE}/core/*.h ${SOURCE}/core/*.c ${SOURCE}/core/*.h)
 source_group("core" FILES ${CORE_FILE_LIST})
 SET(FINAL_TARGET_FILE
 	${PROTOCOL_FILE_LIST} ${PLATFORM_FILE_LIST} ${CORE_FILE_LIST} 
@@ -11,22 +11,22 @@ SET(FINAL_TARGET_FILE
 )
 
 set(PROTOCOL_FILE_LIST
-	${INCLUDE}/tlibc/protocol/tlibc_abstract_reader.h
+	${INCLUDE}/protocol/tlibc_abstract_reader.h
 	${SOURCE}/protocol/tlibc_abstract_reader.c
 
-	${INCLUDE}/tlibc/protocol/tlibc_abstract_writer.h
+	${INCLUDE}/protocol/tlibc_abstract_writer.h
 	${SOURCE}/protocol/tlibc_abstract_writer.c
 
-	${INCLUDE}/tlibc/protocol/tlibc_binary_reader.h
+	${INCLUDE}/protocol/tlibc_binary_reader.h
 	${SOURCE}/protocol/tlibc_binary_reader.c
 
-	${INCLUDE}/tlibc/protocol/tlibc_binary_writer.h
+	${INCLUDE}/protocol/tlibc_binary_writer.h
 	${SOURCE}/protocol/tlibc_binary_writer.c
 
-	${INCLUDE}/tlibc/protocol/tlibc_compact_reader.h
+	${INCLUDE}/protocol/tlibc_compact_reader.h
 	${SOURCE}/protocol/tlibc_compact_reader.c
 
-	${INCLUDE}/tlibc/protocol/tlibc_compact_writer.h
+	${INCLUDE}/protocol/tlibc_compact_writer.h
 	${SOURCE}/protocol/tlibc_compact_writer.c
 )
 source_group("protocol" FILES ${PROTOCOL_FILE_LIST})
@@ -94,7 +94,7 @@ endif(ZLIB_FOUND)
 
 if(MYSQL_FOUND)
 	set(MYSQL_FILE_LIST 
-		${INCLUDE}/tlibc/protocol/tlibc_bind_reader.h
+		${INCLUDE}/protocol/tlibc_bind_reader.h
 		${SOURCE}/protocol/tlibc_bind_reader.c
 	)
 	source_group("protocol" FILES ${MYSQL_FILE_LIST})

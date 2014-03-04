@@ -1,7 +1,7 @@
 #ifndef _H_TLIBC_XML_READER_SCANNER_H
 #define _H_TLIBC_XML_READER_SCANNER_H
 
-#include "tlibc/protocol/tlibc_xml_reader.h"
+#include "protocol/tlibc_xml_reader.h"
 
 #define YYSTYPE TLIBC_XML_READER_SCANNER_CONTEXT
 #define YYLTYPE_IS_DECLARED
