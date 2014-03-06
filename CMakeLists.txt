@@ -1,11 +1,16 @@
-project(TLibC)
+SET(PNAME "TLibC")
+project(${PNAME})
 
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.6)
 
-SET(CMAKE_MODULE_PATH "${TLibC_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
+SET(CMAKE_MODULE_PATH "${${PNAME}_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
 
-IF (CMAKE_BUILD_TYPE STREQUAL "")
+OPTION(WITH_DEBUG "Use debug" ON)
+
+IF (WITH_DEBUG)
     SET(CMAKE_BUILD_TYPE "Debug")
+ELSE()
+    SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 
 IF(WIN32)
@@ -17,13 +22,12 @@ ELSE()
 	SET(CMAKE_C_FLAGS_RELEASE "-O2 -Wall")
 ENDIF()
 
-set(DIR_HOME ${TLibC_SOURCE_DIR})
-set(BUILD_HOME ${TLibC_BINARY_DIR})
-
-set(INCLUDE  ${DIR_HOME}/include)
-set(SOURCE  ${DIR_HOME}/source)
+set(INCLUDE  ${${PNAME}_SOURCE_DIR}/include)
+set(SOURCE  ${${PNAME}_SOURCE_DIR}/source)
+set(BINARY  ${${PNAME}_BINARY_DIR})
 
 add_subdirectory(source)
+SET(CMAKE_INSTALL_DEFAULT_COMPONENT_NAME ${PNAME})
+
 install(DIRECTORY cmake DESTINATION ".")
 install(DIRECTORY include DESTINATION ".")
-install(FILES README.md DESTINATION ".")
