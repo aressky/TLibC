@@ -10,7 +10,7 @@ TLibC
 
 项目依赖
 ========
-	不需要任何的依赖库就可以进行编译安装。
+- 不需要任何的依赖库就可以进行编译安装。
 	开启读取Excel表格的功能， 需要安装zlib库。
 	开启读取mysql的功能， 需要安装mysql库。
 
@@ -18,7 +18,8 @@ TLibC
 安装方法
 ========
 - Windows:
-用[CMake](http://www.cmake.org/)生成VS工程文件
+
+	用[CMake](http://www.cmake.org/)生成VS工程文件
 
 		打开CMake界面。
 		在Where is the source code栏目里填入源代码所在的目录， 如"D:/TData"。
