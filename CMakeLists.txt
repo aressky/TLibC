@@ -1,4 +1,5 @@
 SET(PNAME "TLibC")
+SET(PONAME "tlibc")
 project(${PNAME})
 
 cmake_minimum_required(VERSION 2.6)
