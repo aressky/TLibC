@@ -1,6 +1,7 @@
 TLibC
 ======
 **C语言常用函数库**
+
 这个库只有非常少的依赖项， 但是提供了对很多种格式数据的处理功能， 并且有着极佳的性能。
 
 - platform 跨平台模块， 支持Linux,OS X。
@@ -26,30 +27,30 @@ TLibC
 		点击Generate生成VS工程文件。
 		在弹出的界面中， 选择需要生成的工程类型， 如选择Visual Studio 11， 点击Finish。
 
-INSTALL
+	INSTALL
 
-	打开解决方案Build名叫INSTALL的工程， 如果安装的目录是否需要管理员权限， 请点击右键选择用管理员方式启动VS。
+		打开解决方案Build名叫INSTALL的工程， 如果安装的目录是否需要管理员权限， 请点击右键选择用管理员方式启动VS。
 
--Linux:
+- Linux:
 
-建立编译所需的目录
+	建立编译所需的目录
 
-	mkdir build
+		mkdir build
 
-下载源代码
+	下载源代码
 
-	cd build
+		cd build
 
-生成Makefile
+	生成Makefile
 
-	cmake ../TData
+		cmake ../TData
 
-下面的我们已经很熟悉了:)
+	下面的我们已经很熟悉了:)
 
-	make
-	sodu make install
+		make
+		sodu make install
 	
 教学
 ====
 
-	请参考tutorial目录下面的例子
+	请参考tutorial目录下面的例子。
