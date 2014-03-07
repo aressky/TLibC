@@ -10,9 +10,8 @@ TLibC
 
 项目依赖
 ========
-- 不需要任何的依赖库就可以进行编译安装。
-	开启读取Excel表格的功能， 需要安装zlib库。
-	开启读取mysql的功能， 需要安装mysql库。
+- 开启读取Excel表格的功能， 需要安装zlib库。
+- 开启读取mysql的功能， 需要安装mysql库。
 
 
 安装方法
@@ -28,7 +27,7 @@ TLibC
 		点击Generate生成VS工程文件。
 		在弹出的界面中， 选择需要生成的工程类型， 如选择Visual Studio 11， 点击Finish。
 
-	INSTALL
+	安装
 
 		打开解决方案Build名叫INSTALL的工程， 如果安装的目录是否需要管理员权限， 请点击右键选择用管理员方式启动VS。
 
