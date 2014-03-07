@@ -27,8 +27,8 @@ set(INCLUDE  ${${PNAME}_SOURCE_DIR}/include)
 set(SOURCE  ${${PNAME}_SOURCE_DIR}/source)
 set(BINARY  ${${PNAME}_BINARY_DIR})
 
-find_package(ZLIB REQUIRED)
-find_package(MySQL REQUIRED)
+find_package(ZLIB)
+find_package(MySQL)
 
 add_subdirectory(source)
 
