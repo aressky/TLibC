@@ -41,8 +41,22 @@ if(WITH_RE2C)
 		COMMAND re2c -c -F -t${RE2C_XML_HEADER} -o${RE2C_XML_OUTPUTS} ${RE2C_XML_FILE}
 	)
 endif(WITH_RE2C)
-source_group("protocol" FILES ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS})
-list(APPEND FINAL_TARGET_FILE ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS})
+source_group("protocol" FILES ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS}
+	${INCLUDE}/protocol/tlibc_xml_reader.h
+	${SOURCE}/protocol/tlibc_xml_reader.c
+	${INCLUDE}/protocol/tlibc_xml_writer.h
+	${SOURCE}/protocol/tlibc_xml_writer.c
+	${SOURCE}/protocol/tlibc_xml_reader_scanner.h
+	${SOURCE}/protocol/tlibc_xml_reader_scanner.c
+	)
+list(APPEND FINAL_TARGET_FILE ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS}
+	${INCLUDE}/protocol/tlibc_xml_reader.h
+	${SOURCE}/protocol/tlibc_xml_reader.c
+	${INCLUDE}/protocol/tlibc_xml_writer.h
+	${SOURCE}/protocol/tlibc_xml_writer.c
+	${SOURCE}/protocol/tlibc_xml_reader_scanner.h
+	${SOURCE}/protocol/tlibc_xml_reader_scanner.c
+)
 
 
 if(ZLIB_FOUND)
@@ -80,12 +94,16 @@ if(ZLIB_FOUND)
 		${RE2C_XLSX_WORKBOOK_FILE} ${RE2C_XLSX_WORKBOOK_HEADER} ${RE2C_XLSX_WORKBOOK_OUTPUTS}
 		${RE2C_XLSX_WORKBOOK_RELS_FILE} ${RE2C_XLSX_WORKBOOK_RELS_HEADER} ${RE2C_XLSX_WORKBOOK_RELS_OUTPUTS}
 		${RE2C_XLSX_SHAREDSTRING_FILE} ${RE2C_XLSX_SHAREDSTRING_HEADER} ${RE2C_XLSX_SHAREDSTRING_OUTPUTS}
+		${INCLUDE}/protocol/tlibc_xlsx_reader.h
+		${SOURCE}/protocol/tlibc_xlsx_reader.c
 	)
 	list(APPEND FINAL_TARGET_FILE
 	${RE2C_XLSX_FILE} ${RE2C_XLSX_HEADER} ${RE2C_XLSX_OUTPUTS}
 	${RE2C_XLSX_WORKBOOK_FILE} ${RE2C_XLSX_WORKBOOK_HEADER} ${RE2C_XLSX_WORKBOOK_OUTPUTS}
 	${RE2C_XLSX_WORKBOOK_RELS_FILE} ${RE2C_XLSX_WORKBOOK_RELS_HEADER} ${RE2C_XLSX_WORKBOOK_RELS_OUTPUTS}
 	${RE2C_XLSX_SHAREDSTRING_FILE} ${RE2C_XLSX_SHAREDSTRING_HEADER} ${RE2C_XLSX_SHAREDSTRING_OUTPUTS}
+	${INCLUDE}/protocol/tlibc_xlsx_reader.h
+	${SOURCE}/protocol/tlibc_xlsx_reader.c
 	)
 else()
 	list(REMOVE_ITEM FINAL_TARGET_FILE ${SOURCE}/core/tlibc_unzip.c)
@@ -96,6 +114,8 @@ if(MYSQL_FOUND)
 	set(MYSQL_FILE_LIST 
 		${INCLUDE}/protocol/tlibc_bind_reader.h
 		${SOURCE}/protocol/tlibc_bind_reader.c
+		${INCLUDE}/protocol/tlibc_bind_writer.h
+		${SOURCE}/protocol/tlibc_bind_writer.c
 	)
 	source_group("protocol" FILES ${MYSQL_FILE_LIST})
 	INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIR})
