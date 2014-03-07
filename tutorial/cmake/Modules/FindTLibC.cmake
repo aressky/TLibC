@@ -13,7 +13,7 @@ endif(WIN32)
 if(WIN32)
 	find_library(TLIBC_LIBRARIES NAMES tlibc
 		PATHS 
-		$ENV{PROGRAMFILES}/lib
+		$ENV{PROGRAMFILES}/TLibC/lib
 	   )
 else()
 	find_library(TLIBC_LIBRARIES NAMES tlibc

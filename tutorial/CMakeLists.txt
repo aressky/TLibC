@@ -1,10 +1,11 @@
 PROJECT(Example)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.6)
+SET(CMAKE_MODULE_PATH "${Example_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
 find_package(ZLIB REQUIRED)
+find_package(TLibC REQUIRED)
 
 FILE(GLOB FILE_LIST *.h *.c)
 
-SET(CMAKE_MODULE_PATH "${Example_SOURCE_DIR}/cmake/Modules/;${CMAKE_MODULE_PATH}" )
 
 find_package(TLibC REQUIRED)
 
