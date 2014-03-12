@@ -881,7 +881,7 @@ TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32
     tlibc_unzip_read_info_s* pfile_in_zip_read_info;
     pfile_in_zip_read_info=&self->pfile_in_zip_read;
 
-    if ((pfile_in_zip_read_info->read_buffer == NULL))
+    if (pfile_in_zip_read_info->read_buffer == NULL)
 	{
         return E_TLIBC_ERROR;
 	}
