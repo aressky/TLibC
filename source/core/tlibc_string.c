@@ -5,34 +5,34 @@ const char *tstrerror(TLIBC_ERROR_CODE errno)
 	switch (errno)
 	{
 	case E_TLIBC_NOERROR:
-		return "Õı³£";
+		return "æ­£å¸¸";
 	case E_TLIBC_ERROR:
-		return "´íÎó";
+		return "é”™è¯¯";
 	case E_TLIBC_OUT_OF_MEMORY:
-		return "ÄÚ´æÒç³ö";
+		return "å†…å­˜æº¢å‡º";
 	case E_TLIBC_NOT_FOUND:
-		return "ÕÒ²»µ½";
+		return "æ‰¾ä¸åˆ°";
 	case E_TLIBC_SYNTAX:
-		return "Óï·¨´íÎó";
+		return "è¯­æ³•é”™è¯¯";
 	case E_TLIBC_MISMATCH:
-		return "²»Æ¥Åä";
+		return "ä¸åŒ¹é…";
 	case E_TLIBC_ERRNO:
 		return "errno";
 	case E_TLIBC_WOULD_BLOCK:
-		return "»á±»×èÈû";
+		return "ä¼šè¢«é˜»å¡";
 	case E_TLIBC_BAD_FILE:
-		return "´íÎóµÄÎÄ¼ş";
+		return "é”™è¯¯çš„æ–‡ä»¶";
 	case E_TLIBC_EOF:
-		return "ÎÄ¼ş½áÊø";
+		return "æ–‡ä»¶ç»“æŸ";
 	case E_TLIBC_EMPTY:
-		return "Ä¿±êÎª¿Õ";
+		return "ç›®æ ‡ä¸ºç©º";
 	case E_TLIBC_INTEGER_OVERFLOW:
-		return "ÕûÊıÒç³ö";
+		return "æ•´æ•°æº¢å‡º";
 	case E_TLIBC_IGNORE:
-		return "ºöÂÔ";
+		return "å¿½ç•¥";
 	case E_TLIBC_PLEASE_READ_ENUM_NAME:
-		return "Çë¶ÁÈ¡Ã¶¾ÙÃû";
+		return "è¯·è¯»å–æšä¸¾å";
 	default:
-		return "Î´Öª´íÎó";
+		return "æœªçŸ¥é”™è¯¯";
 	}
 }
