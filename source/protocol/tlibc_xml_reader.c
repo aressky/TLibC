@@ -523,11 +523,21 @@ const char* tlibc_xml_str2c(const char* curr, const char* limit, char *ch)
 		{
 			//&lt
 			*ch = '<';
+			curr += 2;
+			if(curr >= limit)
+			{
+				goto ERROR_RET;
+			}
 		}
 		else if(c2 == 'g')
 		{
 			//&gt
 			*ch = '>';
+			curr += 2;
+			if(curr >= limit)
+			{
+				goto ERROR_RET;
+			}
 		}
 		else
 		{
@@ -541,16 +551,31 @@ const char* tlibc_xml_str2c(const char* curr, const char* limit, char *ch)
 			{
 				//&amp
 				*ch = '&';
+				curr += 2;
+				if(curr >= limit)
+				{
+					goto ERROR_RET;
+				}
 			}
 			else if(c3 == 'p')
 			{
 				//&apos
 				*ch = '\'';
+				curr += 3;
+				if(curr >= limit)
+				{
+					goto ERROR_RET;
+				}
 			}
 			else if(c3 == 'u')
 			{
 				//&auot
 				*ch = '\"';
+				curr += 3;
+				if(curr >= limit)
+				{
+					goto ERROR_RET;
+				}
 			}
 		}
 	}
@@ -587,6 +612,11 @@ tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *s
 	while(curr < limit)
 	{
 		char c;
+		if(*curr == '<')
+		{
+			self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_cursor = curr - 1;
+			break;
+		}
 		curr = tlibc_xml_str2c(curr, limit, &c);
 		if(curr == NULL)
 		{
@@ -594,11 +624,6 @@ tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *s
 			goto ERROR_RET;
 		}
 
-		if(c == '<')
-		{
-			self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_cursor = curr - 1;
-			break;
-		}
 		if(len >= str_len)
 		{
 			ret = E_TLIBC_OUT_OF_MEMORY;
