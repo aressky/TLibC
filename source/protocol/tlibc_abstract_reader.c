@@ -196,7 +196,7 @@ tlibc_error_code_t tlibc_read_vector_element_begin(tlibc_abstract_reader_t *self
 	if(self->enable_name)
 	{
 		int len = snprintf(self->name_ptr, TLIBC_READER_NAME_LENGTH - (self->name_ptr - self->name)
-				, "[%u]", var_name, index);
+				, "[%u]", index);
 
 		if(len < 0)
 		{
@@ -224,7 +224,7 @@ tlibc_error_code_t tlibc_read_vector_element_end(tlibc_abstract_reader_t *self, 
 	if(self->enable_name)
 	{		
 		char curr_name[TLIBC_READER_NAME_LENGTH];
-		int len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH, "[%u]", var_name, index);
+		int len = snprintf(curr_name, TLIBC_READER_NAME_LENGTH, "[%u]", index);
 		
 		if(len < 0)
 		{
