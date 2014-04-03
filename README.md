@@ -16,24 +16,8 @@ TLibC
 ========
 TLibC使用[CMake](http://www.cmake.org/)作为构建工具， 支持Linux, Windows, Unix(Mac OSX)操作系统。
 
-- Windows:
-
-	用[CMake](http://www.cmake.org/)生成VS工程文件
-
-		打开CMake界面。
-		在Where is the source code栏目里填入源代码所在的目录， 如"D:/TLibC"。
-		在Where to build the binaries栏目里填入生成工程文件的目录, 如"D:/build"。
-		点击Configure进行设置。
-		点击Generate生成VS工程文件。
-		在弹出的界面中， 选择需要生成的工程类型， 如选择Visual Studio 11， 点击Finish。
-		点击Configure
-		点击Generate
-
-	安装
-
-		打开解决方案Build名叫INSTALL的工程， 如果安装的目录是否需要管理员权限， 请点击右键选择用管理员方式启动VS。
-
-### 1.CMake生成工程文件
+1.CMake生成工程文件
+-------------------
 假设需要在build目录下生成工程文件， 源代码位于TLibC目录。
 
     Linux/Unix:
@@ -51,7 +35,8 @@ _CMake选项:_
 - TLIBC_INCLUDE_DIR 依赖包TLIBC的头文件目录。
 - WITH_RE2C 选项可以重新生成语法分析部分的代码， 需要安装 [re2c](http://www.re2c.org)。
 
-### 2.编译安装
+2.编译安装
+----------
 
     Linux/Unix:
         make
