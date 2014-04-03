@@ -27,7 +27,7 @@ TLibC使用[CMake](http://www.cmake.org/)作为构建工具， 支持Linux, Windows, Unix(M
 		点击Generate生成VS工程文件。
 		在弹出的界面中， 选择需要生成的工程类型， 如选择Visual Studio 11， 点击Finish。
 		点击Configure
-                点击Generate
+		点击Generate
 
 	安装
 
