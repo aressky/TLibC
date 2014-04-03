@@ -8,8 +8,8 @@ TLibC
 
 项目依赖
 ========
-- 开启读取Excel表格的功能， 需要安装[zlib](http://www.zlib.net)
-- 开启读取mysql的功能， 需要安装[mysql](http://www.mysql.com)
+- 开启读取Excel表格的功能， 需要安装[zlib](http://www.zlib.net)。
+- 开启读取mysql的功能， 需要安装[mysql](http://www.mysql.com)。
 
 
 安装方法
