@@ -16,8 +16,8 @@ TLibC
 ========
 TLibC使用[CMake](http://www.cmake.org/)作为构建工具， 支持Linux, Windows, Unix(Mac OSX)操作系统。
 
-1.CMake生成工程文件
--------------------
+**1.CMake生成工程文件**
+
 假设需要在build目录下生成工程文件， 源代码位于TLibC目录。
 
     Linux/Unix:
@@ -35,8 +35,7 @@ _CMake选项:_
 - TLIBC_INCLUDE_DIR 依赖包TLIBC的头文件目录。
 - WITH_RE2C 选项可以重新生成语法分析部分的代码， 需要安装 [re2c](http://www.re2c.org)。
 
-2.编译安装
-----------
+**2.编译安装**
 
     Linux/Unix:
         make
