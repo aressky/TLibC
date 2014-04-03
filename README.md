@@ -33,7 +33,7 @@ _CMake选项:_
 - CMAKE_BUILD_TYPE 选择编译选项Debug|Release, Windows可以在Visual Studio里面选择。
 - CMAKE_INSTALL_PREFIX 指定安装路径。
 - TLIBC_INCLUDE_DIR 依赖包TLIBC的头文件目录。
-- WITH_RE2C 选项可以重新生成语法分析部分的代码， 需要安装 [re2c](http://www.re2c.org)。
+- WITH_RE2C 选项可以重新生成词法分析部分的代码， 需要安装 [re2c](http://www.re2c.org)。
 
 **2.编译安装**
 
