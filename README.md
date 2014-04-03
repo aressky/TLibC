@@ -14,7 +14,7 @@ TLibC
 
 安装方法
 ========
-TLibC编译器使用[CMake](http://www.cmake.org/)作为构建工具， 支持Linux, Windows, Unix(Mac OSX)操作系统。
+TLibC使用[CMake](http://www.cmake.org/)作为构建工具， 支持Linux, Windows, Unix(Mac OSX)操作系统。
 
 - Windows:
 
