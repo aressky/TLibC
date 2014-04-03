@@ -627,7 +627,7 @@ tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *s
 	const char* limit = self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_limit;
 	while(curr < limit)
 	{
-		char c;
+		char c = 0;
 		if(*curr == '<')
 		{
 			self->scanner_context_stack[self->scanner_context_stack_num - 1].yy_cursor = curr - 1;
