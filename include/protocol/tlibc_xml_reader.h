@@ -54,6 +54,7 @@ typedef struct _TLIBC_XML_READER
 	int ignore_int32_once;
 	int pre_read_uint32_field_once;
 	uint32_t ui32;
+	TLIBC_ERROR_CODE error_code;
 }TLIBC_XML_READER;
 
  void tlibc_xml_reader_init(TLIBC_XML_READER *self);

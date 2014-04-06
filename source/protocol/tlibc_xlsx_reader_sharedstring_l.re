@@ -1,4 +1,4 @@
-#include "tlibc/protocol/tlibc_xlsx_reader.h"
+#include "protocol/tlibc_xlsx_reader.h"
 #include "tlibc_xlsx_reader_sharedstring_l.h"
 #include <string.h>
 #include <errno.h>

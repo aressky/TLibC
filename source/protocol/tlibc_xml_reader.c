@@ -183,7 +183,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_struct_begin(TLIBC_ABSTRACT_READER *super, const
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = E_TLIBC_SYNTAX;
+		ret = self->error_code;
 		goto done;
 	}
 
@@ -212,7 +212,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_struct_end(TLIBC_ABSTRACT_READER *super, const c
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = E_TLIBC_SYNTAX;
+		ret = self->error_code;
 		goto done;
 	}
 	if(strcmp(struct_name, self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name) != 0)
@@ -293,7 +293,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_begin(TLIBC_ABSTRACT_READER *super, const 
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = E_TLIBC_SYNTAX;
+		ret = self->error_code;
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)
@@ -322,7 +322,7 @@ TLIBC_ERROR_CODE tlibc_xml_read_field_end(TLIBC_ABSTRACT_READER *super, const ch
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = E_TLIBC_SYNTAX;
+		ret = self->error_code;
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)

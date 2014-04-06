@@ -1,5 +1,5 @@
-#include "tlibc/platform/tlibc_platform.h"
-#include "tlibc/protocol/tlibc_xml_reader.h"
+#include "platform/tlibc_platform.h"
+#include "protocol/tlibc_xml_reader.h"
 #include "protocol/tlibc_xml_reader_scanner.h"
 #include "tlibc_xml_reader_l.h"
 #include <string.h>
@@ -11,6 +11,7 @@
 TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER *self)
 {
 	TLIBC_XML_READER_SCANNER_CONTEXT *sp = NULL;
+	self->error_code = E_TLIBC_NOERROR;
 restart:
 	sp = &self->scanner_context_stack[self->scanner_context_stack_num - 1];
 	if(YYCURSOR >= YYLIMIT)
@@ -54,6 +55,7 @@ anychar			([^])
 	}
 	if(file_begin == NULL)
 	{
+		self->error_code = E_TLIBC_SYNTAX;
 		return tok_error;
 	}
 	for(file_end = NULL; YYCURSOR != YYLIMIT; ++YYCURSOR)
@@ -67,6 +69,7 @@ anychar			([^])
 	}
 	if(file_end == NULL)
 	{
+		self->error_code = E_TLIBC_SYNTAX;
 		return tok_error;
 	}
 	for(;YYCURSOR != YYLIMIT; ++YYCURSOR)
@@ -80,6 +83,7 @@ anychar			([^])
 	file_len = file_end - file_begin;
 	if(file_len >= TLIBC_MAX_PATH_LENGTH)
 	{
+		self->error_code = E_TLIBC_OUT_OF_MEMORY;
 		return tok_error;
 	}
 	memcpy(file, file_begin, file_len);
@@ -87,6 +91,7 @@ anychar			([^])
 
 	if(tlibc_xml_reader_push_file(self, file) != E_TLIBC_NOERROR)
 	{
+		self->error_code = E_TLIBC_NOT_FOUND;
 		return tok_error;
 	}
 	goto restart;
