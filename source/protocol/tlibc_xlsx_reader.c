@@ -231,6 +231,11 @@ void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self)
 
 void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self)
 {
+	if(self->cell_matrix)
+	{
+		free(self->cell_matrix);
+	}
+
 	if(self->workbook_buff)
 	{
 		free(self->workbook_buff);
