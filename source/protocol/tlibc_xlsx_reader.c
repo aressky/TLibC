@@ -231,9 +231,30 @@ void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self)
 
 void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self)
 {
-	free(self->workbook_buff);
-	free(self->workbook_rels_buff);
-	free(self->sharedstring_buff);
+	if(self->workbook_buff)
+	{
+		free(self->workbook_buff);
+	}	
+
+	if(self->workbook_rels_buff)
+	{
+		free(self->workbook_rels_buff);
+	}
+	
+	if(self->sharedstring_buff)
+	{
+		free(self->sharedstring_buff);
+	}
+	
+	if(self->sharedstring_begin_list)
+	{
+		free(self->sharedstring_begin_list);
+	}
+
+	if(self->sharedstring_end_list)
+	{
+		free(self->sharedstring_end_list);
+	}
 	
 	tlibc_unzip_fini(&self->unzip);
 }
