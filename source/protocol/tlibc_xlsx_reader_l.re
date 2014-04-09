@@ -20,9 +20,10 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 	while(*xpos >='A')
 	{
 		self->col *= 26;
-		self->col += *xpos - 'A';
+		self->col += *xpos - 'A' + 1;
 		++xpos;
 	}
+	--(self->col);
 
 	self->row = 0;
 	while(*xpos != 0)

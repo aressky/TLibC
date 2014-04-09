@@ -1,8 +1,8 @@
 ﻿#include "core/tlibc_string.h"
 
-const char *tstrerror(tlibc_error_code_t errno)
+const char *tstrerror(tlibc_error_code_t terrno)
 {
-	switch (errno)
+	switch (terrno)
 	{
 	case E_TLIBC_NOERROR:
 		return "正常";

@@ -66,7 +66,9 @@ typedef struct _tlibc_xlsx_reader_t
 
 	tlibc_xlsx_cell_s *curr_row;
 	tlibc_xlsx_cell_s *curr_cell;	
-	
+
+
+	const char *last_pos;
 
 	int read_enum_name_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
@@ -85,7 +87,7 @@ typedef struct _tlibc_xlsx_reader_t
 
  void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
- int32_t tlibc_xlsx_current_location(tlibc_xlsx_reader_t *self);
+ const char* tlibc_xlsx_last_location(tlibc_xlsx_reader_t *self);
 
 
 
