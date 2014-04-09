@@ -84,15 +84,15 @@ typedef struct _tlibc_unzip_s
                                         file if we are decompressing it */
 }tlibc_unzip_s;
 
-TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path);
+tlibc_error_code_t tlibc_unzip_init(tlibc_unzip_s *self, const void *path);
 
-TLIBC_ERROR_CODE tlibc_unzip_locate(tlibc_unzip_s *self, const char *szFileName);
+tlibc_error_code_t tlibc_unzip_locate(tlibc_unzip_s *self, const char *szFileName);
 
-TLIBC_ERROR_CODE tlibc_unzip_open_current_file(tlibc_unzip_s *self);
+tlibc_error_code_t tlibc_unzip_open_current_file(tlibc_unzip_s *self);
 
-TLIBC_ERROR_CODE tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len);
+tlibc_error_code_t tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len);
 
-TLIBC_ERROR_CODE tlibc_unzip_close_current_file(tlibc_unzip_s *self);
+tlibc_error_code_t tlibc_unzip_close_current_file(tlibc_unzip_s *self);
 
 void tlibc_unzip_fini(tlibc_unzip_s *self);
 

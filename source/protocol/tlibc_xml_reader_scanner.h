@@ -3,7 +3,7 @@
 
 #include "protocol/tlibc_xml_reader.h"
 
-#define YYSTYPE TLIBC_XML_READER_SCANNER_CONTEXT
+#define YYSTYPE tlibc_xml_reader_scanner_context_t
 #define YYLTYPE_IS_DECLARED
 #define YYCTYPE   char
 #define YYFILL(n) 
@@ -20,19 +20,19 @@
 #define YYSTATE      YYGETCONDITION()
 
 
-typedef enum _TLIBC_XML_READER_TOKEN
+typedef enum tlibc_xml_reader_token_e
 {
 	tok_end = 0,						//½âÎö½áÊø
 	tok_error = 1,						//½âÎö´íÎó
 	tok_tag_begin = 2,
 	tok_tag_end = 3,
-}TLIBC_XML_READER_TOKEN;
+}tlibc_xml_reader_token_t;
 
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER *self);
+tlibc_xml_reader_token_t tlibc_xml_reader_scan(tlibc_xml_reader_t *self);
 
-void tlibc_xml_reader_locate(TLIBC_XML_READER *self);
+void tlibc_xml_reader_locate(tlibc_xml_reader_t *self);
 
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_get_token(TLIBC_XML_READER *self);
+tlibc_xml_reader_token_t tlibc_xml_reader_get_token(tlibc_xml_reader_t *self);
 
 #endif//_H_TLIBC_XML_READER_SCANNER_H
 

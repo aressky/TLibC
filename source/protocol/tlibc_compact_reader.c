@@ -7,7 +7,7 @@
 #include <string.h>
 #include <assert.h>
 
-static TLIBC_ERROR_CODE tlibc_compact_varint16_decode(const char *buff_ptr, uint32_t *buff_size, uint16_t *result)
+static tlibc_error_code_t tlibc_compact_varint16_decode(const char *buff_ptr, uint32_t *buff_size, uint16_t *result)
 {
 	uint8_t b;
 
@@ -56,7 +56,7 @@ not_enough_byte_size:
 }
 
 
-static TLIBC_ERROR_CODE tlibc_compact_varint32_decode(const char *buff_ptr, uint32_t *buff_size, uint32_t *result)
+static tlibc_error_code_t tlibc_compact_varint32_decode(const char *buff_ptr, uint32_t *buff_size, uint32_t *result)
 {
 	uint8_t b;
 
@@ -129,7 +129,7 @@ not_enough_byte_size:
 }
 
 
-static TLIBC_ERROR_CODE tlibc_compact_varint64_decode(const char *buff_ptr, uint32_t *buff_size, uint64_t *result)
+static tlibc_error_code_t tlibc_compact_varint64_decode(const char *buff_ptr, uint32_t *buff_size, uint64_t *result)
 {
 	uint8_t b;
 
@@ -268,7 +268,7 @@ not_enough_byte_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const char *addr, uint32_t size)
+void tlibc_compact_reader_init(tlibc_compact_reader_t *self, const char *addr, uint32_t size)
 {
 	tlibc_abstract_reader_init(&self->super);
 
@@ -295,9 +295,9 @@ void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const char *addr, uin
 #define COMPACT_READER_PTR(self) (self->addr + self->offset)
 
 
-TLIBC_ERROR_CODE tlibc_compact_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val)
+tlibc_error_code_t tlibc_compact_read_int8(tlibc_abstract_reader_t *super, int8_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(int8_t))
 	{
 		goto not_enough_bytebuff_size;
@@ -310,12 +310,12 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val)
+tlibc_error_code_t tlibc_compact_read_int16(tlibc_abstract_reader_t *super, int16_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint16_t res;
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	tlibc_error_code_t ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, &res);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -327,12 +327,12 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val)
+tlibc_error_code_t tlibc_compact_read_int32(tlibc_abstract_reader_t *super, int32_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint32_t res;
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	tlibc_error_code_t ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, &res);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -344,12 +344,12 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val)
+tlibc_error_code_t tlibc_compact_read_int64(tlibc_abstract_reader_t *super, int64_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint64_t res;
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, &res);
+	tlibc_error_code_t ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, &res);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -361,9 +361,9 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val)
+tlibc_error_code_t tlibc_compact_read_uint8(tlibc_abstract_reader_t *super, uint8_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(uint8_t))
 	{
 		goto not_enough_bytebuff_size;
@@ -376,11 +376,11 @@ not_enough_bytebuff_size:
 	return E_TLIBC_OUT_OF_MEMORY;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val)
+tlibc_error_code_t tlibc_compact_read_uint16(tlibc_abstract_reader_t *super, uint16_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, val);
+	tlibc_error_code_t ret = tlibc_compact_varint16_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -391,11 +391,11 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val)
+tlibc_error_code_t tlibc_compact_read_uint32(tlibc_abstract_reader_t *super, uint32_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, val);
+	tlibc_error_code_t ret = tlibc_compact_varint32_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -406,11 +406,11 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val)
+tlibc_error_code_t tlibc_compact_read_uint64(tlibc_abstract_reader_t *super, uint64_t *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint32_t buff_size = COMPACT_READER_CAPACITY(self);
-	TLIBC_ERROR_CODE ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, val);
+	tlibc_error_code_t ret = tlibc_compact_varint64_decode(COMPACT_READER_PTR(self), &buff_size, val);
 	if(ret != E_TLIBC_NOERROR)
 	{
 		goto done;
@@ -421,9 +421,9 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_compact_read_char(TLIBC_ABSTRACT_READER *super, char *val)
+tlibc_error_code_t tlibc_compact_read_char(tlibc_abstract_reader_t *super, char *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(char))
 	{
 		goto not_enough_bytebuff_size;
@@ -437,9 +437,9 @@ not_enough_bytebuff_size:
 }
 
 
-TLIBC_ERROR_CODE tlibc_compact_read_double(TLIBC_ABSTRACT_READER *super, double *val)
+tlibc_error_code_t tlibc_compact_read_double(tlibc_abstract_reader_t *super, double *val)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	if(COMPACT_READER_CAPACITY(self) < sizeof(double))
 	{
 		goto not_enough_bytebuff_size;
@@ -453,11 +453,11 @@ not_enough_bytebuff_size:
 }
 
 
-TLIBC_ERROR_CODE tlibc_compact_read_string(TLIBC_ABSTRACT_READER *super, char* str, uint32_t str_length)
+tlibc_error_code_t tlibc_compact_read_string(tlibc_abstract_reader_t *super, char* str, uint32_t str_length)
 {
-	TLIBC_COMPACT_READER *self = TLIBC_CONTAINER_OF(super, TLIBC_COMPACT_READER, super);
+	tlibc_compact_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_compact_reader_t, super);
 	uint32_t str_len = 0;
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 
 	for(; self->offset < self->size; )
 	{

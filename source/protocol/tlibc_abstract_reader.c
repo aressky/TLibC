@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
+void tlibc_abstract_reader_init(tlibc_abstract_reader_t *self)
 {
 	self->enable_name = FALSE;
 	self->name[0] = 0;
@@ -37,7 +37,7 @@ void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self)
 	self->read_string = NULL;
 }
 
-TLIBC_ERROR_CODE tlibc_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name)
+tlibc_error_code_t tlibc_read_struct_begin(tlibc_abstract_reader_t *self, const char *struct_name)
 {
 	if(self->read_struct_begin == NULL)
 	{
@@ -46,7 +46,7 @@ TLIBC_ERROR_CODE tlibc_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char
 	return self->read_struct_begin(self, struct_name);
 }
 
-TLIBC_ERROR_CODE tlibc_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name)
+tlibc_error_code_t tlibc_read_struct_end(tlibc_abstract_reader_t *self, const char *struct_name)
 {
 	if(self->read_struct_end == NULL)
 	{
@@ -56,7 +56,7 @@ TLIBC_ERROR_CODE tlibc_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *
 }
 
 
-TLIBC_ERROR_CODE tlibc_read_union_begin(TLIBC_ABSTRACT_READER *self, const char *union_name)
+tlibc_error_code_t tlibc_read_union_begin(tlibc_abstract_reader_t *self, const char *union_name)
 {
 	if(self->read_union_begin == NULL)
 	{
@@ -65,7 +65,7 @@ TLIBC_ERROR_CODE tlibc_read_union_begin(TLIBC_ABSTRACT_READER *self, const char 
 	return self->read_union_begin(self, union_name);
 }
 
-TLIBC_ERROR_CODE tlibc_read_union_end(TLIBC_ABSTRACT_READER *self, const char *union_name)
+tlibc_error_code_t tlibc_read_union_end(tlibc_abstract_reader_t *self, const char *union_name)
 {
 	if(self->read_union_end == NULL)
 	{
@@ -75,7 +75,7 @@ TLIBC_ERROR_CODE tlibc_read_union_end(TLIBC_ABSTRACT_READER *self, const char *u
 }
 
 
-TLIBC_ERROR_CODE tlibc_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name)
+tlibc_error_code_t tlibc_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name)
 {
 	if(self->read_enum_begin == NULL)
 	{
@@ -84,7 +84,7 @@ TLIBC_ERROR_CODE tlibc_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *
 	return self->read_enum_begin(self, enum_name);
 }
 
-TLIBC_ERROR_CODE tlibc_read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name)
+tlibc_error_code_t tlibc_read_enum_end(tlibc_abstract_reader_t *self, const char *enum_name)
 {
 	if(self->read_enum_end == NULL)
 	{
@@ -95,7 +95,7 @@ TLIBC_ERROR_CODE tlibc_read_enum_end(TLIBC_ABSTRACT_READER *self, const char *en
 
 
 
-TLIBC_ERROR_CODE tlibc_read_vector_begin(TLIBC_ABSTRACT_READER *self)
+tlibc_error_code_t tlibc_read_vector_begin(tlibc_abstract_reader_t *self)
 {
 	if(self->read_vector_begin == NULL)
 	{
@@ -104,7 +104,7 @@ TLIBC_ERROR_CODE tlibc_read_vector_begin(TLIBC_ABSTRACT_READER *self)
 	return self->read_vector_begin(self);
 }
 
-TLIBC_ERROR_CODE tlibc_read_vector_end(TLIBC_ABSTRACT_READER *self)
+tlibc_error_code_t tlibc_read_vector_end(tlibc_abstract_reader_t *self)
 {
 	if(self->read_vector_end == NULL)
 	{
@@ -113,7 +113,7 @@ TLIBC_ERROR_CODE tlibc_read_vector_end(TLIBC_ABSTRACT_READER *self)
 	return self->read_vector_end(self);
 }
 
-TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name)
+tlibc_error_code_t tlibc_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name)
 {
 	if(self->enable_name)
 	{
@@ -135,9 +135,9 @@ TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char 
 	return self->read_field_begin(self, var_name);
 }
 
-TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name)
+tlibc_error_code_t tlibc_read_field_end(tlibc_abstract_reader_t *self, const char *var_name)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 
 	if(self->read_field_end != NULL)
 	{
@@ -160,7 +160,7 @@ TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *v
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index)
+tlibc_error_code_t tlibc_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
 	if(self->enable_name)
 	{
@@ -181,9 +181,9 @@ TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, co
 	return self->read_vector_element_begin(self, var_name, index);
 }
 
-TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index)
+tlibc_error_code_t tlibc_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 
 	if(self->read_vector_element_end != NULL)
 	{
@@ -204,7 +204,7 @@ TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, cons
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_read_int8(TLIBC_ABSTRACT_READER *self, int8_t *val)
+tlibc_error_code_t tlibc_read_int8(tlibc_abstract_reader_t *self, int8_t *val)
 {
 	if(self->read_int8 == NULL)
 	{
@@ -213,7 +213,7 @@ TLIBC_ERROR_CODE tlibc_read_int8(TLIBC_ABSTRACT_READER *self, int8_t *val)
 	return self->read_int8(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_int16(TLIBC_ABSTRACT_READER *self, int16_t *val)
+tlibc_error_code_t tlibc_read_int16(tlibc_abstract_reader_t *self, int16_t *val)
 {
 	if(self->read_int16 == NULL)
 	{
@@ -222,7 +222,7 @@ TLIBC_ERROR_CODE tlibc_read_int16(TLIBC_ABSTRACT_READER *self, int16_t *val)
 	return self->read_int16(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_int32(TLIBC_ABSTRACT_READER *self, int32_t *val)
+tlibc_error_code_t tlibc_read_int32(tlibc_abstract_reader_t *self, int32_t *val)
 {
 	if(self->read_int32 == NULL)
 	{
@@ -231,7 +231,7 @@ TLIBC_ERROR_CODE tlibc_read_int32(TLIBC_ABSTRACT_READER *self, int32_t *val)
 	return self->read_int32(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_int64(TLIBC_ABSTRACT_READER *self, int64_t *val)
+tlibc_error_code_t tlibc_read_int64(tlibc_abstract_reader_t *self, int64_t *val)
 {
 	if(self->read_int64 == NULL)
 	{
@@ -240,7 +240,7 @@ TLIBC_ERROR_CODE tlibc_read_int64(TLIBC_ABSTRACT_READER *self, int64_t *val)
 	return self->read_int64(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_uint8(TLIBC_ABSTRACT_READER *self, uint8_t *val)
+tlibc_error_code_t tlibc_read_uint8(tlibc_abstract_reader_t *self, uint8_t *val)
 {
 	if(self->read_uint8 == NULL)
 	{
@@ -249,7 +249,7 @@ TLIBC_ERROR_CODE tlibc_read_uint8(TLIBC_ABSTRACT_READER *self, uint8_t *val)
 	return self->read_uint8(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_uint16(TLIBC_ABSTRACT_READER *self, uint16_t *val)
+tlibc_error_code_t tlibc_read_uint16(tlibc_abstract_reader_t *self, uint16_t *val)
 {
 	if(self->read_uint16 == NULL)
 	{
@@ -258,7 +258,7 @@ TLIBC_ERROR_CODE tlibc_read_uint16(TLIBC_ABSTRACT_READER *self, uint16_t *val)
 	return self->read_uint16(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_uint32(TLIBC_ABSTRACT_READER *self, uint32_t *val)
+tlibc_error_code_t tlibc_read_uint32(tlibc_abstract_reader_t *self, uint32_t *val)
 {
 	if(self->read_uint32 == NULL)
 	{
@@ -267,7 +267,7 @@ TLIBC_ERROR_CODE tlibc_read_uint32(TLIBC_ABSTRACT_READER *self, uint32_t *val)
 	return self->read_uint32(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_uint64(TLIBC_ABSTRACT_READER *self, uint64_t *val)
+tlibc_error_code_t tlibc_read_uint64(tlibc_abstract_reader_t *self, uint64_t *val)
 {
 	if(self->read_uint64 == NULL)
 	{
@@ -276,7 +276,7 @@ TLIBC_ERROR_CODE tlibc_read_uint64(TLIBC_ABSTRACT_READER *self, uint64_t *val)
 	return self->read_uint64(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_char(TLIBC_ABSTRACT_READER *self, char *val)
+tlibc_error_code_t tlibc_read_char(tlibc_abstract_reader_t *self, char *val)
 {
 	if(self->read_char == NULL)
 	{
@@ -285,7 +285,7 @@ TLIBC_ERROR_CODE tlibc_read_char(TLIBC_ABSTRACT_READER *self, char *val)
 	return self->read_char(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_double(TLIBC_ABSTRACT_READER *self, double *val)
+tlibc_error_code_t tlibc_read_double(tlibc_abstract_reader_t *self, double *val)
 {
 	if(self->read_double == NULL)
 	{
@@ -294,7 +294,7 @@ TLIBC_ERROR_CODE tlibc_read_double(TLIBC_ABSTRACT_READER *self, double *val)
 	return self->read_double(self, val);
 }
 
-TLIBC_ERROR_CODE tlibc_read_string(TLIBC_ABSTRACT_READER *self, char* str, uint32_t str_length)
+tlibc_error_code_t tlibc_read_string(tlibc_abstract_reader_t *self, char* str, uint32_t str_length)
 {
 	if(self->read_string == NULL)
 	{

@@ -16,7 +16,7 @@
 #define SIZECENTRALDIRITEM (0x2e)
 #define SIZEZIPLOCALHEADER (0x1e)
 
-static TLIBC_ERROR_CODE read_uint16(FILE* filestream, uint16_t *p)
+static tlibc_error_code_t read_uint16(FILE* filestream, uint16_t *p)
 {
 	if(fread(p, sizeof(int16_t), 1, filestream) != 1)
 	{
@@ -29,7 +29,7 @@ ERROR_RET:
 	return E_TLIBC_ERROR;
 }
 
-static TLIBC_ERROR_CODE read_uint32(FILE* filestream, uint32_t *p)
+static tlibc_error_code_t read_uint32(FILE* filestream, uint32_t *p)
 {
 	if(fread(p, sizeof(int32_t), 1, filestream) != 1)
 	{
@@ -96,7 +96,7 @@ done:
     return pos_found;
 }
 
-static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *self,
+static tlibc_error_code_t unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *self,
 												  tlibc_unzip_file_info_s *pfile_info,
 												  tlibc_unzip_file_info_internal_s *pfile_info_internal,
 												  char *szFileName,
@@ -108,7 +108,7 @@ static TLIBC_ERROR_CODE unz64local_GetCurrentFileInfoInternal (tlibc_unzip_s *se
 {
 	tlibc_unzip_file_info_s file_info;
 	tlibc_unzip_file_info_internal_s file_info_internal;
-	TLIBC_ERROR_CODE err=E_TLIBC_NOERROR;
+	tlibc_error_code_t err=E_TLIBC_NOERROR;
 	uint32_t uMagic;
 	long lSeek=0;
 
@@ -418,9 +418,9 @@ ERROR_RET:
 	return err;
 }
 
-static TLIBC_ERROR_CODE unzGoToFirstFile (tlibc_unzip_s *self)
+static tlibc_error_code_t unzGoToFirstFile (tlibc_unzip_s *self)
 {
-    TLIBC_ERROR_CODE err=E_TLIBC_NOERROR;    
+    tlibc_error_code_t err=E_TLIBC_NOERROR;    
     self->pos_in_central_dir=self->offset_central_dir;
     self->num_file=0;
     err=unz64local_GetCurrentFileInfoInternal(self,&self->cur_file_info,
@@ -430,9 +430,9 @@ static TLIBC_ERROR_CODE unzGoToFirstFile (tlibc_unzip_s *self)
     return err;
 }
 
-static TLIBC_ERROR_CODE  unzGoToNextFile (tlibc_unzip_s  *self)
+static tlibc_error_code_t  unzGoToNextFile (tlibc_unzip_s  *self)
 {
-    TLIBC_ERROR_CODE err;
+    tlibc_error_code_t err;
 
     if (!self->current_file_ok)
         return E_TLIBC_EOF;
@@ -451,9 +451,9 @@ static TLIBC_ERROR_CODE  unzGoToNextFile (tlibc_unzip_s  *self)
 }
 
 
-extern TLIBC_ERROR_CODE  tlibc_unzip_locate (tlibc_unzip_s *self, const char *szFileName)
+extern tlibc_error_code_t  tlibc_unzip_locate (tlibc_unzip_s *self, const char *szFileName)
 {
-    TLIBC_ERROR_CODE err;
+    tlibc_error_code_t err;
 
     /* We remember the 'current' position in the file so that we can jump
      * back there if we fail.
@@ -500,7 +500,7 @@ extern TLIBC_ERROR_CODE  tlibc_unzip_locate (tlibc_unzip_s *self, const char *sz
     return err;
 }
 
-static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_s* s, uInt* piSizeVar,
+static tlibc_error_code_t unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_s* s, uInt* piSizeVar,
                                                     size_t * poffset_local_extrafield,
                                                     uInt  * psize_local_extrafield)
 {
@@ -511,7 +511,7 @@ static TLIBC_ERROR_CODE unz64local_CheckCurrentFileCoherencyHeader (tlibc_unzip_
     uint16_t size_extra_field;
 	uint16_t compression_method;
 	uint32_t crc, compress_size, uncompress_size;
-    TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
+    tlibc_error_code_t err = E_TLIBC_NOERROR;
 
     *piSizeVar = 0;
     *poffset_local_extrafield = 0;
@@ -636,10 +636,10 @@ ERROR_RET:
 	return err;
 }
 
-static TLIBC_ERROR_CODE  unzOpenCurrentFile3 (tlibc_unzip_s *self, int* method,
+static tlibc_error_code_t  unzOpenCurrentFile3 (tlibc_unzip_s *self, int* method,
                                             int* level, int raw)
 {
-    TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
+    tlibc_error_code_t err = E_TLIBC_NOERROR;
     uInt iSizeVar;
     tlibc_unzip_read_info_s* pfile_in_zip_read_info;
     size_t offset_local_extrafield;  /* offset of the local extra field */
@@ -743,7 +743,7 @@ ERROR_RET:
 }
 
 
-TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
+tlibc_error_code_t tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
 {
     size_t central_pos;
     uint32_t flag;
@@ -756,7 +756,7 @@ TLIBC_ERROR_CODE tlibc_unzip_init(tlibc_unzip_s *self, const void *path)
                                    the central dir
                                    (same than number_entry on nospan) */
 
-    TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
+    tlibc_error_code_t err = E_TLIBC_NOERROR;
 
 
 	self->filestream = fopen((const char*)path, "rb");
@@ -869,14 +869,14 @@ void  tlibc_unzip_fini (tlibc_unzip_s *self)
     fclose(self->filestream);
 }
 
-TLIBC_ERROR_CODE tlibc_unzip_open_current_file (tlibc_unzip_s *self)
+tlibc_error_code_t tlibc_unzip_open_current_file (tlibc_unzip_s *self)
 {
     return unzOpenCurrentFile3(self, NULL, NULL, 0);
 }
 
-TLIBC_ERROR_CODE  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len)
+tlibc_error_code_t  tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint32_t *len)
 {
-    TLIBC_ERROR_CODE err = E_TLIBC_NOERROR;
+    tlibc_error_code_t err = E_TLIBC_NOERROR;
     uInt iRead = 0;
     tlibc_unzip_read_info_s* pfile_in_zip_read_info;
     pfile_in_zip_read_info=&self->pfile_in_zip_read;
@@ -1024,9 +1024,9 @@ done:
     return err;
 }
 
-TLIBC_ERROR_CODE tlibc_unzip_close_current_file (tlibc_unzip_s *self)
+tlibc_error_code_t tlibc_unzip_close_current_file (tlibc_unzip_s *self)
 {
-    TLIBC_ERROR_CODE err=E_TLIBC_NOERROR;
+    tlibc_error_code_t err=E_TLIBC_NOERROR;
 
     tlibc_unzip_read_info_s* pfile_in_zip_read_info;
     pfile_in_zip_read_info=&self->pfile_in_zip_read;

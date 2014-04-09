@@ -33,7 +33,7 @@ void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 	}
 }
 
-TLIBC_ERROR_CODE tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, uint32_t bindinfo_row)
+tlibc_error_code_t tlibc_xlsx_reader_loadsheet(tlibc_xlsx_reader_t *self, uint32_t bindinfo_row)
 {
 	tlibc_xlsx_cell_s *cell = NULL;
 	int is_sharedstring = FALSE;

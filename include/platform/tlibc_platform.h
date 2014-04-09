@@ -3,7 +3,7 @@
 
 #include "platform/tlibc_platform_common.h"
 
-#ifndef _WIN32
+#ifndef _WINDOWS
 	#include "platform/tlibc_platform_linux.h"
 #else
 	#include "platform/tlibc_platform_windows.h"

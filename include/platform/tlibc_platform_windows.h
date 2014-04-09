@@ -12,8 +12,6 @@
 #define snprintf _snprintf
 #define snwprintf _snwprintf
 
-#define tlibc_mkdir(path, mode) mkdir(path)
-
 #ifdef _WIN32
 #define TLIBC_WORDSIZE 32
 #elif _WIN64

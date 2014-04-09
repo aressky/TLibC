@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-TLIBC_ERROR_CODE tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *buckets, uint32_t size)
+tlibc_error_code_t tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *buckets, uint32_t size)
 {
 	uint32_t i;
 
@@ -61,7 +61,7 @@ const tlibc_hash_head_t* tlibc_hash_find_const(const tlibc_hash_t *self, const c
 	uint32_t key_hash = tlibc_hash_key(key, key_size);
 	uint32_t key_index = key_hash % self->size;
 	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
-	TLIBC_LIST_HEAD *iter = bucket->data_list.next;
+	tlibc_list_head_t *iter = bucket->data_list.next;
 	uint32_t i;
 	for(i = 0; i < bucket->data_list_num; iter = iter->next, ++i)
 	{
@@ -79,7 +79,7 @@ tlibc_hash_head_t* tlibc_hash_find(tlibc_hash_t *self, const char *key, uint32_t
 	uint32_t key_hash = tlibc_hash_key(key, key_size);
 	uint32_t key_index = key_hash % self->size;
 	const tlibc_hash_bucket_t *bucket = &self->buckets[key_index];
-	TLIBC_LIST_HEAD *iter = iter = bucket->data_list.next;
+	tlibc_list_head_t *iter = iter = bucket->data_list.next;
 	uint32_t i;
 	for(i = 0; i < bucket->data_list_num; iter = iter->next, ++i)
 	{
@@ -110,7 +110,7 @@ void tlibc_hash_remove(tlibc_hash_t *self, tlibc_hash_head_t *ele)
 
 void tlibc_hash_clear(tlibc_hash_t *self)
 {
-	TLIBC_LIST_HEAD *iter = self->used_bucket_list.next;
+	tlibc_list_head_t *iter = self->used_bucket_list.next;
 	uint32_t i;
 	for(i = 0; i < self->used_bucket_list_num; iter = iter->next, ++i)
 	{

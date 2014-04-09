@@ -4,37 +4,37 @@
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_reader.h"
 
-typedef struct _TLIBC_COMPACT_READER
+typedef struct tlibc_compact_reader_s
 {
-	TLIBC_ABSTRACT_READER super;
+	tlibc_abstract_reader_t super;
 
 	const char *addr;
 	uint32_t size;
 	uint32_t offset;
-}TLIBC_COMPACT_READER;
+}tlibc_compact_reader_t;
 
- void tlibc_compact_reader_init(TLIBC_COMPACT_READER *self, const char *addr, uint32_t size);
+ void tlibc_compact_reader_init(tlibc_compact_reader_t *self, const char *addr, uint32_t size);
 
- TLIBC_ERROR_CODE tlibc_compact_read_int8(TLIBC_ABSTRACT_READER *super, int8_t *val);
+ tlibc_error_code_t tlibc_compact_read_int8(tlibc_abstract_reader_t *super, int8_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_int16(TLIBC_ABSTRACT_READER *super, int16_t *val);
+ tlibc_error_code_t tlibc_compact_read_int16(tlibc_abstract_reader_t *super, int16_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_int32(TLIBC_ABSTRACT_READER *super, int32_t *val);
+ tlibc_error_code_t tlibc_compact_read_int32(tlibc_abstract_reader_t *super, int32_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_int64(TLIBC_ABSTRACT_READER *super, int64_t *val);
+ tlibc_error_code_t tlibc_compact_read_int64(tlibc_abstract_reader_t *super, int64_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_uint8(TLIBC_ABSTRACT_READER *super, uint8_t *val);
+ tlibc_error_code_t tlibc_compact_read_uint8(tlibc_abstract_reader_t *super, uint8_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_uint16(TLIBC_ABSTRACT_READER *super, uint16_t *val);
+ tlibc_error_code_t tlibc_compact_read_uint16(tlibc_abstract_reader_t *super, uint16_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_uint32(TLIBC_ABSTRACT_READER *super, uint32_t *val);
+ tlibc_error_code_t tlibc_compact_read_uint32(tlibc_abstract_reader_t *super, uint32_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_uint64(TLIBC_ABSTRACT_READER *super, uint64_t *val);
+ tlibc_error_code_t tlibc_compact_read_uint64(tlibc_abstract_reader_t *super, uint64_t *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_char(TLIBC_ABSTRACT_READER *super, char *val);
+ tlibc_error_code_t tlibc_compact_read_char(tlibc_abstract_reader_t *super, char *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_double(TLIBC_ABSTRACT_READER *super, double *val);
+ tlibc_error_code_t tlibc_compact_read_double(tlibc_abstract_reader_t *super, double *val);
 
- TLIBC_ERROR_CODE tlibc_compact_read_string(TLIBC_ABSTRACT_READER *super, char* str, uint32_t str_length);
+ tlibc_error_code_t tlibc_compact_read_string(tlibc_abstract_reader_t *super, char* str, uint32_t str_length);
 
 #endif

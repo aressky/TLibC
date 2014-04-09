@@ -7,8 +7,8 @@
 typedef struct _tlibc_mempool_entry_t
 {
 	uint64_t          sn;
-	TLIBC_LIST_HEAD  unused_list;
-	TLIBC_LIST_HEAD  used_list;
+	tlibc_list_head_t  unused_list;
+	tlibc_list_head_t  used_list;
 }tlibc_mempool_entry_t;
 
 typedef struct _tlibc_mempool_t

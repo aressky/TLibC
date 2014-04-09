@@ -1,4 +1,4 @@
-#include "protocol/tlibc_bind_writer.h"
+#include "protocol/tlibc_mybind_writer.h"
 #include "platform/tlibc_platform.h"
 #include "core/tlibc_util.h"
 #include "protocol/tlibc_abstract_writer.h"
@@ -9,7 +9,7 @@
 #include <stdint.h>
 
 
-void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num)
+void tlibc_bind_writer_init(tlibc_mybind_writer_t *self, MYSQL_BIND *bind_vec, uint32_t bind_vec_num)
 {
 	tlibc_abstract_writer_init(&self->super);
 
@@ -31,10 +31,10 @@ void tlibc_bind_writer_init(tlibc_bind_writer_t *self, MYSQL_BIND *bind_vec, uin
 	self->idx = 0;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_int8(TLIBC_ABSTRACT_WRITER *super, const int8_t *val)
+tlibc_error_code_t tlibc_bind_write_int8(tlibc_abstract_writer_t *super, const int8_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -50,10 +50,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_int16(TLIBC_ABSTRACT_WRITER *super, const int16_t *val)
+tlibc_error_code_t tlibc_bind_write_int16(tlibc_abstract_writer_t *super, const int16_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -69,10 +69,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_int32(TLIBC_ABSTRACT_WRITER *super, const int32_t *val)
+tlibc_error_code_t tlibc_bind_write_int32(tlibc_abstract_writer_t *super, const int32_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 
 	if(self->idx >= self->bind_vec_num)
 	{
@@ -89,10 +89,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_int64(TLIBC_ABSTRACT_WRITER *super, const int64_t *val)
+tlibc_error_code_t tlibc_bind_write_int64(tlibc_abstract_writer_t *super, const int64_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -109,10 +109,10 @@ done:
 }
 
 
-TLIBC_ERROR_CODE tlibc_bind_write_uint8(TLIBC_ABSTRACT_WRITER *super, const uint8_t *val)
+tlibc_error_code_t tlibc_bind_write_uint8(tlibc_abstract_writer_t *super, const uint8_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -128,10 +128,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_uint16(TLIBC_ABSTRACT_WRITER *super, const uint16_t *val)
+tlibc_error_code_t tlibc_bind_write_uint16(tlibc_abstract_writer_t *super, const uint16_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -147,10 +147,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_uint32(TLIBC_ABSTRACT_WRITER *super, const uint32_t *val)
+tlibc_error_code_t tlibc_bind_write_uint32(tlibc_abstract_writer_t *super, const uint32_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -166,10 +166,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_uint64(TLIBC_ABSTRACT_WRITER *super, const uint64_t *val)
+tlibc_error_code_t tlibc_bind_write_uint64(tlibc_abstract_writer_t *super, const uint64_t *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -186,10 +186,10 @@ done:
 }
 
 
-TLIBC_ERROR_CODE tlibc_bind_write_double(TLIBC_ABSTRACT_WRITER *super, const double *val)
+tlibc_error_code_t tlibc_bind_write_double(tlibc_abstract_writer_t *super, const double *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	if(self->idx >= self->bind_vec_num)
 	{
 		ret = E_TLIBC_OUT_OF_MEMORY;
@@ -205,10 +205,10 @@ done:
 	return ret;
 }
 
-TLIBC_ERROR_CODE tlibc_bind_write_char(TLIBC_ABSTRACT_WRITER *super, const char *val)
+tlibc_error_code_t tlibc_bind_write_char(tlibc_abstract_writer_t *super, const char *val)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 
 	if(self->idx >= self->bind_vec_num)
 	{
@@ -228,10 +228,10 @@ done:
 }
 
 
-TLIBC_ERROR_CODE tlibc_bind_write_string(TLIBC_ABSTRACT_WRITER *super, const char* str, uint32_t str_length)
+tlibc_error_code_t tlibc_bind_write_string(tlibc_abstract_writer_t *super, const char* str, uint32_t str_length)
 {
-	TLIBC_ERROR_CODE ret = E_TLIBC_NOERROR;
-	tlibc_bind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_bind_writer_t, super);
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
+	tlibc_mybind_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_mybind_writer_t, super);
 	TLIBC_UNUSED(str_length);
 
 	if(self->idx >= self->bind_vec_num)

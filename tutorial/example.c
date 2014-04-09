@@ -28,8 +28,8 @@ void test_hash()
 	tlibc_hash_head_t *pos;
 	const tlibc_hash_head_t *pos_const;
 	const test_hash_data_t *data;
-	const TLIBC_LIST_HEAD *iter;
-	const TLIBC_LIST_HEAD *iter_bucket;
+	const tlibc_list_head_t *iter;
+	const tlibc_list_head_t *iter_bucket;
 
 	//准备数据
 	d0.data = 0;
@@ -204,7 +204,7 @@ void test_mempool()
 	unit_t *data_list[MAX_UNIT_NUM];
 	size_t data_list_num = 0;
 	int total;
-	TLIBC_LIST_HEAD *iter;
+	tlibc_list_head_t *iter;
 
 	tlibc_mempool_init(&mp, unit_t, entry, (char*)mem, sizeof(unit_t), MAX_UNIT_NUM);
 
@@ -276,7 +276,7 @@ void test_unzip()
 {
 	void *buff;
 	size_t size_buf;
-	TLIBC_ERROR_CODE err;
+	tlibc_error_code_t err;
 	tlibc_unzip_s uf;
 	err = tlibc_unzip_init(&uf, "d:/1.xlsx");
 	//unz64_s uf = unzOpen("d:/1.zip");

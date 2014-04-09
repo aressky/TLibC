@@ -9,8 +9,6 @@
 //如果不包含stdlib.h strtoll会出错
 #include <stdlib.h>
 
-#define tlibc_mkdir(path, mode) mkdir(path, mode)
-
 #if __WORDSIZE == 32
 #define TLIBC_WORDSIZE 32
 #elif __WORDSIZE == 64

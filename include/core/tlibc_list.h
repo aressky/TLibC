@@ -1,10 +1,10 @@
 #ifndef _H_TLIBC_LIST
 #define _H_TLIBC_LIST
 
-typedef struct _TLIBC_LIST_HEAD
+typedef struct tlibc_list_head_s
 {
-	struct _TLIBC_LIST_HEAD *next, *prev;
-}TLIBC_LIST_HEAD;
+	struct tlibc_list_head_s *next, *prev;
+}tlibc_list_head_t;
 
 #define tlibc_list_init(_head)\
 {\

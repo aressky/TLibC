@@ -12,7 +12,7 @@
 #define YYMARKER self->scanner.marker
 #define YYCTYPE char
 
-TLIBC_ERROR_CODE tlibc_xlsx_reader_load_sharedstring(tlibc_xlsx_reader_t *self)
+tlibc_error_code_t tlibc_xlsx_reader_load_sharedstring(tlibc_xlsx_reader_t *self)
 {
 	char* str_begin = NULL;
 

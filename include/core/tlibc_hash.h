@@ -8,7 +8,7 @@
 typedef struct _tlibc_hash_head_t tlibc_hash_head_t;
 struct _tlibc_hash_head_t
 {
-	TLIBC_LIST_HEAD data_list;
+	tlibc_list_head_t data_list;
 	const char* key;
 	uint32_t key_size;
 	uint32_t key_index;
@@ -17,8 +17,8 @@ struct _tlibc_hash_head_t
 typedef struct _tlibc_hash_bucket_t tlibc_hash_bucket_t;
 struct _tlibc_hash_bucket_t
 {
-	TLIBC_LIST_HEAD data_list;
-	TLIBC_LIST_HEAD used_bucket_list;
+	tlibc_list_head_t data_list;
+	tlibc_list_head_t used_bucket_list;
 	uint32_t data_list_num;
 };
 
@@ -28,11 +28,11 @@ struct _tlibc_hash_t
 	tlibc_hash_bucket_t		*buckets;
 	uint32_t					size;
 
-	TLIBC_LIST_HEAD			used_bucket_list;
+	tlibc_list_head_t			used_bucket_list;
 	uint32_t					used_bucket_list_num;
 };
 
- TLIBC_ERROR_CODE tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *buckets, uint32_t size);
+ tlibc_error_code_t tlibc_hash_init(tlibc_hash_t *self, tlibc_hash_bucket_t *buckets, uint32_t size);
 
  uint32_t tlibc_hash_key(const char *key, uint32_t key_size);
 

@@ -10,7 +10,7 @@ typedef struct _tlibc_timer_entry_t tlibc_timer_entry_t;
 typedef void (*tlibc_timer_callback)(const struct _tlibc_timer_entry_t*);
 struct _tlibc_timer_entry_t
 {
-	TLIBC_LIST_HEAD entry;
+	tlibc_list_head_t entry;
 	uint64_t expires;
 	tlibc_timer_callback callback;
 };
@@ -32,12 +32,12 @@ struct _tlibc_timer_entry_t
 
 typedef struct _tlibc_timver_vec_t
 {
-	TLIBC_LIST_HEAD vec[TLIBC_TVN_SIZE];
+	tlibc_list_head_t vec[TLIBC_TVN_SIZE];
 }tlibc_timer_vec_t;
 
 typedef struct _tlibc_timer_verc_root_t
 {
-	TLIBC_LIST_HEAD vec[TLIBC_TVR_SIZE];
+	tlibc_list_head_t vec[TLIBC_TVR_SIZE];
 }tlibc_timer_ver_root_t;
 
 typedef struct _tlibc_timer_t
@@ -61,6 +61,6 @@ void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer);
 
 #define tlibc_timer_jiffies(self) ((self)->jiffies)
 
- TLIBC_ERROR_CODE tlibc_timer_tick(tlibc_timer_t *self);
+ tlibc_error_code_t tlibc_timer_tick(tlibc_timer_t *self);
 
 #endif//_H_TLIBC_TIMER_H

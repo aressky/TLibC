@@ -1,6 +1,6 @@
-#include "core/tlibc_string.h"
+﻿#include "core/tlibc_string.h"
 
-const char *tstrerror(TLIBC_ERROR_CODE errno)
+const char *tstrerror(tlibc_error_code_t errno)
 {
 	switch (errno)
 	{

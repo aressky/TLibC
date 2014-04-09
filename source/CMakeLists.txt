@@ -112,10 +112,10 @@ endif(ZLIB_FOUND)
 
 if(MYSQL_FOUND)
 	set(MYSQL_FILE_LIST 
-		${INCLUDE}/protocol/tlibc_bind_reader.h
-		${SOURCE}/protocol/tlibc_bind_reader.c
-		${INCLUDE}/protocol/tlibc_bind_writer.h
-		${SOURCE}/protocol/tlibc_bind_writer.c
+		${INCLUDE}/protocol/tlibc_mybind_reader.h
+		${SOURCE}/protocol/tlibc_mybind_reader.c
+		${INCLUDE}/protocol/tlibc_mybind_writer.h
+		${SOURCE}/protocol/tlibc_mybind_writer.c
 	)
 	source_group("protocol" FILES ${MYSQL_FILE_LIST})
 	INCLUDE_DIRECTORIES(${MYSQL_INCLUDE_DIR})

@@ -6,64 +6,64 @@
 
 #define TLIBC_READER_NAME_LENGTH 65536
 
-typedef struct _TLIBC_ABSTRACT_READER TLIBC_ABSTRACT_READER;
-struct _TLIBC_ABSTRACT_READER
+typedef struct tlibc_abstract_reader_s tlibc_abstract_reader_t;
+struct tlibc_abstract_reader_s
 {
 	int enable_name;
 	char name[TLIBC_READER_NAME_LENGTH];
 	char *name_ptr;
 
-	TLIBC_ERROR_CODE (*read_struct_begin)(TLIBC_ABSTRACT_READER *self, const char *struct_name);
-	TLIBC_ERROR_CODE (*read_struct_end)(TLIBC_ABSTRACT_READER *self, const char *struct_name);
-	TLIBC_ERROR_CODE (*read_union_begin)(TLIBC_ABSTRACT_READER *self, const char *union_name);
-	TLIBC_ERROR_CODE (*read_union_end)(TLIBC_ABSTRACT_READER *self, const char *union_name);
-	TLIBC_ERROR_CODE (*read_enum_begin)(TLIBC_ABSTRACT_READER *self, const char *enum_name);
-	TLIBC_ERROR_CODE (*read_enum_end)(TLIBC_ABSTRACT_READER *self, const char *enum_name);
-	TLIBC_ERROR_CODE (*read_vector_begin)(TLIBC_ABSTRACT_READER *self);
-	TLIBC_ERROR_CODE (*read_vector_end)(TLIBC_ABSTRACT_READER *self);
-	TLIBC_ERROR_CODE (*read_vector_element_begin)(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
-	TLIBC_ERROR_CODE (*read_vector_element_end)(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
-	TLIBC_ERROR_CODE (*read_field_begin)(TLIBC_ABSTRACT_READER *self, const char *var_name);
-	TLIBC_ERROR_CODE (*read_field_end)(TLIBC_ABSTRACT_READER *self, const char *var_name);
+	tlibc_error_code_t (*read_struct_begin)(tlibc_abstract_reader_t *self, const char *struct_name);
+	tlibc_error_code_t (*read_struct_end)(tlibc_abstract_reader_t *self, const char *struct_name);
+	tlibc_error_code_t (*read_union_begin)(tlibc_abstract_reader_t *self, const char *union_name);
+	tlibc_error_code_t (*read_union_end)(tlibc_abstract_reader_t *self, const char *union_name);
+	tlibc_error_code_t (*read_enum_begin)(tlibc_abstract_reader_t *self, const char *enum_name);
+	tlibc_error_code_t (*read_enum_end)(tlibc_abstract_reader_t *self, const char *enum_name);
+	tlibc_error_code_t (*read_vector_begin)(tlibc_abstract_reader_t *self);
+	tlibc_error_code_t (*read_vector_end)(tlibc_abstract_reader_t *self);
+	tlibc_error_code_t (*read_vector_element_begin)(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
+	tlibc_error_code_t (*read_vector_element_end)(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
+	tlibc_error_code_t (*read_field_begin)(tlibc_abstract_reader_t *self, const char *var_name);
+	tlibc_error_code_t (*read_field_end)(tlibc_abstract_reader_t *self, const char *var_name);
 
-	TLIBC_ERROR_CODE (*read_int8)(TLIBC_ABSTRACT_READER *self, int8_t *val);
-	TLIBC_ERROR_CODE (*read_int16)(TLIBC_ABSTRACT_READER *self, int16_t *val);
-	TLIBC_ERROR_CODE (*read_int32)(TLIBC_ABSTRACT_READER *self, int32_t *val);
-	TLIBC_ERROR_CODE (*read_int64)(TLIBC_ABSTRACT_READER *self, int64_t *val);
-	TLIBC_ERROR_CODE (*read_uint8)(TLIBC_ABSTRACT_READER *self, uint8_t *val);
-	TLIBC_ERROR_CODE (*read_uint16)(TLIBC_ABSTRACT_READER *self, uint16_t *val);
-	TLIBC_ERROR_CODE (*read_uint32)(TLIBC_ABSTRACT_READER *self, uint32_t *val);
-	TLIBC_ERROR_CODE (*read_uint64)(TLIBC_ABSTRACT_READER *self, uint64_t *val);
-	TLIBC_ERROR_CODE (*read_char)(TLIBC_ABSTRACT_READER *self, char *val);
-	TLIBC_ERROR_CODE (*read_double)(TLIBC_ABSTRACT_READER *self, double *val);
-	TLIBC_ERROR_CODE (*read_string)(TLIBC_ABSTRACT_READER *self, char* str, uint32_t str_length);
+	tlibc_error_code_t (*read_int8)(tlibc_abstract_reader_t *self, int8_t *val);
+	tlibc_error_code_t (*read_int16)(tlibc_abstract_reader_t *self, int16_t *val);
+	tlibc_error_code_t (*read_int32)(tlibc_abstract_reader_t *self, int32_t *val);
+	tlibc_error_code_t (*read_int64)(tlibc_abstract_reader_t *self, int64_t *val);
+	tlibc_error_code_t (*read_uint8)(tlibc_abstract_reader_t *self, uint8_t *val);
+	tlibc_error_code_t (*read_uint16)(tlibc_abstract_reader_t *self, uint16_t *val);
+	tlibc_error_code_t (*read_uint32)(tlibc_abstract_reader_t *self, uint32_t *val);
+	tlibc_error_code_t (*read_uint64)(tlibc_abstract_reader_t *self, uint64_t *val);
+	tlibc_error_code_t (*read_char)(tlibc_abstract_reader_t *self, char *val);
+	tlibc_error_code_t (*read_double)(tlibc_abstract_reader_t *self, double *val);
+	tlibc_error_code_t (*read_string)(tlibc_abstract_reader_t *self, char* str, uint32_t str_length);
 };
 
- void tlibc_abstract_reader_init(TLIBC_ABSTRACT_READER *self);
+ void tlibc_abstract_reader_init(tlibc_abstract_reader_t *self);
 
- TLIBC_ERROR_CODE tlibc_read_struct_begin(TLIBC_ABSTRACT_READER *self, const char *struct_name);
- TLIBC_ERROR_CODE tlibc_read_struct_end(TLIBC_ABSTRACT_READER *self, const char *struct_name);
- TLIBC_ERROR_CODE tlibc_read_union_begin(TLIBC_ABSTRACT_READER *self, const char *union_name);
- TLIBC_ERROR_CODE tlibc_read_union_end(TLIBC_ABSTRACT_READER *self, const char *union_name);
- TLIBC_ERROR_CODE tlibc_read_enum_begin(TLIBC_ABSTRACT_READER *self, const char *enum_name);
- TLIBC_ERROR_CODE tlibc_read_enum_end(TLIBC_ABSTRACT_READER *self, const char *enum_name);
- TLIBC_ERROR_CODE tlibc_read_vector_begin(TLIBC_ABSTRACT_READER *self);
- TLIBC_ERROR_CODE tlibc_read_vector_end(TLIBC_ABSTRACT_READER *self);
- TLIBC_ERROR_CODE tlibc_read_field_begin(TLIBC_ABSTRACT_READER *self, const char *var_name);
- TLIBC_ERROR_CODE tlibc_read_field_end(TLIBC_ABSTRACT_READER *self, const char *var_name);
- TLIBC_ERROR_CODE tlibc_read_vector_element_begin(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
- TLIBC_ERROR_CODE tlibc_read_vector_element_end(TLIBC_ABSTRACT_READER *self, const char *var_name, uint32_t index);
+ tlibc_error_code_t tlibc_read_struct_begin(tlibc_abstract_reader_t *self, const char *struct_name);
+ tlibc_error_code_t tlibc_read_struct_end(tlibc_abstract_reader_t *self, const char *struct_name);
+ tlibc_error_code_t tlibc_read_union_begin(tlibc_abstract_reader_t *self, const char *union_name);
+ tlibc_error_code_t tlibc_read_union_end(tlibc_abstract_reader_t *self, const char *union_name);
+ tlibc_error_code_t tlibc_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name);
+ tlibc_error_code_t tlibc_read_enum_end(tlibc_abstract_reader_t *self, const char *enum_name);
+ tlibc_error_code_t tlibc_read_vector_begin(tlibc_abstract_reader_t *self);
+ tlibc_error_code_t tlibc_read_vector_end(tlibc_abstract_reader_t *self);
+ tlibc_error_code_t tlibc_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name);
+ tlibc_error_code_t tlibc_read_field_end(tlibc_abstract_reader_t *self, const char *var_name);
+ tlibc_error_code_t tlibc_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
+ tlibc_error_code_t tlibc_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
 
- TLIBC_ERROR_CODE tlibc_read_int8(TLIBC_ABSTRACT_READER *self, int8_t *val);
- TLIBC_ERROR_CODE tlibc_read_int16(TLIBC_ABSTRACT_READER *self, int16_t *val);
- TLIBC_ERROR_CODE tlibc_read_int32(TLIBC_ABSTRACT_READER *self, int32_t *val);
- TLIBC_ERROR_CODE tlibc_read_int64(TLIBC_ABSTRACT_READER *self, int64_t *val);
- TLIBC_ERROR_CODE tlibc_read_uint8(TLIBC_ABSTRACT_READER *self, uint8_t *val);
- TLIBC_ERROR_CODE tlibc_read_uint16(TLIBC_ABSTRACT_READER *self, uint16_t *val);
- TLIBC_ERROR_CODE tlibc_read_uint32(TLIBC_ABSTRACT_READER *self, uint32_t *val);
- TLIBC_ERROR_CODE tlibc_read_uint64(TLIBC_ABSTRACT_READER *self, uint64_t *val);
- TLIBC_ERROR_CODE tlibc_read_char(TLIBC_ABSTRACT_READER *self, char *val);
- TLIBC_ERROR_CODE tlibc_read_double(TLIBC_ABSTRACT_READER *self, double *val);
- TLIBC_ERROR_CODE tlibc_read_string(TLIBC_ABSTRACT_READER *self, char* str, uint32_t str_length);
+ tlibc_error_code_t tlibc_read_int8(tlibc_abstract_reader_t *self, int8_t *val);
+ tlibc_error_code_t tlibc_read_int16(tlibc_abstract_reader_t *self, int16_t *val);
+ tlibc_error_code_t tlibc_read_int32(tlibc_abstract_reader_t *self, int32_t *val);
+ tlibc_error_code_t tlibc_read_int64(tlibc_abstract_reader_t *self, int64_t *val);
+ tlibc_error_code_t tlibc_read_uint8(tlibc_abstract_reader_t *self, uint8_t *val);
+ tlibc_error_code_t tlibc_read_uint16(tlibc_abstract_reader_t *self, uint16_t *val);
+ tlibc_error_code_t tlibc_read_uint32(tlibc_abstract_reader_t *self, uint32_t *val);
+ tlibc_error_code_t tlibc_read_uint64(tlibc_abstract_reader_t *self, uint64_t *val);
+ tlibc_error_code_t tlibc_read_char(tlibc_abstract_reader_t *self, char *val);
+ tlibc_error_code_t tlibc_read_double(tlibc_abstract_reader_t *self, double *val);
+ tlibc_error_code_t tlibc_read_string(tlibc_abstract_reader_t *self, char* str, uint32_t str_length);
 
  #endif

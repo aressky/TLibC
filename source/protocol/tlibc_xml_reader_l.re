@@ -8,9 +8,9 @@
 
 
 		
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_scan(TLIBC_XML_READER *self)
+tlibc_xml_reader_token_t tlibc_xml_reader_scan(tlibc_xml_reader_t *self)
 {
-	TLIBC_XML_READER_SCANNER_CONTEXT *sp = NULL;
+	tlibc_xml_reader_scanner_context_t *sp = NULL;
 	self->error_code = E_TLIBC_NOERROR;
 restart:
 	sp = &self->scanner_context_stack[self->scanner_context_stack_num - 1];

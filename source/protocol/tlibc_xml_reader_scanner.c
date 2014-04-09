@@ -2,10 +2,10 @@
 
 #include <string.h>
 
-void tlibc_xml_reader_locate(TLIBC_XML_READER *self)
+void tlibc_xml_reader_locate(tlibc_xml_reader_t *self)
 {
 	const char *i;
-	TLIBC_XML_READER_SCANNER_CONTEXT *sp = &self->scanner_context_stack[self->scanner_context_stack_num - 1];
+	tlibc_xml_reader_scanner_context_t *sp = &self->scanner_context_stack[self->scanner_context_stack_num - 1];
 	for(i = sp->yy_last; i < sp->yy_cursor;++i)
 	{
 		if(*i == '\n')
@@ -25,10 +25,10 @@ void tlibc_xml_reader_locate(TLIBC_XML_READER *self)
 	sp->yy_last = sp->yy_cursor;
 }
 
-TLIBC_XML_READER_TOKEN tlibc_xml_reader_get_token(TLIBC_XML_READER *self)
+tlibc_xml_reader_token_t tlibc_xml_reader_get_token(tlibc_xml_reader_t *self)
 {
-	TLIBC_XML_READER_TOKEN token = tok_end;
-	TLIBC_XML_READER_SCANNER_CONTEXT *sp = NULL;
+	tlibc_xml_reader_token_t token = tok_end;
+	tlibc_xml_reader_scanner_context_t *sp = NULL;
 
 	token = tlibc_xml_reader_scan(self);
 	if(token == tok_end)
