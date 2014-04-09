@@ -103,6 +103,9 @@ tlibc_error_code_t tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char 
 
 	tlibc_abstract_reader_init(&self->super);
 
+	self->last_col = -1;
+	self->last_col_str[0] = 0;
+
 	self->super.read_vector_element_begin = tlibc_xlsx_read_vector_element_begin;
 	self->super.read_field_begin = tlibc_xlsx_read_field_begin;	
 	self->super.read_enum_begin = tlibc_xlsx_read_enum_begin;
@@ -239,10 +242,7 @@ static void tlibc_xlsx_locate(tlibc_xlsx_reader_t *self)
 {
 	tlibc_xlsx_cell_s *cell;
 	tlibc_hash_head_t *head;
-	if(self->curr_cell != 0)
-	{
-		self->last_pos = self->curr_cell->xpos;
-	}
+
 	self->curr_cell = NULL;
 	if(self->super.name_ptr <= self->super.name)
 	{
@@ -255,6 +255,10 @@ static void tlibc_xlsx_locate(tlibc_xlsx_reader_t *self)
 	}
 	cell = TLIBC_CONTAINER_OF(head, tlibc_xlsx_cell_s, name2index);
 	self->curr_cell = self->curr_row + (cell - self->bindinfo_row);
+
+	self->last_col = self->curr_cell - self->curr_row;
+
+	
 
 done:
 	return;
@@ -561,7 +565,32 @@ done:
 	return ret;
 }
 
-const char* tlibc_xlsx_last_location(tlibc_xlsx_reader_t *self)
+const char* tlibc_xlsx_last_col(tlibc_xlsx_reader_t *self)
 {
-	return self->last_pos;
+	if(self->last_col >= 0)
+	{
+		uint32_t col = self->last_col + 1;
+		uint32_t i = 0;
+		while(col > 0)
+		{
+			if(i >= TLIBC_XLSX_MAX_COL_STR)
+			{
+				break;
+			}
+			self->last_col_str[i] = col % 26 + 'A';
+			++i;
+			col /= 26;
+		}
+		if(i < TLIBC_XLSX_MAX_COL_STR)
+		{
+			self->last_col_str[i] = 0;
+		}
+		else
+		{
+			self->last_col_str[TLIBC_XLSX_MAX_COL_STR - 1] = 0;
+		}
+		
+	}
+	
+	return self->last_col_str;
 }

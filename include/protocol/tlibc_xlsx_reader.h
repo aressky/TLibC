@@ -32,6 +32,7 @@ typedef struct _tlibc_xlsx_cell_s
 }tlibc_xlsx_cell_s;
 
 #define TLIBC_XLSX_HASH_BUCKET 65536
+#define TLIBC_XLSX_MAX_COL_STR 1024
 
 typedef struct _tlibc_xlsx_reader_t
 {
@@ -68,7 +69,8 @@ typedef struct _tlibc_xlsx_reader_t
 	tlibc_xlsx_cell_s *curr_cell;	
 
 
-	const char *last_pos;
+	int32_t last_col;
+	char last_col_str[TLIBC_XLSX_MAX_COL_STR];
 
 	int read_enum_name_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
@@ -87,7 +89,7 @@ typedef struct _tlibc_xlsx_reader_t
 
  void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
- const char* tlibc_xlsx_last_location(tlibc_xlsx_reader_t *self);
+ const char* tlibc_xlsx_last_col(tlibc_xlsx_reader_t *self);
 
 
 
