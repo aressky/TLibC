@@ -18,6 +18,10 @@ restart:
 	{
 		if(self->scanner_context_stack_num > 0)
 		{
+			if(self->scanner_context_stack[self->scanner_context_stack_num - 1].filecontent_ptr)
+			{
+				free(self->scanner_context_stack[self->scanner_context_stack_num - 1].filecontent_ptr);
+			}
 			--self->scanner_context_stack_num;
 			goto restart;
 		}
