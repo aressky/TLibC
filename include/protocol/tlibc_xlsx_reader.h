@@ -68,6 +68,8 @@ typedef struct _tlibc_xlsx_reader_t
 	tlibc_xlsx_cell_s *curr_row;
 	tlibc_xlsx_cell_s *curr_cell;	
 
+	
+
 
 	int32_t last_col;
 	char last_col_str[TLIBC_XLSX_MAX_COL_STR];
@@ -75,6 +77,13 @@ typedef struct _tlibc_xlsx_reader_t
 	int read_enum_name_once;
 	tlibc_hash_bucket_t hash_bucket[TLIBC_XLSX_HASH_BUCKET];
 	tlibc_hash_t name2index;
+
+
+	//如果不存在动态长度的数据， 可以通过这个开关来优化读取速度。
+	//可以通过TData生成数据的标号来更好的解决这个问题。
+	int use_cache;
+	size_t row_index;
+	tlibc_xlsx_cell_s **hash_cache;
 }tlibc_xlsx_reader_t;
 
  tlibc_error_code_t tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char *file_name);

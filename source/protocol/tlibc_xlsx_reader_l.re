@@ -84,6 +84,10 @@ restart:
 	xpos2pos(&self->cell_max_pos, size_max);
 	self->cell_row_size = (self->cell_max_pos.row - self->cell_min_pos.row + 1);
 	self->cell_col_size = (self->cell_max_pos.col - self->cell_min_pos.col + 1);
+	if(self->use_cache)
+	{
+		self->hash_cache = malloc(sizeof(tlibc_xlsx_cell_s) * self->cell_col_size);
+	}
 	self->cell_matrix = malloc(sizeof(tlibc_xlsx_cell_s) * self->cell_row_size * self->cell_col_size);
 	if(self->cell_matrix == NULL)
 	{

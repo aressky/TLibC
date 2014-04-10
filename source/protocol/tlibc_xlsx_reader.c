@@ -124,6 +124,9 @@ tlibc_error_code_t tlibc_xlsx_reader_init(tlibc_xlsx_reader_t *self, const char 
 	self->super.read_char = tlibc_xlsx_read_char;
 	self->super.read_string = tlibc_xlsx_read_string;
 	self->super.enable_name = TRUE;
+	self->use_cache = TRUE;
+	self->hash_cache = NULL;
+	self->row_index = 0;
 	
 	tlibc_hash_init(&self->name2index, self->hash_bucket, TLIBC_XLSX_HASH_BUCKET);
 	
@@ -201,6 +204,10 @@ ERROR_RET:
 			tlibc_hash_insert(&self->name2index, self->bindinfo_row[i].val_begin
 				, self->bindinfo_row[i].val_end - self->bindinfo_row[i].val_begin, &self->bindinfo_row[i].name2index);
 		}
+		if(self->use_cache)
+		{
+			self->hash_cache[i] = NULL;
+		}
 	}
 
 	return E_TLIBC_NOERROR;
@@ -220,7 +227,8 @@ void tlibc_xlsx_reader_row_seek(tlibc_xlsx_reader_t *self, uint32_t offset)
 	self->super.name_ptr = self->super.name;
 	self->curr_cell = NULL;
 	self->read_enum_name_once = FALSE;
-	self->curr_row = self->cell_matrix + (offset - self->cell_min_pos.row) * self->cell_col_size;
+	self->row_index = 0;
+	self->curr_row = self->cell_matrix + (offset - self->cell_min_pos.row) * self->cell_col_size;	
 }
 
 void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self)
@@ -231,6 +239,11 @@ void tlibc_xlsx_reader_close_sheet(tlibc_xlsx_reader_t *self)
 
 void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self)
 {
+	if(self->hash_cache)
+	{
+		free(self->hash_cache);
+	}
+
 	if(self->cell_matrix)
 	{
 		free(self->cell_matrix);
@@ -270,23 +283,33 @@ static void tlibc_xlsx_locate(tlibc_xlsx_reader_t *self)
 	tlibc_hash_head_t *head;
 
 	self->curr_cell = NULL;
-	if(self->super.name_ptr <= self->super.name)
+	if((self->use_cache) && (self->hash_cache) && (self->hash_cache[self->row_index]))
 	{
-		goto done;
+		cell = self->hash_cache[self->row_index];
+		self->super.enable_name = FALSE;
 	}
-	head = tlibc_hash_find(&self->name2index, self->super.name + 1, self->super.name_ptr - self->super.name - 1);
-	if(head == NULL)
-	{
-		goto done;
+	else
+	{	
+		if(self->super.name_ptr <= self->super.name)
+		{
+			goto done;
+		}
+		head = tlibc_hash_find(&self->name2index, self->super.name + 1, self->super.name_ptr - self->super.name - 1);
+		if(head == NULL)
+		{
+			goto done;
+		}
+		cell = TLIBC_CONTAINER_OF(head, tlibc_xlsx_cell_s, name2index);
+		if(self->use_cache)
+		{
+			self->hash_cache[self->row_index] = cell;
+		}
 	}
-	cell = TLIBC_CONTAINER_OF(head, tlibc_xlsx_cell_s, name2index);
+	++self->row_index;
 	self->curr_cell = self->curr_row + (cell - self->bindinfo_row);
-
 	self->last_col = self->curr_cell - self->curr_row;
 
-	
-
-done:
+done:	
 	return;
 }
 tlibc_error_code_t tlibc_xlsx_read_vector_element_begin(tlibc_abstract_reader_t *super, const char* var_name, uint32_t index)
