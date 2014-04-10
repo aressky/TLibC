@@ -614,32 +614,66 @@ done:
 	return ret;
 }
 
-const char* tlibc_xlsx_last_col(tlibc_xlsx_reader_t *self)
+size_t tlibc_xlsx_current_col(tlibc_xlsx_reader_t *self)
 {
-	if(self->last_col >= 0)
+	return self->last_col + 1;
+}
+
+size_t tlibc_xlsx_str2num(const char* str)
+{
+	size_t len;
+	size_t i;
+	uint32_t num = 0;
+	if(str == NULL)
 	{
-		uint32_t col = self->last_col + 1;
-		uint32_t i = 0;
-		while(col > 0)
+		return 0;
+	}
+	len = strlen(str);
+
+	for(i = 0; i < len; ++i)
+	{
+		num = num * 26 + str[i] - 'A' + 1;
+	}
+	return num;
+}
+
+const char* tlibc_xlsx_num2str(int num, char *str, size_t str_max_len)
+{             
+	int r = 0;
+	size_t str_len = str_max_len;
+	if(str_len <= 0)
+	{
+		return NULL;
+	}
+	--str_len;
+	str[str_len] = 0;
+
+	while(num != 0)  
+	{
+		char ch;
+		r = num % 26;
+		if(r == 0)
 		{
-			if(i >= TLIBC_XLSX_MAX_COL_STR)
-			{
-				break;
-			}
-			self->last_col_str[i] = col % 26 + 'A';
-			++i;
-			col /= 26;
-		}
-		if(i < TLIBC_XLSX_MAX_COL_STR)
-		{
-			self->last_col_str[i] = 0;
+			ch = 'Z';
 		}
 		else
 		{
-			self->last_col_str[TLIBC_XLSX_MAX_COL_STR - 1] = 0;
+			ch = (char)('A' + r - 1);
 		}
-		
+		if(str_len <= 0)
+		{
+			return NULL;
+		}
+		--str_len;
+		str[str_len] = ch;		
+		if(ch == 'Z')
+		{
+			num = num / 26 - 1;
+		}
+		else
+		{
+			num /= 26 ;
+		}
 	}
-	
-	return self->last_col_str;
+	return str + str_len;
 }

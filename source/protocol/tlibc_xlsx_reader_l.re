@@ -14,7 +14,7 @@
 re2c:yyfill:enable   = 0;
 */
 
-void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
+static void xpos2pos(tlibc_xlsx_pos *self, const char* xpos)
 {
 	self->col = 0;
 	while(*xpos >='A')

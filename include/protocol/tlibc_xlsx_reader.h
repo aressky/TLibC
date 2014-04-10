@@ -98,7 +98,11 @@ typedef struct _tlibc_xlsx_reader_t
 
  void tlibc_xlsx_reader_fini(tlibc_xlsx_reader_t *self);
 
- const char* tlibc_xlsx_last_col(tlibc_xlsx_reader_t *self);
+ size_t tlibc_xlsx_str2num(const char* str);
+
+ const char* tlibc_xlsx_num2str(int num, char *str, size_t str_max_len);
+
+ size_t tlibc_xlsx_current_col(tlibc_xlsx_reader_t *self);
 
 
 
