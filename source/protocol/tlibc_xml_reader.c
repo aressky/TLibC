@@ -340,18 +340,16 @@ ERROR_RET:
 
 tlibc_error_code_t tlibc_xml_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
-	char name[TLIBC_MAX_PATH_LENGTH];
 	TLIBC_UNUSED(var_name);
-	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
-	return tlibc_xml_read_field_begin(self, name);
+	TLIBC_UNUSED(index);
+	return tlibc_xml_read_field_begin(self, "element");
 }
 
 tlibc_error_code_t tlibc_xml_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
-	char name[TLIBC_MAX_PATH_LENGTH];
 	TLIBC_UNUSED(var_name);
-	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
-	return tlibc_xml_read_field_end(self, name);
+	TLIBC_UNUSED(index);
+	return tlibc_xml_read_field_end(self, "element");
 }
 
 tlibc_error_code_t tlibc_xml_read_double(tlibc_abstract_reader_t *super, double *val)
