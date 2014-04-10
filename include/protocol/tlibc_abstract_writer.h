@@ -14,8 +14,8 @@ struct tlibc_abstract_writer_s
 	tlibc_error_code_t (*write_union_end)(tlibc_abstract_writer_t *self, const char *union_name);
 	tlibc_error_code_t (*write_enum_begin)(tlibc_abstract_writer_t *self, const char *enum_name);
 	tlibc_error_code_t (*write_enum_end)(tlibc_abstract_writer_t *self, const char *enum_name);
-	tlibc_error_code_t (*write_vector_begin)(tlibc_abstract_writer_t *self);
-	tlibc_error_code_t (*write_vector_end)(tlibc_abstract_writer_t *self);
+	tlibc_error_code_t (*write_vector_begin)(tlibc_abstract_writer_t *self, const char* vec_name);
+	tlibc_error_code_t (*write_vector_end)(tlibc_abstract_writer_t *self, const char* vec_name);
 	tlibc_error_code_t (*write_field_begin)(tlibc_abstract_writer_t *self, const char *var_name);
 	tlibc_error_code_t (*write_field_end)(tlibc_abstract_writer_t *self, const char *var_name);	
 	tlibc_error_code_t (*write_vector_element_begin)(tlibc_abstract_writer_t *self, const char *var_name, uint32_t index);
@@ -42,8 +42,8 @@ struct tlibc_abstract_writer_s
  tlibc_error_code_t tlibc_write_union_end(tlibc_abstract_writer_t *self, const char *union_name);
  tlibc_error_code_t tlibc_write_enum_begin(tlibc_abstract_writer_t *self, const char *enum_name);
  tlibc_error_code_t tlibc_write_enum_end(tlibc_abstract_writer_t *self, const char *enum_name);
- tlibc_error_code_t tlibc_write_vector_begin(tlibc_abstract_writer_t *self);
- tlibc_error_code_t tlibc_write_vector_end(tlibc_abstract_writer_t *self);
+ tlibc_error_code_t tlibc_write_vector_begin(tlibc_abstract_writer_t *self, const char* vec_name);
+ tlibc_error_code_t tlibc_write_vector_end(tlibc_abstract_writer_t *self, const char* vec_name);
  tlibc_error_code_t tlibc_write_field_begin(tlibc_abstract_writer_t *self, const char *var_name);
  tlibc_error_code_t tlibc_write_field_end(tlibc_abstract_writer_t *self, const char *var_name);
  tlibc_error_code_t tlibc_write_vector_element_begin(tlibc_abstract_writer_t *self, const char *var_name, uint32_t index);

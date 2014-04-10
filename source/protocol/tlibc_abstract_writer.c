@@ -85,22 +85,22 @@ tlibc_error_code_t tlibc_write_enum_end(tlibc_abstract_writer_t *self, const cha
 	return self->write_enum_end(self, enum_name);
 }
 
-tlibc_error_code_t tlibc_write_vector_begin(tlibc_abstract_writer_t *self)
+tlibc_error_code_t tlibc_write_vector_begin(tlibc_abstract_writer_t *self, const char* vec_name)
 {
 	if(self->write_vector_begin == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_vector_begin(self);
+	return self->write_vector_begin(self, vec_name);
 }
 
-tlibc_error_code_t tlibc_write_vector_end(tlibc_abstract_writer_t *self)
+tlibc_error_code_t tlibc_write_vector_end(tlibc_abstract_writer_t *self, const char* vec_name)
 {
 	if(self->write_vector_end == NULL)
 	{
 		return E_TLIBC_NOERROR;
 	}
-	return self->write_vector_end(self);
+	return self->write_vector_end(self, vec_name);
 }
 
 tlibc_error_code_t tlibc_write_field_begin(tlibc_abstract_writer_t *self, const char *var_name)

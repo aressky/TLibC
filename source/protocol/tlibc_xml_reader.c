@@ -236,13 +236,14 @@ tlibc_error_code_t tlibc_xml_read_enum_begin(tlibc_abstract_reader_t *super, con
 	return E_TLIBC_NOERROR;
 }
 
-tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super)
+tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super, const char *vec_name)
 {
 	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	uint32_t level;
 	uint32_t count;
 	tlibc_xml_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_reader_t, super);
 	tlibc_xml_reader_t self_copy = *self;
+	TLIBC_UNUSED(vec_name);
 	count = 0;
 	level = 0;
 	do
@@ -266,7 +267,7 @@ tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super)
 		}
 	}while(level != 0);
 
-	ret = tlibc_xml_read_field_begin(super, "vector");
+	ret = tlibc_xml_read_field_begin(super, vec_name);
 	self->pre_read_uint32_field_once = TRUE;
 	self->ui32 = count;
 
@@ -275,9 +276,9 @@ ERROR_RET:
 	return ret;
 }
 
-tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *super)
+tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *super, const char *vec_name)
 {
-	return tlibc_xml_read_field_end(super, "vector");
+	return tlibc_xml_read_field_end(super, vec_name);
 }
 
 tlibc_error_code_t tlibc_xml_read_field_begin(tlibc_abstract_reader_t *super, const char *var_name)
@@ -339,14 +340,18 @@ ERROR_RET:
 
 tlibc_error_code_t tlibc_xml_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
-	TLIBC_UNUSED(index);
-	return tlibc_xml_read_field_begin(self, var_name);
+	char name[TLIBC_MAX_PATH_LENGTH];
+	TLIBC_UNUSED(var_name);
+	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
+	return tlibc_xml_read_field_begin(self, name);
 }
 
 tlibc_error_code_t tlibc_xml_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index)
 {
-	TLIBC_UNUSED(index);
-	return tlibc_xml_read_field_end(self, var_name);
+	char name[TLIBC_MAX_PATH_LENGTH];
+	TLIBC_UNUSED(var_name);
+	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
+	return tlibc_xml_read_field_end(self, name);
 }
 
 tlibc_error_code_t tlibc_xml_read_double(tlibc_abstract_reader_t *super, double *val)

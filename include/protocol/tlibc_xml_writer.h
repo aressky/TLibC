@@ -25,9 +25,9 @@ tlibc_error_code_t tlibc_xml_writer_init(tlibc_xml_writer_t *self, const char *f
 void tlibc_xml_writer_fini(tlibc_xml_writer_t *self);
 
 
-tlibc_error_code_t tlibc_xml_write_vector_begin(tlibc_abstract_writer_t *super);
+tlibc_error_code_t tlibc_xml_write_vector_begin(tlibc_abstract_writer_t *super, const char* vec_name);
 
-tlibc_error_code_t tlibc_xml_write_vector_end(tlibc_abstract_writer_t *super);
+tlibc_error_code_t tlibc_xml_write_vector_end(tlibc_abstract_writer_t *super, const char* vec_name);
 
 tlibc_error_code_t tlibc_xml_write_field_begin(tlibc_abstract_writer_t *super, const char *var_name);
 

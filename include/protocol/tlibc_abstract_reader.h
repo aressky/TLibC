@@ -19,8 +19,8 @@ struct tlibc_abstract_reader_s
 	tlibc_error_code_t (*read_union_end)(tlibc_abstract_reader_t *self, const char *union_name);
 	tlibc_error_code_t (*read_enum_begin)(tlibc_abstract_reader_t *self, const char *enum_name);
 	tlibc_error_code_t (*read_enum_end)(tlibc_abstract_reader_t *self, const char *enum_name);
-	tlibc_error_code_t (*read_vector_begin)(tlibc_abstract_reader_t *self);
-	tlibc_error_code_t (*read_vector_end)(tlibc_abstract_reader_t *self);
+	tlibc_error_code_t (*read_vector_begin)(tlibc_abstract_reader_t *self, const char* vec_name);
+	tlibc_error_code_t (*read_vector_end)(tlibc_abstract_reader_t *self, const char* vec_name);
 	tlibc_error_code_t (*read_vector_element_begin)(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
 	tlibc_error_code_t (*read_vector_element_end)(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
 	tlibc_error_code_t (*read_field_begin)(tlibc_abstract_reader_t *self, const char *var_name);
@@ -47,8 +47,8 @@ struct tlibc_abstract_reader_s
  tlibc_error_code_t tlibc_read_union_end(tlibc_abstract_reader_t *self, const char *union_name);
  tlibc_error_code_t tlibc_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name);
  tlibc_error_code_t tlibc_read_enum_end(tlibc_abstract_reader_t *self, const char *enum_name);
- tlibc_error_code_t tlibc_read_vector_begin(tlibc_abstract_reader_t *self);
- tlibc_error_code_t tlibc_read_vector_end(tlibc_abstract_reader_t *self);
+ tlibc_error_code_t tlibc_read_vector_begin(tlibc_abstract_reader_t *self, const char* vec_name);
+ tlibc_error_code_t tlibc_read_vector_end(tlibc_abstract_reader_t *self, const char* vec_name);
  tlibc_error_code_t tlibc_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name);
  tlibc_error_code_t tlibc_read_field_end(tlibc_abstract_reader_t *self, const char *var_name);
  tlibc_error_code_t tlibc_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);

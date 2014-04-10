@@ -81,9 +81,9 @@ typedef struct tlibc_xml_reader_s
 
  tlibc_error_code_t tlibc_xml_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name);
 
- tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *self);
+ tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *self, const char *vec_name);
 
- tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *self);
+ tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *self, const char *vec_name);
 
  tlibc_error_code_t tlibc_xml_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name);
 

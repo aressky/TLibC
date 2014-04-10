@@ -123,23 +123,23 @@ tlibc_error_code_t tlibc_xml_write_enum_begin(tlibc_abstract_writer_t *super, co
 	return E_TLIBC_NOERROR;
 }
 
-tlibc_error_code_t tlibc_xml_write_vector_begin(tlibc_abstract_writer_t *super)
+tlibc_error_code_t tlibc_xml_write_vector_begin(tlibc_abstract_writer_t *super, const char* vec_name)
 {
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);	
-	tlibc_error_code_t ret = tlibc_xml_write_field_begin(super, "vector");
+	tlibc_error_code_t ret = tlibc_xml_write_field_begin(super, vec_name);
 	self->skip_uint32_field_once = TRUE;
 	return ret;
 }
 
-tlibc_error_code_t tlibc_xml_write_vector_end(tlibc_abstract_writer_t *super)
+tlibc_error_code_t tlibc_xml_write_vector_end(tlibc_abstract_writer_t *super, const char* vec_name)
 {
-	return tlibc_xml_write_field_end(super, "vector");
+	return tlibc_xml_write_field_end(super, vec_name);
 }
 
 tlibc_error_code_t tlibc_xml_write_field_begin(tlibc_abstract_writer_t *super, const char *var_name)
 {
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	const char *i;
+	const char *i;	
 	if(self->skip_uint32_field_once)
 	{
 		goto done;
@@ -190,14 +190,18 @@ done:
 
 tlibc_error_code_t tlibc_xml_write_vector_element_begin(tlibc_abstract_writer_t *super, const char *var_name, uint32_t index)
 {
-	TLIBC_UNUSED(index);
-	return tlibc_xml_write_field_begin(super, var_name);
+	char name[TLIBC_MAX_PATH_LENGTH];
+	TLIBC_UNUSED(var_name);
+	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
+	return tlibc_xml_write_field_begin(super, name);
 }
 
 tlibc_error_code_t tlibc_xml_write_vector_element_end(tlibc_abstract_writer_t *super, const char *var_name, uint32_t index)
 {
-	TLIBC_UNUSED(index);
-	return tlibc_xml_write_field_end(super, var_name);
+	char name[TLIBC_MAX_PATH_LENGTH];
+	TLIBC_UNUSED(var_name);
+	snprintf(name, TLIBC_MAX_PATH_LENGTH, "[%u]", index);
+	return tlibc_xml_write_field_end(super, name);
 }
 
 tlibc_error_code_t tlibc_xml_write_double(tlibc_abstract_writer_t *super, const double *val)

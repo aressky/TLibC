@@ -196,16 +196,18 @@ restart:
 			goto ERROR_RET;
 		}
 		cell->val_begin = self->sharedstring_begin_list[string_index];
+		cell->val_start = cell->val_begin;
 		cell->val_end = self->sharedstring_end_list[string_index];
+		cell->val_limit = cell->val_end;
 	}
 	BEGIN(IN_ROW);
 	goto restart;
 }
-<IN_COL>"<v>"						{ cell->val_begin = YYCURSOR; goto restart;}
-<IN_COL>"</v>"						{ cell->val_end = YYCURSOR - 4; *(YYCURSOR - 4)= 0; goto restart;}
+<IN_COL>"<v>"						{ cell->val_begin = YYCURSOR; cell->val_start = cell->val_begin; goto restart;}
+<IN_COL>"</v>"						{ cell->val_end = YYCURSOR - 4; *(YYCURSOR - 4)= 0; cell->val_limit = cell->val_end; goto restart;}
 <IN_ROW>"</row>"					{ BEGIN(IN_SHEETDATA); goto restart; }
-<IN_SHEETDATA>"</sheetdata>"		{ BEGIN(INITIAL); goto restart;		}
-<INITIAL>"</sheetdata>"				{ BEGIN(INITIAL);goto restart;		}
+<IN_SHEETDATA>"</sheetdata>"		{ BEGIN(INITIAL); goto restart;		 }
+<INITIAL>"</sheetdata>"				{ BEGIN(INITIAL);goto restart;		 }
 <*>[^]								{ goto restart;}
 */
 ERROR_RET:
