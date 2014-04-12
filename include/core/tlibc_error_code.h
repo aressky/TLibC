@@ -19,6 +19,7 @@ typedef enum tlibc_error_code_e
 	E_TLIBC_INTEGER_OVERFLOW = -11,
 	E_TLIBC_IGNORE = -12,
 	E_TLIBC_PLEASE_READ_ENUM_NAME = -13,
+	E_TLIBC_FILE_IS_ALREADY_ON_THE_STACK = -14,
 }tlibc_error_code_t;
 
 #define TLIBC_ERROR_CODE_NUM 15

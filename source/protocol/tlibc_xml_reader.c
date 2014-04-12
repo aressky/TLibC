@@ -18,6 +18,21 @@ tlibc_error_code_t tlibc_xml_reader_push_file(tlibc_xml_reader_t *self, const ch
 	size_t file_size;
 	char c;
 	char *start, *curr, *limit;
+	size_t i;
+
+	for(i = 0; i < self->scanner_context_stack_num ; ++i)
+	{
+		if(self->scanner_context_stack[i].filecontent_ptr)
+		{
+			if(strcmp(self->scanner_context_stack[i].yylloc.file_name, file_name) == 0)
+			{
+				ret = E_TLIBC_FILE_IS_ALREADY_ON_THE_STACK;
+				goto done;
+			}
+		}		
+	}
+
+	
 
 	fin = fopen(file_name, "rb");
 	if(fin == NULL)
@@ -37,7 +52,7 @@ tlibc_error_code_t tlibc_xml_reader_push_file(tlibc_xml_reader_t *self, const ch
 	if(fin == NULL)
 	{
 		ret = E_TLIBC_NOT_FOUND;
-		goto ERROR_RET;
+		goto done;
 	}	
 
 	fseek(fin, 0, SEEK_END);
@@ -78,7 +93,7 @@ free_buff:
 	free(start);
 free_file:
 	fclose(fin);
-ERROR_RET:
+done:
 	return ret;
 }
 
@@ -242,6 +257,7 @@ tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super, c
 	uint32_t level;
 	uint32_t count;
 	tlibc_xml_reader_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_reader_t, super);
+	//copy一份是因为统计数组的长度。
 	tlibc_xml_reader_t self_copy = *self;
 	TLIBC_UNUSED(vec_name);
 	count = 0;
@@ -262,7 +278,7 @@ tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super, c
 				--level;
 				break;
 			default:
-				ret = E_TLIBC_SYNTAX;
+				ret = self_copy.error_code;
 				goto ERROR_RET;
 		}
 	}while(level != 0);

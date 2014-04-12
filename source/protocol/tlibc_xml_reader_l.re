@@ -34,15 +34,31 @@ restart:
 re2c:yyfill:check = 0;
 
 identifier		([a-zA-Z_][a-zA-Z_0-9]*)
-comment			("<!--".*"-->")
+comment			("<!--")
 anychar			([^])
+
 
 
 <!*> := yyleng = YYCURSOR - yytext; tlibc_xml_reader_locate(self);
 
-<*>{comment}							{	goto restart;																}
+<*>{comment}
+{
+	const char * comment_begin = NULL;
+	for(comment_begin = YYCURSOR; YYCURSOR != YYLIMIT; ++YYCURSOR)
+	{
+		if(YYCURSOR - comment_begin >= 2)
+		{
+			if((*(YYCURSOR - 2) == '-') && (*(YYCURSOR - 1) == '-') && (*(YYCURSOR - 0) == '>'))
+			{
+				goto restart;
+			}
+		}
+	}
+	goto restart;
+}
 <INITIAL>'<!include'
 {
+	tlibc_error_code_t r;
 	const char* file_begin;
 	const char* file_end;
 	size_t file_len;
@@ -93,9 +109,10 @@ anychar			([^])
 	memcpy(file, file_begin, file_len);
 	file[file_len] = 0;
 
-	if(tlibc_xml_reader_push_file(self, file) != E_TLIBC_NOERROR)
+	r = tlibc_xml_reader_push_file(self, file); 
+	if(r != E_TLIBC_NOERROR)
 	{
-		self->error_code = E_TLIBC_NOT_FOUND;
+		self->error_code = r;
 		return tok_error;
 	}
 	goto restart;
