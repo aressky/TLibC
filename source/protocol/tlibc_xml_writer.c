@@ -9,21 +9,15 @@
 #include <stdio.h>
 
 
-tlibc_error_code_t tlibc_xml_writer_init(tlibc_xml_writer_t *self, const char *file_name)
+void tlibc_xml_writer_init(tlibc_xml_writer_t *self, char *start, char*limit)
 {
-	tlibc_error_code_t ret;
-
 	tlibc_abstract_writer_init(&self->super);
 
-	self->f = fopen(file_name, "wb");
-	if(self->f == NULL)
-	{
-		ret = E_TLIBC_NOT_FOUND;
-		goto ERROR_RET;
-	}
 
+	self->cur = start;
+	self->start = start;
+	self->limit = limit;
 	self->count = 0;
-	self->need_tab = FALSE;
 
 	self->super.write_struct_begin = tlibc_xml_write_struct_begin;
 	self->super.write_struct_end = tlibc_xml_write_struct_end;
@@ -54,65 +48,55 @@ tlibc_error_code_t tlibc_xml_writer_init(tlibc_xml_writer_t *self, const char *f
 
 	self->skip_uint32_field_once = FALSE;
 	self->ignore_int32_once = FALSE;
-
-	return E_TLIBC_NOERROR;
-ERROR_RET:
-	return ret;
-
-}
-
- void tlibc_xml_writer_fini(tlibc_xml_writer_t *self)
-{
-	fclose(self->f);
-}
-
-static void printf_tab(tlibc_xml_writer_t *self)
-{
-	uint32_t i;
-	for(i = 0;i < self->count; ++i)
-	{
-		fputc('\t', self->f);
-	}
 }
 
 tlibc_error_code_t tlibc_xml_write_struct_begin(tlibc_abstract_writer_t *super, const char *struct_name)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);	
-	uint32_t i;
-	uint32_t len;
+	size_t slen, len;
 
 	if(self->count == 0)
 	{
-		len = strlen(struct_name);
-		fputc('<', self->f);
-		for(i = 0;i < len; ++i)
+		slen = strlen(struct_name);
+		len = slen + 1 + 1;
+		if((size_t)(self->limit - self->cur) < len)
 		{
-			fputc(struct_name[i], self->f);
+			ret = E_TLIBC_OUT_OF_MEMORY;
+			goto done;
 		}
-		fputc('>', self->f);
+		*(self->cur++) = '<';
+		memcpy(self->cur, struct_name, slen);
+		self->cur += slen;
+		*(self->cur++) = '>';
 	}
-	return E_TLIBC_NOERROR;
+	
+done:
+	return ret;
 }
 
 tlibc_error_code_t tlibc_xml_write_struct_end(tlibc_abstract_writer_t *super, const char *struct_name)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);	
-	uint32_t i;
-	uint32_t len = 0;
+	size_t slen, len;
 	if(self->count == 0)
 	{
-		len = strlen(struct_name);
-
-		fputc('\n', self->f);
-		fputc('<', self->f);
-		fputc('/', self->f);
-		for(i = 0;i < len; ++i)
+		slen = strlen(struct_name);
+		len = slen + 3;
+		if((size_t)(self->limit - self->cur) < len)
 		{
-			fputc(struct_name[i], self->f);
+			ret = E_TLIBC_OUT_OF_MEMORY;
+			goto done;
 		}
-		fputc('>', self->f);
+		*(self->cur++) = '<';
+		*(self->cur++) = '/';
+		memcpy(self->cur, struct_name, slen);
+		self->cur += slen;
+		*(self->cur++) = '>';
 	}
-	return E_TLIBC_NOERROR;
+done:
+	return ret;
 }
 
 tlibc_error_code_t tlibc_xml_write_enum_begin(tlibc_abstract_writer_t *super, const char *enum_name)
@@ -138,51 +122,58 @@ tlibc_error_code_t tlibc_xml_write_vector_end(tlibc_abstract_writer_t *super, co
 
 tlibc_error_code_t tlibc_xml_write_field_begin(tlibc_abstract_writer_t *super, const char *var_name)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	const char *i;	
+	size_t len, slen;
 	if(self->skip_uint32_field_once)
 	{
 		goto done;
 	}
+	++self->count;
 
-	fputc('\n', self->f);	
-	++(self->count);
-	printf_tab(self);
+	slen = strlen(var_name);
+	len = 0;
 	
-	fputc('<', self->f);
-	for(i = var_name;*i; ++i)
+	if((size_t)(self->limit - self->cur) < len)
 	{
-		fputc(*i, self->f);
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
 	}
-	fputc('>', self->f);
+	
+	*(self->cur++) = '<';
+	memcpy(self->cur, var_name, slen);
+	self->cur+=slen;
+	*(self->cur++) = '>';
 done:
 	return E_TLIBC_NOERROR;
 }
 
 tlibc_error_code_t tlibc_xml_write_field_end(tlibc_abstract_writer_t *super, const char *var_name)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);	
-	const char *i;
+	size_t len, slen;
 	if(self->skip_uint32_field_once)
 	{
 		self->skip_uint32_field_once = FALSE;
 		goto done;
 	}
 
-	if(self->need_tab)
+	slen = strlen(var_name);
+	len = 1 + 1 + slen + 1;
+	
+	if((size_t)(self->limit - self->cur) < len)
 	{
-		fputc('\n', self->f);
-		printf_tab(self);
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
 	}
+	
 	--(self->count);
-	self->need_tab = TRUE;
-	fputc('<', self->f);
-	fputc('/', self->f);
-	for(i = var_name; *i; ++i)
-	{
-		fputc(*i, self->f);
-	}
-	fputc('>', self->f);
+	*(self->cur++) = '<';
+	*(self->cur++) = '/';
+	memcpy(self->cur, var_name, slen);
+	self->cur += slen;
+	*(self->cur++) = '>';
 
 done:
 	return E_TLIBC_NOERROR;
@@ -201,13 +192,24 @@ tlibc_error_code_t tlibc_xml_write_vector_element_end(tlibc_abstract_writer_t *s
 	TLIBC_UNUSED(index);
 	return tlibc_xml_write_field_end(super, "element");
 }
+#define TLIBC_XML_VALUE_LEN 128
 
 tlibc_error_code_t tlibc_xml_write_double(tlibc_abstract_writer_t *super, const double *val)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	fprintf(self->f, "%lf", *val);
-	self->need_tab = FALSE;
-	return E_TLIBC_NOERROR;
+	char str[TLIBC_XML_VALUE_LEN];
+	size_t len;
+	len = snprintf(str, TLIBC_XML_VALUE_LEN, "%lf", *val);
+	if((size_t)(self->limit - self->cur) < len)
+	{
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
+	}
+	memcpy(self->cur, str, len);
+	self->cur += len;
+done:
+	return ret;
 }
 
 tlibc_error_code_t tlibc_xml_write_int8(tlibc_abstract_writer_t *super, const int8_t *val)
@@ -241,10 +243,20 @@ done:
 
 tlibc_error_code_t tlibc_xml_write_int64(tlibc_abstract_writer_t *super, const int64_t *val)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	fprintf(self->f, "%"PRIi64, *val);
-	self->need_tab = FALSE;
-	return E_TLIBC_NOERROR;
+	char str[TLIBC_XML_VALUE_LEN];
+	size_t len;
+	len = snprintf(str, TLIBC_XML_VALUE_LEN, "%"PRIi64, *val);
+	if((size_t)(self->limit - self->cur) < len)
+	{
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
+	}
+	memcpy(self->cur, str, len);
+	self->cur += len;
+done:
+	return ret;
 }
 
 
@@ -276,57 +288,91 @@ done:
 
 tlibc_error_code_t tlibc_xml_write_uint64(tlibc_abstract_writer_t *super, const uint64_t *val)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	fprintf(self->f, "%"PRIu64, *val);
-	self->need_tab = FALSE;
-	return E_TLIBC_NOERROR;
+	char str[TLIBC_XML_VALUE_LEN];
+	size_t len;
+	len = snprintf(str, TLIBC_XML_VALUE_LEN, "%"PRIu64, *val);
+	if((size_t)(self->limit - self->cur) < len)
+	{
+		ret = E_TLIBC_OUT_OF_MEMORY;
+		goto done;
+	}
+	memcpy(self->cur, str, len);
+	self->cur += len;
+done:
+	return ret;
 }
 
-static void write_char(FILE* fout, char c)
+static char* write_char(char *cur, char *limit, char c)
 {
+	const char *str = NULL;
+	size_t len = 0;
 	switch (c)
 	{
 	case '<':
-		fprintf(fout, "&lt");
+		str = "&lt";
+		len = 3;
 		break;
 	case '>':
-		fprintf(fout, "&gt");
+		str = "&gt";
+		len = 3;
 		break;
 	case '&':
-		fprintf(fout, "&amp");
+		str = "&amp";
+		len = 4;
 		break;
 	case '\'':
-		fprintf(fout, "&apos");
+		str = "&apos";
+		len = 6;
 		break;
 	case '\"':
-		fprintf(fout, "&quot");
+		str = "&quot";
+		len = 5;
 		break;
 	default:
-		{
-			fputc(c, fout);
-		}
+		str = &c;
+		len = 1;
+		break;
 	}
+
+	if((size_t)(limit - cur) < len)
+	{
+		return NULL;
+	}
+	memcpy(cur, str, len);
+	return cur + len;
 }
 
 tlibc_error_code_t tlibc_xml_write_string(tlibc_abstract_writer_t *super, const char* str, uint32_t str_length)
 {
+	tlibc_error_code_t ret = E_TLIBC_NOERROR;
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
-	const char *i;
+	const char *i;	
 	TLIBC_UNUSED(str_length);
-
-	self->need_tab = FALSE;
 	for(i = str; *i ; ++i)
 	{
-		write_char(self->f, *i);
+		char *next = write_char(self->cur, self->limit, *i);
+		if(next == NULL)
+		{
+			ret = E_TLIBC_OUT_OF_MEMORY;
+			goto done;
+		}
+		self->cur = next;
 	}
-
-	return E_TLIBC_NOERROR;
+done:
+	return ret;
 }
 
 tlibc_error_code_t tlibc_xml_write_char(tlibc_abstract_writer_t *super, const char *val)
 {
 	tlibc_xml_writer_t *self = TLIBC_CONTAINER_OF(super, tlibc_xml_writer_t, super);
+	char *next = write_char(self->cur, self->limit, *val);
+	if(next == NULL)
+	{
+		return E_TLIBC_OUT_OF_MEMORY;
+	}
 
-	write_char(self->f, *val);
+	self->cur = next;
 	return E_TLIBC_NOERROR;
 }

@@ -12,17 +12,16 @@ typedef struct tlibc_xml_writer_s
 {
 	tlibc_abstract_writer_t super;
 	uint32_t count;
-	FILE *f;
-	int need_tab;
+	char *start;
+	char *cur;
+	char *limit;
 
 	int skip_uint32_field_once;
 
 	int ignore_int32_once;
 }tlibc_xml_writer_t;
 
-tlibc_error_code_t tlibc_xml_writer_init(tlibc_xml_writer_t *self, const char *file_name);
-
-void tlibc_xml_writer_fini(tlibc_xml_writer_t *self);
+void tlibc_xml_writer_init(tlibc_xml_writer_t *self, char *start, char*limit);
 
 
 tlibc_error_code_t tlibc_xml_write_vector_begin(tlibc_abstract_writer_t *super, const char* vec_name);
