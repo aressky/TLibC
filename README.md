@@ -1,6 +1,6 @@
-TLibC
+The C Library
 ======
-**C语言常用函数库**
+**TLibC**
 
 - platform 对Linux, Windows, Unix(Mac OSX)下的差异进行了非常简单的封装。
 - core 常用的数据结构如链表， hash表， 定时器等。
