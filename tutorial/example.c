@@ -275,7 +275,7 @@ void test_mempool()
 void test_unzip()
 {
 	void *buff;
-	size_t size_buf;
+	uint32_t size_buf;
 	tlibc_error_code_t err;
 	tlibc_unzip_s uf;
 	err = tlibc_unzip_init(&uf, "d:/1.xlsx");
