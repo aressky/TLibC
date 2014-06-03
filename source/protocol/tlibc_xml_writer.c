@@ -21,6 +21,8 @@ void tlibc_xml_writer_init(tlibc_xml_writer_t *self, char *start, char*limit)
 
 	self->super.write_struct_begin = tlibc_xml_write_struct_begin;
 	self->super.write_struct_end = tlibc_xml_write_struct_end;
+	self->super.write_union_begin = tlibc_xml_write_struct_begin;
+	self->super.write_union_end = tlibc_xml_write_struct_end;
 	self->super.write_enum_begin = tlibc_xml_write_enum_begin;
 
 	self->super.write_vector_begin = tlibc_xml_write_vector_begin;
@@ -132,7 +134,7 @@ tlibc_error_code_t tlibc_xml_write_field_begin(tlibc_abstract_writer_t *super, c
 	++self->count;
 
 	slen = strlen(var_name);
-	len = 0;
+	len = 1 + slen + 1;
 	
 	if((size_t)(self->limit - self->cur) < len)
 	{

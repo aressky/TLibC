@@ -139,6 +139,8 @@ void tlibc_xml_reader_init(tlibc_xml_reader_t *self)
 
 	self->super.read_struct_begin = tlibc_xml_read_struct_begin;
 	self->super.read_struct_end = tlibc_xml_read_struct_end;
+	self->super.read_union_begin = tlibc_xml_read_struct_begin;
+	self->super.read_union_end = tlibc_xml_read_struct_end;
 	self->super.read_enum_begin = tlibc_xml_read_enum_begin;
 
 	self->super.read_vector_begin = tlibc_xml_read_vector_begin;

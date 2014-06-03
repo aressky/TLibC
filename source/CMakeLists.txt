@@ -28,6 +28,9 @@ set(PROTOCOL_FILE_LIST
 
 	${INCLUDE}/protocol/tlibc_compact_writer.h
 	${SOURCE}/protocol/tlibc_compact_writer.c
+
+	${INCLUDE}/protocol/tlibc_json_writer.h
+	${SOURCE}/protocol/tlibc_json_writer.c
 )
 source_group("protocol" FILES ${PROTOCOL_FILE_LIST})
 list(APPEND FINAL_TARGET_FILE ${PROTOCOL_FILE_LIST})
