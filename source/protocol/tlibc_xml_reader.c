@@ -200,7 +200,14 @@ tlibc_error_code_t tlibc_xml_read_struct_begin(tlibc_abstract_reader_t *super, c
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = self->error_code;
+		if(self->error_code == E_TLIBC_NOERROR)
+		{
+			ret = E_TLIBC_BAD_FILE;
+		}
+		else
+		{
+			ret = self->error_code;
+		}
 		goto done;
 	}
 
@@ -229,7 +236,14 @@ tlibc_error_code_t tlibc_xml_read_struct_end(tlibc_abstract_reader_t *super, con
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = self->error_code;
+		if(self->error_code == E_TLIBC_NOERROR)
+		{
+			ret = E_TLIBC_BAD_FILE;
+		}
+		else
+		{
+			ret = self->error_code;
+		}
 		goto done;
 	}
 	if(strcmp(struct_name, self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name) != 0)
@@ -279,8 +293,15 @@ tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *super, c
 			case tok_tag_end:
 				--level;
 				break;
-			default:
-				ret = self_copy.error_code;
+			default:				
+				if(self->error_code == E_TLIBC_NOERROR)
+				{
+					ret = E_TLIBC_BAD_FILE;
+				}
+				else
+				{
+					ret = self->error_code;
+				}
 				goto ERROR_RET;
 		}
 	}while(level != 0);
@@ -312,7 +333,14 @@ tlibc_error_code_t tlibc_xml_read_field_begin(tlibc_abstract_reader_t *super, co
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_begin)
 	{
-		ret = self->error_code;
+		if(self->error_code == E_TLIBC_NOERROR)
+		{
+			ret = E_TLIBC_BAD_FILE;
+		}
+		else
+		{
+			ret = self->error_code;
+		}
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)
@@ -341,7 +369,14 @@ tlibc_error_code_t tlibc_xml_read_field_end(tlibc_abstract_reader_t *super, cons
 	token = tlibc_xml_reader_get_token(self);
 	if(token != tok_tag_end)
 	{
-		ret = self->error_code;
+		if(self->error_code == E_TLIBC_NOERROR)
+		{
+			ret = E_TLIBC_BAD_FILE;
+		}
+		else
+		{
+			ret = self->error_code;
+		}
 		goto ERROR_RET;
 	}
 	if(strcmp(self->scanner_context_stack[self->scanner_context_stack_num - 1].tag_name, var_name) != 0)

@@ -57,63 +57,63 @@ typedef struct tlibc_xml_reader_s
 	tlibc_error_code_t error_code;
 }tlibc_xml_reader_t;
 
- void tlibc_xml_reader_init(tlibc_xml_reader_t *self);
+void tlibc_xml_reader_init(tlibc_xml_reader_t *self);
 
- tlibc_error_code_t tlibc_xml_add_include(tlibc_xml_reader_t *self, const char *path);
+tlibc_error_code_t tlibc_xml_add_include(tlibc_xml_reader_t *self, const char *path);
 
- tlibc_error_code_t tlibc_xml_reader_push_file(tlibc_xml_reader_t *self, const char *file_name);
+tlibc_error_code_t tlibc_xml_reader_push_file(tlibc_xml_reader_t *self, const char *file_name);
 
- tlibc_error_code_t tlibc_xml_reader_push_buff(tlibc_xml_reader_t *self, const char *xml_start, const char* xml_limit);
+tlibc_error_code_t tlibc_xml_reader_push_buff(tlibc_xml_reader_t *self, const char *xml_start, const char* xml_limit);
 
- void tlibc_xml_reader_pop_file(tlibc_xml_reader_t *self);
+void tlibc_xml_reader_pop_file(tlibc_xml_reader_t *self);
 
- void tlibc_xml_reader_pop_buff(tlibc_xml_reader_t *self);
+void tlibc_xml_reader_pop_buff(tlibc_xml_reader_t *self);
 
- const char* tlibc_xml_str2c(const char* curr, const char* limit, char *ch);
+const char* tlibc_xml_str2c(const char* curr, const char* limit, char *ch);
 
- const tlibc_xml_reader_yyltype_t* tlibc_xml_current_location(tlibc_xml_reader_t *self);
+const tlibc_xml_reader_yyltype_t* tlibc_xml_current_location(tlibc_xml_reader_t *self);
 
 
 
- tlibc_error_code_t tlibc_xml_read_struct_begin(tlibc_abstract_reader_t *self, const char *struct_name);
+tlibc_error_code_t tlibc_xml_read_struct_begin(tlibc_abstract_reader_t *self, const char *struct_name);
 
- tlibc_error_code_t tlibc_xml_read_struct_end(tlibc_abstract_reader_t *self, const char *struct_name);
+tlibc_error_code_t tlibc_xml_read_struct_end(tlibc_abstract_reader_t *self, const char *struct_name);
 
- tlibc_error_code_t tlibc_xml_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name);
+tlibc_error_code_t tlibc_xml_read_enum_begin(tlibc_abstract_reader_t *self, const char *enum_name);
 
- tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *self, const char *vec_name);
+tlibc_error_code_t tlibc_xml_read_vector_begin(tlibc_abstract_reader_t *self, const char *vec_name);
 
- tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *self, const char *vec_name);
+tlibc_error_code_t tlibc_xml_read_vector_end(tlibc_abstract_reader_t *self, const char *vec_name);
 
- tlibc_error_code_t tlibc_xml_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name);
+tlibc_error_code_t tlibc_xml_read_field_begin(tlibc_abstract_reader_t *self, const char *var_name);
 
- tlibc_error_code_t tlibc_xml_read_field_end(tlibc_abstract_reader_t *self, const char *var_name);
+tlibc_error_code_t tlibc_xml_read_field_end(tlibc_abstract_reader_t *self, const char *var_name);
 
- tlibc_error_code_t tlibc_xml_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
+tlibc_error_code_t tlibc_xml_read_vector_element_begin(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
 
- tlibc_error_code_t tlibc_xml_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
+tlibc_error_code_t tlibc_xml_read_vector_element_end(tlibc_abstract_reader_t *self, const char *var_name, uint32_t index);
 
- tlibc_error_code_t tlibc_xml_read_char(tlibc_abstract_reader_t *super, char *val);
+tlibc_error_code_t tlibc_xml_read_char(tlibc_abstract_reader_t *super, char *val);
 
- tlibc_error_code_t tlibc_xml_read_double(tlibc_abstract_reader_t *super, double *val);
+tlibc_error_code_t tlibc_xml_read_double(tlibc_abstract_reader_t *super, double *val);
 
- tlibc_error_code_t tlibc_xml_read_int8(tlibc_abstract_reader_t *super, int8_t *val);
+tlibc_error_code_t tlibc_xml_read_int8(tlibc_abstract_reader_t *super, int8_t *val);
 
- tlibc_error_code_t tlibc_xml_read_int16(tlibc_abstract_reader_t *super, int16_t *val);
+tlibc_error_code_t tlibc_xml_read_int16(tlibc_abstract_reader_t *super, int16_t *val);
 
- tlibc_error_code_t tlibc_xml_read_int32(tlibc_abstract_reader_t *super, int32_t *val);
+tlibc_error_code_t tlibc_xml_read_int32(tlibc_abstract_reader_t *super, int32_t *val);
 
- tlibc_error_code_t tlibc_xml_read_int64(tlibc_abstract_reader_t *super, int64_t *val);
+tlibc_error_code_t tlibc_xml_read_int64(tlibc_abstract_reader_t *super, int64_t *val);
 
- tlibc_error_code_t tlibc_xml_read_uint8(tlibc_abstract_reader_t *super, uint8_t *val);
+tlibc_error_code_t tlibc_xml_read_uint8(tlibc_abstract_reader_t *super, uint8_t *val);
 
- tlibc_error_code_t tlibc_xml_read_uint16(tlibc_abstract_reader_t *super, uint16_t *val);
+tlibc_error_code_t tlibc_xml_read_uint16(tlibc_abstract_reader_t *super, uint16_t *val);
 
- tlibc_error_code_t tlibc_xml_read_uint32(tlibc_abstract_reader_t *super, uint32_t *val);
+tlibc_error_code_t tlibc_xml_read_uint32(tlibc_abstract_reader_t *super, uint32_t *val);
 
- tlibc_error_code_t tlibc_xml_read_uint64(tlibc_abstract_reader_t *super, uint64_t *val);
+tlibc_error_code_t tlibc_xml_read_uint64(tlibc_abstract_reader_t *super, uint64_t *val);
 
- tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *str, uint32_t str_len);
+tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *str, uint32_t str_len);
 
 #endif
 
