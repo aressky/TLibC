@@ -37,14 +37,9 @@ set(RE2C_XML_FILE ${SOURCE}/protocol/tlibc_xml_reader_l.re)
 set(RE2C_XML_HEADER ${GEN_PATH}/tlibc_xml_reader_l.h)
 set(RE2C_XML_OUTPUTS ${GEN_PATH}/tlibc_xml_reader_l.c)
 
-set(RE2C_JSON_FILE ${SOURCE}/protocol/tlibc_json_reader_l.re)
-set(RE2C_JSON_HEADER ${GEN_PATH}/tlibc_json_reader_l.h)
-set(RE2C_JSON_OUTPUTS ${GEN_PATH}/tlibc_json_reader_l.c)
-
 if(WITH_RE2C)
-	add_custom_command(OUTPUT ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS} ${RE2C_JSON_HEADER} ${RE2C_JSON_OUTPUTS} 
+	add_custom_command(OUTPUT ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS}
 		COMMAND re2c -c -F -t${RE2C_XML_HEADER} -o${RE2C_XML_OUTPUTS} ${RE2C_XML_FILE}
-		COMMAND re2c -c -F -t${RE2C_JSON_HEADER} -o${RE2C_JSON_OUTPUTS} ${RE2C_JSON_FILE}
 	)
 endif(WITH_RE2C)
 source_group("protocol" FILES ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS}
@@ -54,14 +49,6 @@ source_group("protocol" FILES ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUT
 	${SOURCE}/protocol/tlibc_xml_writer.c
 	${SOURCE}/protocol/tlibc_xml_reader_scanner.h
 	${SOURCE}/protocol/tlibc_xml_reader_scanner.c
-
-	${RE2C_JSON_FILE} ${RE2C_JSON_HEADER} ${RE2C_JSON_OUTPUTS}
-	${INCLUDE}/protocol/tlibc_json_reader.h
-	${SOURCE}/protocol/tlibc_json_reader.c
-	${INCLUDE}/protocol/tlibc_json_writer.h
-	${SOURCE}/protocol/tlibc_json_writer.c
-	${SOURCE}/protocol/tlibc_json_reader_scanner.h
-	${SOURCE}/protocol/tlibc_json_reader_scanner.c
 	)
 
 list(APPEND FINAL_TARGET_FILE ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUTPUTS}
@@ -71,14 +58,6 @@ list(APPEND FINAL_TARGET_FILE ${RE2C_XML_FILE} ${RE2C_XML_HEADER} ${RE2C_XML_OUT
 	${SOURCE}/protocol/tlibc_xml_writer.c
 	${SOURCE}/protocol/tlibc_xml_reader_scanner.h
 	${SOURCE}/protocol/tlibc_xml_reader_scanner.c
-
-	${RE2C_JSON_FILE} ${RE2C_JSON_HEADER} ${RE2C_JSON_OUTPUTS}
-	${INCLUDE}/protocol/tlibc_json_reader.h
-	${SOURCE}/protocol/tlibc_json_reader.c
-	${INCLUDE}/protocol/tlibc_json_writer.h
-	${SOURCE}/protocol/tlibc_json_writer.c
-	${SOURCE}/protocol/tlibc_json_reader_scanner.h
-	${SOURCE}/protocol/tlibc_json_reader_scanner.c
 )
 
 
