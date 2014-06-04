@@ -1,6 +1,10 @@
 #ifndef _H_TLIBC_ERROR_CODE
 #define _H_TLIBC_ERROR_CODE
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 #include "platform/tlibc_platform.h"
 
 typedef enum tlibc_error_code_e
@@ -23,5 +27,10 @@ typedef enum tlibc_error_code_e
 }tlibc_error_code_t;
 
 #define TLIBC_ERROR_CODE_NUM 15
+
+#ifdef  __cplusplus
+}
+#endif
+
 
 #endif

@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_TIMER_H
 #define _H_TLIBC_TIMER_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "platform/tlibc_platform.h"
 #include "core/tlibc_list.h"
 #include "core/tlibc_error_code.h"
@@ -54,13 +59,18 @@ typedef struct _tlibc_timer_t
 void tlibc_timer_init(tlibc_timer_t *base);
 
 
- void tlibc_timer_pop(tlibc_timer_entry_t *timer);
+void tlibc_timer_pop(tlibc_timer_entry_t *timer);
 
 
 void tlibc_timer_push(tlibc_timer_t *self, tlibc_timer_entry_t *timer);
 
 #define tlibc_timer_jiffies(self) ((self)->jiffies)
 
- tlibc_error_code_t tlibc_timer_tick(tlibc_timer_t *self);
+tlibc_error_code_t tlibc_timer_tick(tlibc_timer_t *self);
+
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif//_H_TLIBC_TIMER_H

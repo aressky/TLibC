@@ -1,6 +1,10 @@
 #ifndef _H_TLIBC_PLATFORM_WINDOWS
 #define _H_TLIBC_PLATFORM_WINDOWS
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 #include <stddef.h>
 //如果不包含stdlib.h strtoll会出错
 #include <stdlib.h>
@@ -28,5 +32,9 @@
 
 //屏蔽广告
 #pragma warning (disable: 4996)
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif

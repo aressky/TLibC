@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_PLATFORM_LINUX
 #define _H_TLIBC_PLATFORM_LINUX
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #define TLIBC_FILE_SEPARATOR '/'
 
 #include <stddef.h>
@@ -16,5 +21,10 @@
 #else
 #error "unknow wordsize"
 #endif
+
+#ifdef  __cplusplus
+}
+#endif
+
 
 #endif

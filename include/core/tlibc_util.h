@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_UTIL
 #define _H_TLIBC_UTIL
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "platform/tlibc_platform.h"
 
 #include <stdint.h>
@@ -73,6 +78,10 @@
 #define tlibc_zigzag_decode32(n) ((int32_t)((n >> 1) ^ -(int32_t)(n & 1)))
 #define tlibc_zigzag_decode64(n) ((int64_t)((n >> 1) ^ -(int64_t)(n & 1)))
 
-#endif//_H_TLIBC_UTIL
 
+#ifdef  __cplusplus
+}
+#endif
+
+#endif//_H_TLIBC_UTIL
 

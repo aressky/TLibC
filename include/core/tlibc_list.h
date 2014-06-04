@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_LIST
 #define _H_TLIBC_LIST
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 typedef struct tlibc_list_head_s
 {
 	struct tlibc_list_head_s *next, *prev;
@@ -42,5 +47,10 @@ typedef struct tlibc_list_head_s
 {\
 	__tlibc_list_del((entry)->prev, (entry)->next);\
 }
+
+#ifdef  __cplusplus
+}
+#endif
+
 
 #endif

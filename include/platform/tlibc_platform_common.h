@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_PLATFORM_COMMON
 #define _H_TLIBC_PLATFORM_COMMON
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include <stdint.h>
 
 #ifndef NULL
@@ -59,5 +64,10 @@
 #define TLIBC_CONTAINER_OF(ptr, type, member) ((type *)((size_t)ptr - TLIBC_OFFSET_OF(type, member)))
 
 #define TLIBC_MAX_PATH_LENGTH 1024
+
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif

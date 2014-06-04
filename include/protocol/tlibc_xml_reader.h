@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_XML_READER
 #define _H_TLIBC_XML_READER
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_reader.h"
 #include "core/tlibc_error_code.h"
@@ -114,6 +119,11 @@ tlibc_error_code_t tlibc_xml_read_uint32(tlibc_abstract_reader_t *super, uint32_
 tlibc_error_code_t tlibc_xml_read_uint64(tlibc_abstract_reader_t *super, uint64_t *val);
 
 tlibc_error_code_t tlibc_xml_read_string(tlibc_abstract_reader_t *super, char *str, uint32_t str_len);
+
+#ifdef  __cplusplus
+}
+#endif
+
 
 #endif
 

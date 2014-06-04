@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_XML_WRITER
 #define _H_TLIBC_XML_WRITER
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "platform/tlibc_platform.h"
 #include "protocol/tlibc_abstract_writer.h"
 #include "core/tlibc_error_code.h"
@@ -63,5 +68,10 @@ tlibc_error_code_t tlibc_xml_write_struct_begin(tlibc_abstract_writer_t *super, 
 tlibc_error_code_t tlibc_xml_write_struct_end(tlibc_abstract_writer_t *super, const char *struct_name);
 
 tlibc_error_code_t tlibc_xml_write_enum_begin(tlibc_abstract_writer_t *super, const char *enum_name);
+
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif

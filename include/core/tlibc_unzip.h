@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_UNZIP_H
 #define _H_TLIBC_UNZIP_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "core/tlibc_error_code.h"
 
 #include "zlib.h"
@@ -95,5 +100,9 @@ tlibc_error_code_t tlibc_read_current_file(tlibc_unzip_s *self, voidp buf, uint3
 tlibc_error_code_t tlibc_unzip_close_current_file(tlibc_unzip_s *self);
 
 void tlibc_unzip_fini(tlibc_unzip_s *self);
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif//_H_TLIBC_UNZIP_H

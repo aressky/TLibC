@@ -1,6 +1,11 @@
 #ifndef _H_TLIBC_MEMPOOL_H
 #define _H_TLIBC_MEMPOOL_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
+
 #include "platform/tlibc_platform.h"
 #include "core/tlibc_list.h"
 #include "tlibc_error_code.h"
@@ -71,6 +76,10 @@ typedef struct _tlibc_mempool_t
 	++(self)->unused_list_num;\
 	(unit)->entry.sn = tlibc_mempool_invalid_id;\
 }
+
+#ifdef  __cplusplus
+}
+#endif
 
 
 #endif//_H_TLIBC_MEMPOOL_H
